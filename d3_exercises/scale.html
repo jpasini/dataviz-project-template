@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Scale exercise</title>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    </head>
+    <body>
+    <script>
+        var scale = d3.scale.linear();
+        scale.domain([0, 1]);
+        scale.range([0, 100]);
+
+        console.log(scale(0));
+        console.log(scale(0.5));
+        console.log(scale(1));
+    </script>
+    </body>
+</html>
+
