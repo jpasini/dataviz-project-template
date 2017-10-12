@@ -69,30 +69,85 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scatterPlot__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__choroplethMap__ = __webpack_require__(1);
 
 
-const xValue = d => d.sepalLength;
-const xLabel = 'Sepal Length';
-const yValue = d => d.petalLength;
-const yLabel = 'Petal Length';
-const colorValue = d => d.species;
-const colorLabel = 'Species';
 const margin = { left: 120, right: 300, top: 20, bottom: 120 };
 
 const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-const row = d => {
-  d.petalLength = +d.petalLength;
-  d.petalWidth = +d.petalWidth;
-  d.sepalLength = +d.sepalLength;
-  d.sepalWidth = +d.sepalWidth;
-  return d;
+/***** parsing code for choropleth *********/
+
+const drivingTimesMap = {};
+const build_driving_map = row => {
+  drivingTimesMap[row.Town] = {};
+  drivingTimesMap[row.Town].time = +row.DrivingTime;
+  const hours = Math.floor(+row.DrivingTime/60);
+  const mins = +row.DrivingTime - 60*hours;
+  if(hours > 0) {
+    drivingTimesMap[row.Town].timeString = hours + "h " + mins + " min";
+  } else {
+    drivingTimesMap[row.Town].timeString = mins + " min";
+  }
+  if(!(row.Town in raceHorizonByTown)) {
+    raceHorizonByTown[row.Town] = { 'daysToRace': 400, 'raceType': ""};
+  }
+  return row;
 };
 
-d3.csv('data/iris.csv', row, data => {
+const racesRunMap = {};
+const build_races_run_map = row => {
+  racesRunMap[row.Town] = {};
+  racesRunMap[row.Town].distance = row.Distance;
+  return row;
+};
+
+const today = d3.timeDay(new Date());
+const racesSoonByTown = {};
+const raceHorizonByTown = {};
+const fmt = d3.format("02");
+const parseRaces = row => {
+  row.Month = +row.Month;
+  row.Day = +row.Day;
+  row.Weekday = +row.Weekday;
+  row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
+  row.raceDay = d3.timeDay(new Date(2017, row.Month-1, row.Day));
+  const daysToRace = d3.timeDay.count(today, row.raceDay);
+  if(daysToRace >= 0 && daysToRace <= 14) {
+    const raceString = "<tr><td><span class='racedate'>" + 
+          row["Date/Time"] + 
+          "</span></td><td><span class='racedistance'>" + 
+          row.Distance + "</span></td><td><span class='racename'>" + 
+          row.Name + "</span></td></tr>";          
+    if(row.Town in racesSoonByTown) {
+      racesSoonByTown[row.Town] += raceString;
+    } else {
+      racesSoonByTown[row.Town] = "<table>" + raceString;
+    }
+    const raceType = daysToRace <= 7 ? "hasRaceVerySoon" : "hasRaceSoon"; 
+    if(row.Town in raceHorizonByTown) {
+      if(daysToRace < raceHorizonByTown[row.Town].daysToRace) {
+        raceHorizonByTown[row.Town] = { 
+          'daysToRace': daysToRace, 
+          'raceType': raceType 
+        };            
+      }            
+    } else {
+      raceHorizonByTown[row.Town] = { 
+        'daysToRace': daysToRace, 
+        'raceType': raceType 
+      };            
+    }
+  }
+  return row;
+};
+
+
+
+
+function dataLoaded(error, mapData, drivingTimes, racesRun, races) {
 
   const render = () => {
 
@@ -101,17 +156,20 @@ d3.csv('data/iris.csv', row, data => {
       .attr('width', visualizationDiv.clientWidth)
       .attr('height', visualizationDiv.clientHeight);
 
-    // Render the scatter plot.
-    Object(__WEBPACK_IMPORTED_MODULE_0__scatterPlot__["a" /* default */])(svg, {
-      data,
-      xValue,
-      xLabel,
-      yValue,
-      yLabel,
-      colorValue,
-      colorLabel,
+    // Render the choropleth map.
+    Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* default */])(svg, {
+      mapData,
+      drivingTimes,
+      racesRun,
+      races,
+      racesRunMap,
+      drivingTimesMap,
+      racesSoonByTown,
+      raceHorizonByTown,
       margin
     });
+
+
   }
 
   // Draw for the first time to initialize.
@@ -119,7 +177,16 @@ d3.csv('data/iris.csv', row, data => {
 
   // Redraw based on the new size whenever the browser window is resized.
   window.addEventListener('resize', render);
-});
+}
+
+d3.queue()
+  .defer(d3.json, "data/ct_towns_simplified.topojson")
+  .defer(d3.csv, "data/driving_times_from_avon.csv", build_driving_map)
+  .defer(d3.csv, "data/towns_run.csv", build_races_run_map)
+  .defer(d3.csv, "data/races2017.csv", parseRaces)
+  .await(dataLoaded);
+
+
 
 
 /***/ }),
@@ -127,116 +194,113 @@ d3.csv('data/iris.csv', row, data => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const xScale = d3.scaleLinear();
-const yScale = d3.scaleLinear();
-const colorScale = d3.scaleOrdinal()
-  .range(d3.schemeCategory10);
-
-const xAxis = d3.axisBottom()
-  .scale(xScale)
-  .tickPadding(15);
-
-const yAxis = d3.axisLeft()
-  .scale(yScale)
-  .ticks(5)
-  .tickPadding(15);
-
-const colorLegend = d3.legendColor()
-  .scale(colorScale)
-  .shape('circle');
-
 /* harmony default export */ __webpack_exports__["a"] = (function (svg, props) {
-  const { 
-    data,
-    xValue,
-    xLabel,
-    yValue,
-    yLabel,
-    colorValue,
-    colorLabel,
+  const {
+    mapData,
+    drivingTimes,
+    racesRun,
+    races,
+    racesRunMap,
+    drivingTimesMap,
+    racesSoonByTown,
+    raceHorizonByTown,
     margin
   } = props;
 
-  const width = svg.attr('width');
-  const height = svg.attr('height');
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  const tip = d3.tip()
+      .attr("class", "d3-tip")
+      .offset([-10, 0])
+      .html(d => "<span class='townname'>" + d.properties.NAME10 + ":</span> <span>"
+          + drivingTimesMap[d.properties.NAME10].timeString
+          + " driving</span>" 
+          + "<span>" 
+          + (d.properties.NAME10 in racesSoonByTown ?
+            racesSoonByTown[d.properties.NAME10]
+            : "")
+          + "</span>"
+          );
 
-  xAxis.tickSize(-innerHeight);
-  yAxis.tickSize(-innerWidth);
+  const colorScale = d3.scaleOrdinal()
+    .domain(["Race within 1 week", "Race within 2 weeks", "Town already run"])
+    .range(["#f03b20", "#feb24c", "#16a"]);
+  const colorLegend = d3.legendColor()
+    .scale(colorScale)
+    .shapeWidth(40)
+    .shapeHeight(20);
 
-  let g = svg.selectAll('.container').data([null]);
-  const gEnter = g.enter().append('g').attr('class', 'container');
-  g = gEnter
-    .merge(g)
-      .attr('transform', `translate(${margin.left},${margin.top})`);
 
-  const xAxisGEnter = gEnter.append('g').attr('class', 'x-axis');
-  const xAxisG = xAxisGEnter
-    .merge(g.select('.x-axis'))
-      .attr('transform', `translate(0, ${innerHeight})`);
 
-  const yAxisGEnter = gEnter.append('g').attr('class', 'y-axis');
-  const yAxisG = yAxisGEnter.merge(g.select('.y-axis'));
-
-  const colorLegendGEnter = gEnter.append('g').attr('class', 'legend');
-  const colorLegendG = colorLegendGEnter
-    .merge(g.select('.legend'))
-      .attr('transform', `translate(${innerWidth + 60}, 150)`);
-
-  xAxisGEnter
-    .append('text')
-      .attr('class', 'axis-label')
-      .attr('y', 100)
-    .merge(xAxisG.select('.axis-label'))
-      .attr('x', innerWidth / 2)
-      .text(xLabel);
-
-  yAxisGEnter
-    .append('text')
-      .attr('class', 'axis-label')
-      .attr('y', -60)
-      .style('text-anchor', 'middle')
-    .merge(yAxisG.select('.axis-label'))
-      .attr('x', -innerHeight / 2)
-      .attr('transform', `rotate(-90)`)
-      .text(yLabel);
-
-  colorLegendGEnter
-    .append('text')
-      .attr('class', 'legend-label')
-      .attr('x', -30)
-      .attr('y', -40)
-    .merge(colorLegendG.select('legend-label'))
-      .text(colorLabel);
-
-  xScale
-    .domain(d3.extent(data, xValue))
-    .range([0, innerWidth])
-    .nice();
-
-  yScale
-    .domain(d3.extent(data, yValue))
-    .range([innerHeight, 0])
-    .nice();
-
-  const circles = g.selectAll('.mark').data(data);
-  circles
-    .enter().append('circle')
-      .attr('class', 'mark')
-      .attr('fill-opacity', 0.6)
-      .attr('r', 8)
-    .merge(circles)
-      .attr('cx', d => xScale(xValue(d)))
-      .attr('cy', d => yScale(yValue(d)))
-      .attr('fill', d => colorScale(colorValue(d)));
-
-  xAxisG.call(xAxis);
-  yAxisG.call(yAxis);
+  const colorLegendG = svg.append("g")
+    .attr("transform",`translate(10,10)`);
   colorLegendG.call(colorLegend)
-    .selectAll('.cell text')
-      .attr('dy', '0.1em');
+    .attr("class", "color-legend");
+
+  function getMapScale(width, height) {
+    // known size of CT image for given scale
+    const baseScale = 12000;
+    const baseWidth = 453;
+    const baseHeight = 379;
+
+    const scale1 = baseScale*width/baseWidth;
+    const scale2 = baseScale*height/baseHeight;
+    return d3.min([scale1, scale2]);
+  }
+
+  function completeTooltipTables() {
+    Object.keys(racesSoonByTown).forEach(
+        key => { racesSoonByTown[key] += "</table>"; }
+    );
+  }
+
+  svg.call(tip);
+
+  completeTooltipTables();
+
+      // Extract the width and height that was computed by CSS.
+      const width = svg.attr('width');
+      const height = svg.attr('height');
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      const centerX = width/2;
+      const centerY = height/2;
+
+      // Use the extracted size to set the size of an SVG element.
+      svg
+        .attr("width", width)
+        .attr("height", height);
+
+      // Start work on the choropleth map
+      // idea from https://www.youtube.com/watch?v=lJgEx_yb4u0&t=23s
+      const mapScale = getMapScale(width, height);
+      const CT_coords = [-72.7,41.6032];
+      const projection = d3.geoMercator()
+        .center(CT_coords)
+        .scale(mapScale)
+        .translate([centerX, centerY]);
+      const path = d3.geoPath().projection(projection);
+
+      const group = svg.selectAll(".path")
+        .data(topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features);
+
+      const areas = group
+        .enter()
+        .append("g").attr("class", "path").append("path")
+          .attr("d", path)
+          .attr("class", d => 
+              d.properties.NAME10 in racesRunMap ? 
+                "area alreadyRun" : 
+                "area " + raceHorizonByTown[d.properties.NAME10].raceType
+               )
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide);
+
+      areas.merge(group).selectAll("path")
+          .attr("d", path);
+
+
 });
+
 
 
 /***/ })
