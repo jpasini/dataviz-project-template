@@ -1,4 +1,14 @@
-import choroplethMap from './choroplethMap'
+import {
+  choroplethMap,
+  buildDrivingMap,
+  buildRacesRunMap,
+  parseRaces as parseRacesForMap
+} from './choroplethMap'
+
+import {
+  calendar,
+  parseRace as parseRacesForCalendar
+} from './calendar.js'
 
 const margin = { left: 120, right: 300, top: 20, bottom: 120 };
 
@@ -6,113 +16,111 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-/***** parsing code for choropleth *********/
+const functions = {
+  calendar: calendar,
+  map: choroplethMap,
+  selector: () => {},
+  drivingTimesFilter: () => {}
+}
 
-const drivingTimesMap = {};
-const build_driving_map = row => {
-  drivingTimesMap[row.Town] = {};
-  drivingTimesMap[row.Town].time = +row.DrivingTime;
-  const hours = Math.floor(+row.DrivingTime/60);
-  const mins = +row.DrivingTime - 60*hours;
-  if(hours > 0) {
-    drivingTimesMap[row.Town].timeString = hours + "h " + mins + " min";
-  } else {
-    drivingTimesMap[row.Town].timeString = mins + " min";
-  }
-  if(!(row.Town in raceHorizonByTown)) {
-    raceHorizonByTown[row.Town] = { 'daysToRace': 400, 'raceType': ""};
-  }
-  return row;
+function drawBox(name, box, functions, props) {
+  // From sample code
+  // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
+  const x = box.x;
+  const y = box.y;
+  const width = box.width;
+  const height = box.height;
+
+  // set up a group for this box
+  // this is the "managing one thing" version of the General Update Pattern
+  let g = svg.selectAll('.' + name).data([null]);
+  const gEnter = g.enter().append('g').attr('class', name);
+  g = gEnter.merge(g)
+      .attr('transform', 'translate(' + x + ',' + y + ')');
+
+  // Draw a box (will remove this later)
+  const rect = g.selectAll('.boxFrame').data([null]);
+  rect
+    .enter().append('rect')
+      .attr('class', 'boxFrame')
+      .attr('fill', 'none')
+      .attr('stroke', '#666')
+    .merge(rect)
+      .attr('width', width)
+      .attr('height', height);
+  // call the specific renderer
+  functions[name](g, props[name], box);
 };
 
-const racesRunMap = {};
-const build_races_run_map = row => {
-  racesRunMap[row.Town] = {};
-  racesRunMap[row.Town].distance = row.Distance;
-  return row;
-};
 
-const today = d3.timeDay(new Date());
-const racesSoonByTown = {};
-const raceHorizonByTown = {};
-const fmt = d3.format("02");
-const parseRaces = row => {
-  row.Month = +row.Month;
-  row.Day = +row.Day;
-  row.Weekday = +row.Weekday;
-  row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2017, row.Month-1, row.Day));
-  const daysToRace = d3.timeDay.count(today, row.raceDay);
-  if(daysToRace >= 0 && daysToRace <= 14) {
-    const raceString = "<tr><td><span class='racedate'>" + 
-          row["Date/Time"] + 
-          "</span></td><td><span class='racedistance'>" + 
-          row.Distance + "</span></td><td><span class='racename'>" + 
-          row.Name + "</span></td></tr>";          
-    if(row.Town in racesSoonByTown) {
-      racesSoonByTown[row.Town] += raceString;
-    } else {
-      racesSoonByTown[row.Town] = "<table>" + raceString;
+const layout = {
+  orientation: "vertical",
+  children: [
+    "calendar",
+    {
+      orientation: "horizontal",
+      children: [
+        "selector",
+        "drivingTimesFilter",
+        "map"
+      ],
+      size: 3
     }
-    const raceType = daysToRace <= 7 ? "hasRaceVerySoon" : "hasRaceSoon"; 
-    if(row.Town in raceHorizonByTown) {
-      if(daysToRace < raceHorizonByTown[row.Town].daysToRace) {
-        raceHorizonByTown[row.Town] = { 
-          'daysToRace': daysToRace, 
-          'raceType': raceType 
-        };            
-      }            
-    } else {
-      raceHorizonByTown[row.Town] = { 
-        'daysToRace': daysToRace, 
-        'raceType': raceType 
-      };            
-    }
+  ]
+};
+
+const sizes = {
+  calendar: {
+    size: 1
+  },
+  map: {
+    size: 2
   }
-  return row;
 };
 
 
+function dataLoaded(error, mapData, drivingTimes, racesRun, racesForMap, racesForCalendar) {
 
+  const props = {
+    calendar: {
+      data: [
+        racesForCalendar
+      ],
+      margin: margin
+    },
+    map: {
+      data: [
+        mapData,
+        drivingTimes,
+        racesRun,
+        racesForMap
+      ],
+      margin: margin
+    },
+    selector: { },
+    drivingTimesFilter: { }
+  };
 
-function dataLoaded(error, mapData, drivingTimes, racesRun, races) {
-  const colorScale = d3.scaleOrdinal()
-    .domain(["Race within 1 week", "Race within 2 weeks", "Town already run"])
-    .range(["#f03b20", "#feb24c", "#16a"]);
-  const colorLegend = d3.legendColor()
-    .scale(colorScale)
-    .shapeWidth(40)
-    .shapeHeight(20);
-
-
-
-  const colorLegendG = svg.append("g")
-    .attr("transform",`translate(10,10)`);
-  colorLegendG.call(colorLegend)
-    .attr("class", "color-legend");
 
 
 
   const render = () => {
-
     // Extract the width and height that was computed by CSS.
+    const width = visualizationDiv.clientWidth;
+    const height = visualizationDiv.clientHeight;
     svg
-      .attr('width', visualizationDiv.clientWidth)
-      .attr('height', visualizationDiv.clientHeight);
+      .attr('width', width)
+      .attr('height', height);
+
+    const box = {
+      width: width,
+      height: height
+    };
+
+    const boxes = d3.boxes(layout, sizes, box);
 
     // Render the choropleth map.
-    choroplethMap(svg, {
-      mapData,
-      drivingTimes,
-      racesRun,
-      races,
-      racesRunMap,
-      drivingTimesMap,
-      racesSoonByTown,
-      raceHorizonByTown,
-      margin
-    });
-
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
 
   }
 
@@ -125,9 +133,10 @@ function dataLoaded(error, mapData, drivingTimes, racesRun, races) {
 
 d3.queue()
   .defer(d3.json, "data/ct_towns_simplified.topojson")
-  .defer(d3.csv, "data/driving_times_from_avon.csv", build_driving_map)
-  .defer(d3.csv, "data/towns_run.csv", build_races_run_map)
-  .defer(d3.csv, "data/races2017.csv", parseRaces)
+  .defer(d3.csv, "data/driving_times_from_avon.csv", buildDrivingMap)
+  .defer(d3.csv, "data/towns_run.csv", buildRacesRunMap)
+  .defer(d3.csv, "data/races2017.csv", parseRacesForMap)
+  .defer(d3.csv, "data/races2017.csv", parseRacesForCalendar)
   .await(dataLoaded);
 
 
