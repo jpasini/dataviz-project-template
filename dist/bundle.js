@@ -70,6 +70,9 @@
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__choroplethMap__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__calendar_js__ = __webpack_require__(2);
+
+
 
 
 const margin = { left: 120, right: 300, top: 20, bottom: 120 };
@@ -78,10 +81,145 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
+const functions = {
+  calendar: __WEBPACK_IMPORTED_MODULE_1__calendar_js__["a" /* calendar */],
+  map: __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* choroplethMap */],
+  selector: () => {},
+  drivingTimesFilter: () => {}
+}
+
+function drawBox(name, box, functions, props) {
+  // From sample code
+  // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
+  const x = box.x;
+  const y = box.y;
+  const width = box.width;
+  const height = box.height;
+
+  // set up a group for this box
+  // this is the "managing one thing" version of the General Update Pattern
+  let g = svg.selectAll('.' + name).data([null]);
+  const gEnter = g.enter().append('g').attr('class', name);
+  g = gEnter.merge(g)
+      .attr('transform', 'translate(' + x + ',' + y + ')');
+
+  // Draw a box (will remove this later)
+  const rect = g.selectAll('.boxFrame').data([null]);
+  rect
+    .enter().append('rect')
+      .attr('class', 'boxFrame')
+      .attr('fill', 'none')
+      .attr('stroke', '#666')
+    .merge(rect)
+      .attr('width', width)
+      .attr('height', height);
+  // call the specific renderer
+  functions[name](g, props[name], box);
+};
+
+
+const layout = {
+  orientation: "vertical",
+  children: [
+    "calendar",
+    {
+      orientation: "horizontal",
+      children: [
+        "selector",
+        "drivingTimesFilter",
+        "map"
+      ],
+      size: 3
+    }
+  ]
+};
+
+const sizes = {
+  calendar: {
+    size: 1
+  },
+  map: {
+    size: 2
+  }
+};
+
+
+function dataLoaded(error, mapData, drivingTimes, racesRun, racesForMap, racesForCalendar) {
+
+  const props = {
+    calendar: {
+      data: [
+        racesForCalendar
+      ],
+      margin: margin
+    },
+    map: {
+      data: [
+        mapData,
+        drivingTimes,
+        racesRun,
+        racesForMap
+      ],
+      margin: margin
+    },
+    selector: { },
+    drivingTimesFilter: { }
+  };
+
+
+
+
+  const render = () => {
+    // Extract the width and height that was computed by CSS.
+    const width = visualizationDiv.clientWidth;
+    const height = visualizationDiv.clientHeight;
+    svg
+      .attr('width', width)
+      .attr('height', height);
+
+    const box = {
+      width: width,
+      height: height
+    };
+
+    const boxes = d3.boxes(layout, sizes, box);
+
+    // Render the choropleth map.
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
+
+  }
+
+  // Draw for the first time to initialize.
+  render();
+
+  // Redraw based on the new size whenever the browser window is resized.
+  window.addEventListener('resize', render);
+}
+
+d3.queue()
+  .defer(d3.json, "data/ct_towns_simplified.topojson")
+  .defer(d3.csv, "data/driving_times_from_avon.csv", __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildDrivingMap */])
+  .defer(d3.csv, "data/towns_run.csv", __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])
+  .defer(d3.csv, "data/races2017.csv", __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* parseRaces */])
+  .defer(d3.csv, "data/races2017.csv", __WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* parseRace */])
+  .await(dataLoaded);
+
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return choroplethMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return buildDrivingMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRacesRunMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return parseRaces; });
 /***** parsing code for choropleth *********/
 
 const drivingTimesMap = {};
-const build_driving_map = row => {
+const buildDrivingMap = row => {
   drivingTimesMap[row.Town] = {};
   drivingTimesMap[row.Town].time = +row.DrivingTime;
   const hours = Math.floor(+row.DrivingTime/60);
@@ -98,7 +236,7 @@ const build_driving_map = row => {
 };
 
 const racesRunMap = {};
-const build_races_run_map = row => {
+const buildRacesRunMap = row => {
   racesRunMap[row.Town] = {};
   racesRunMap[row.Town].distance = row.Distance;
   return row;
@@ -144,85 +282,6 @@ const parseRaces = row => {
   return row;
 };
 
-
-
-
-function dataLoaded(error, mapData, drivingTimes, racesRun, races) {
-  const colorScale = d3.scaleOrdinal()
-    .domain(["Race within 1 week", "Race within 2 weeks", "Town already run"])
-    .range(["#f03b20", "#feb24c", "#16a"]);
-  const colorLegend = d3.legendColor()
-    .scale(colorScale)
-    .shapeWidth(40)
-    .shapeHeight(20);
-
-
-
-  const colorLegendG = svg.append("g")
-    .attr("transform",`translate(10,10)`);
-  colorLegendG.call(colorLegend)
-    .attr("class", "color-legend");
-
-
-
-  const render = () => {
-
-    // Extract the width and height that was computed by CSS.
-    svg
-      .attr('width', visualizationDiv.clientWidth)
-      .attr('height', visualizationDiv.clientHeight);
-
-    // Render the choropleth map.
-    Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* default */])(svg, {
-      mapData,
-      drivingTimes,
-      racesRun,
-      races,
-      racesRunMap,
-      drivingTimesMap,
-      racesSoonByTown,
-      raceHorizonByTown,
-      margin
-    });
-
-
-  }
-
-  // Draw for the first time to initialize.
-  render();
-
-  // Redraw based on the new size whenever the browser window is resized.
-  window.addEventListener('resize', render);
-}
-
-d3.queue()
-  .defer(d3.json, "data/ct_towns_simplified.topojson")
-  .defer(d3.csv, "data/driving_times_from_avon.csv", build_driving_map)
-  .defer(d3.csv, "data/towns_run.csv", build_races_run_map)
-  .defer(d3.csv, "data/races2017.csv", parseRaces)
-  .await(dataLoaded);
-
-
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function (svg, props) {
-  const {
-    mapData,
-    drivingTimes,
-    racesRun,
-    races,
-    racesRunMap,
-    drivingTimesMap,
-    racesSoonByTown,
-    raceHorizonByTown,
-    margin
-  } = props;
-
   const tip = d3.tip()
       .attr("class", "d3-tip")
       .offset([-10, 0])
@@ -235,6 +294,17 @@ d3.queue()
             : "")
           + "</span>"
           );
+
+d3.selectAll('svg').call(tip);
+
+function choroplethMap(container, props, box) {
+  const [
+    mapData,
+    drivingTimes,
+    racesRun,
+    races
+  ] = props.data;
+
 
   function getMapScale(width, height) {
     // known size of CT image for given scale
@@ -253,15 +323,28 @@ d3.queue()
     );
   }
 
-  svg.call(tip);
-
   completeTooltipTables();
 
+  const colorScale = d3.scaleOrdinal()
+    .domain(["Race within 1 week", "Race within 2 weeks", "Town already run"])
+    .range(["#f03b20", "#feb24c", "#16a"]);
+  const colorLegend = d3.legendColor()
+    .scale(colorScale)
+    .shapeWidth(40)
+    .shapeHeight(20);
+
+  // use the "manage only one thing" version of the General Update Pattern
+  const colorLegendG = container.selectAll(".color-legend").data([null])
+    .enter().append('g')
+    .attr("transform",`translate(10,10)`);
+  colorLegendG.call(colorLegend)
+    .attr("class", "color-legend");
+
   // Extract the width and height that was computed by CSS.
-  const width = svg.attr('width');
-  const height = svg.attr('height');
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  const width = box.width;
+  const height = box.height;
+  const innerWidth = width - props.margin.left - props.margin.right;
+  const innerHeight = height - props.margin.top - props.margin.bottom;
 
   const centerX = width/2;
   const centerY = height/2;
@@ -276,26 +359,241 @@ d3.queue()
     .translate([centerX, centerY]);
   const path = d3.geoPath().projection(projection);
 
-  const group = svg.selectAll(".path")
+  const pathClassName = 'areapath';
+  const areas = container.selectAll('.' + pathClassName)
     .data(topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features);
 
-  const areas = group
+  areas
     .enter()
-    .append("g").attr("class", "path").append("path")
-      .attr("d", path)
-      .attr("class", d => 
+    .append('path')
+      .attr('d', path)
+      .attr('class', d =>
           d.properties.NAME10 in racesRunMap ? 
-            "area alreadyRun" : 
-            "area " + raceHorizonByTown[d.properties.NAME10].raceType
-           )
+            pathClassName + " area alreadyRun" : 
+            pathClassName + " area " + raceHorizonByTown[d.properties.NAME10].raceType
+      )
     .on("mouseover", tip.show)
-    .on("mouseout", tip.hide);
+    .on("mouseout", tip.hide)
+    .merge(areas)
+      .attr('d', path);
+}
 
-  areas.merge(group).selectAll("path")
-      .attr("d", path);
 
 
-});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return calendar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return parseRace; });
+const fmt = d3.format("02");
+const parseRace = d => {
+  d.Month = +d.Month;
+  d.Day = +d.Day;
+  d.Weekday = +d.Weekday;
+  d.DateString = "2017-" + fmt(d.Month) + "-" + fmt(d.Day);
+  return d;
+};
+
+const formatCell = d3.format("0");
+
+function calendar(container, props, box) {
+  const [racesData] = props.data;
+
+  const nWeeks = 52;
+  const nDays = 7;
+
+  const width = box.width,
+    height = box.height,
+    cellSize = d3.min([width/(nWeeks+12), height/(nDays+4)]);
+
+  
+  const legendColors = ['#fff', '#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
+  const legendLabels = [null, '&nbsp;&nbsp;1 - 5', '&nbsp;&nbsp;6 - 10', '11 - 15', '16 - 20', 'over 20'];
+  const color = d3.scaleThreshold()
+      .domain([1, 6, 11, 16, 21])
+      .range(legendColors);
+
+  const currentYear = 2017;
+
+  // use the "manage only one thing" GUP
+  // Calendar group
+  let calendarG = container.selectAll('.calendargroup').data([null]);
+  const calendarEnter = calendarG
+    .enter().append('g')
+      .attr('class', 'calendargroup');
+  calendarG = calendarEnter.merge(calendarG)
+      .attr("transform", "translate(" + 
+        ((width - cellSize * 53) / 2 - 2*cellSize) + "," + 
+        (height - cellSize * 7 - 1)/2 + ")");
+
+  // year label
+  const yearLabel = calendarG.selectAll('.yearLabel').data([null]);
+  yearLabel
+    .enter()
+    .append("text")
+      .attr("class", "yearLabel")
+      .attr("text-anchor", "middle")
+      .text(currentYear)
+    .merge(yearLabel)
+      .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
+      .attr("font-size", cellSize*1.6);
+
+  const data = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
+    .object(racesData);
+
+  // draw the background grid
+  // Note: this relies on the top-left corner of this group being (0,0)
+  let rect = calendarG
+    .selectAll('rect')
+    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+
+  rect = rect
+    .enter().append("rect")
+      .attr('fill', 'none')
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 1)
+    .merge(rect)
+      .attr("width", cellSize)
+      .attr("height", cellSize)
+      .attr("x", d => d3.timeWeek.count(d3.timeYear(d), d) * cellSize)
+      .attr("y", d => d.getDay() * cellSize);
+
+  // fill the rects for each day
+  const fmt2 = d3.timeFormat("%Y-%m-%d");
+  rect.filter(d => fmt2(d) in data)
+      .attr("fill", d => color(data[fmt2(d)].length))
+      .attr("class", "day_with_race")
+    .append("title")
+      .text(d => fmt2(d) + ": " + formatCell(data[fmt2(d)].length) + " races\n" +  data[fmt2(d)].races);
+
+  // draw the color legend manually
+  // use the "manage only one thing" version of the General Update Pattern
+  let colorLegendG = calendarG.selectAll('.calendarLegendG').data([null]);
+  colorLegendG = colorLegendG
+    .enter().append('g')
+      .attr('class', 'calendarLegendG')
+    .merge(colorLegendG)
+      .attr("transform", "translate(" + (54*cellSize) + "," + (0.5*cellSize) + ")");
+
+  const colorLegend = colorLegendG.selectAll('rect').data(legendColors.slice(1));
+  const legendLineHeight = cellSize*1.4;
+  colorLegend
+    .enter().append('rect')
+      .attr('x', 0)
+    .merge(colorLegend)
+      .attr('fill', d => d)
+      .attr('width', legendLineHeight*.9)
+      .attr('height', legendLineHeight*.9)
+      .attr('y', (d, i) => (i-0.3)*legendLineHeight);
+  
+  const colorLegendText = colorLegendG.selectAll('text').data(legendLabels.slice(1));
+  colorLegendText
+    .enter().append('text')
+      .attr('fill', d => d)
+      .attr('fill', '#666')
+      //.attr('text-anchor', 'middle')
+      .attr('alignment-baseline', 'middle')
+      .html(d => d)
+    .merge(colorLegendText)
+      .attr('font-size', cellSize)
+      .attr('x', cellSize*2)
+      .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
+
+  // legend title
+  const legendTitle = colorLegendG.selectAll('.legendTitle').data([null]);
+  legendTitle
+    .enter()
+    .append("text")
+      .attr("class", "legendTitle")
+      .attr('fill', '#666')
+      .text('# of Races')
+    .merge(legendTitle)
+      .attr('transform', 'translate(0,-' + cellSize + ')')
+      .attr("font-size", cellSize*1.2);
+
+
+  // frame for today's date
+  const today = d3.timeDay(new Date());
+  const todayRect = calendarG.selectAll('.todayDate').data([null]);
+  todayRect
+    .enter().append('rect')
+      .attr('class', 'todayDate')
+      .attr('fill', 'none')
+      .attr('stroke', 'black')
+    .merge(todayRect)
+      .attr('width', cellSize)
+      .attr('height', cellSize)
+      .attr('stroke-width', d3.min([3, cellSize/5]))
+      .attr('x', d3.timeWeek.count(d3.timeYear(today), today)*cellSize)
+      .attr('y', today.getDay() * cellSize);
+
+  // monthOutlines
+  let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
+  monthOutlinesG = monthOutlinesG
+    .enter().append('g')
+      .attr('id', 'monthOutlines')
+    .merge(monthOutlinesG)
+      .attr('fill', 'none')
+      .attr('stroke', '#666')
+      .attr('stroke-width', d3.min([2, cellSize/5]));
+
+  const monthOutlines = monthOutlinesG.selectAll('.monthPath')
+    .data(d3.timeMonths(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+  monthOutlines
+    .enter().append('path')
+      .attr('class', 'monthPath')
+    .merge(monthOutlines)
+      .attr('d', pathMonth);
+
+
+  // get bounding box for each month outline
+  const mp = document.getElementById("monthOutlines").childNodes;
+  const BB = Array.prototype.slice.call(mp).map(d => d.getBBox());
+  const monthX = BB.map(d => d.x + d.width/2);
+  // add the labels
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthLabels = calendarG.selectAll('.monthLabel').data(months);
+  monthLabels
+    .enter().append('text')
+      .attr('class', 'monthLabel')
+      .attr('y', -10)
+      .text(d => d)
+    .merge(monthLabels)
+      .attr('x', (d,i) => monthX[i])
+      .attr('font-size', cellSize*1.2);
+
+  const weekDayText = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const weekDayLabels = calendarG.selectAll('.weekDayLabel').data(weekDayText);
+  weekDayLabels
+    .enter().append('text')
+      .attr('class', 'weekDayLabel')
+      .text(d => d)
+      .attr('fill', '#666')
+    .merge(weekDayLabels)
+      .attr('x', -1.4*cellSize)
+      .attr("font-size", 0.8*cellSize)
+      .attr('y', (d, i) => cellSize*(i + 0.8));
+
+
+
+  function pathMonth(t0) {
+    const t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
+        d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
+        d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
+    return "M" + (w0 + 1) * cellSize + "," + d0 * cellSize
+        + "H" + w0 * cellSize + "V" + 7 * cellSize
+        + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
+        + "H" + (w1 + 1) * cellSize + "V" + 0
+        + "H" + (w0 + 1) * cellSize + "Z";
+  }
+}
+
+
 
 
 
