@@ -1,8 +1,12 @@
 import {
   choroplethMap,
-  buildDrivingMap,
+  parseDrivingMap,
   buildRacesRunMap,
-  parseRaces as parseRacesForMap
+  parseRaces as parseRacesForMap,
+  getTownNames,
+  buildTownIndex,
+  buildRaceHorizon,
+  buildRacesSoonTables
 } from './choroplethMap'
 
 import {
@@ -79,32 +83,55 @@ const sizes = {
 };
 
 
-function dataLoaded(error, mapData, drivingTimes, racesRun, racesForMap, racesForCalendar) {
+function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar) {
 
-  const props = {
-    calendar: {
-      data: [
-        racesForCalendar
-      ],
-      margin: margin
-    },
-    map: {
-      data: [
-        mapData,
-        drivingTimes,
-        racesRun,
-        racesForMap
-      ],
-      margin: margin
-    },
-    selector: { },
-    drivingTimesFilter: { }
-  };
+  const townNames = getTownNames(drivingTimes);
+  const townIndex = buildTownIndex(townNames);
+  const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
+  const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
+  const racesSoonByTown = buildRacesSoonTables(racesForMap);
 
-
+  const memberNames = [];
+  membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
+    memberNames.push({ 
+      title: row.Name,
+      description:  row.Town + ' - ' + row.TotalTowns + ' towns'
+    });
+  });
 
 
   const render = () => {
+    const defaultName = memberNames[0].title;
+
+    let myName = $('.ui.search').search('get value');
+    if(!(myName in memberTownsMap)) myName = defaultName;
+    const myTown = memberTownsMap[myName];
+    const props = {
+      calendar: {
+        data: [
+          racesForCalendar
+        ],
+        margin: margin
+      },
+      map: {
+        data: [
+          mapData,
+          drivingTimes,
+          racesRunMap,
+          racesForMap,
+          townNames,
+          townIndex,
+          racesSoonByTown,
+          raceHorizonByTown,
+          myTown,
+          myName
+        ],
+        margin: margin
+      },
+      selector: { },
+      drivingTimesFilter: { }
+    };
+
     // Extract the width and height that was computed by CSS.
     const width = visualizationDiv.clientWidth;
     const height = visualizationDiv.clientHeight;
@@ -129,14 +156,26 @@ function dataLoaded(error, mapData, drivingTimes, racesRun, racesForMap, racesFo
 
   // Redraw based on the new size whenever the browser window is resized.
   window.addEventListener('resize', render);
+
+  $('.ui.search').search({
+    source: memberNames,
+    maxResults: 10,
+    onSelect: function(result, response) {
+      // hack to prevent inconsistency when result is selected after
+      // entering a partial match
+      $('#searchText').val(result.title);
+      render();
+    }
+  });
+
 }
 
 d3.queue()
-  .defer(d3.json, "data/ct_towns_simplified.topojson")
-  .defer(d3.csv, "data/driving_times_from_avon.csv", buildDrivingMap)
-  .defer(d3.csv, "data/towns_run.csv", buildRacesRunMap)
-  .defer(d3.csv, "data/races2017.csv", parseRacesForMap)
-  .defer(d3.csv, "data/races2017.csv", parseRacesForCalendar)
+  .defer(d3.json, 'data/ct_towns_simplified.topojson')
+  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', parseDrivingMap)
+  .defer(d3.csv, 'data/members_towns_clean.csv')
+  .defer(d3.csv, 'data/races2017.csv', parseRacesForMap)
+  .defer(d3.csv, 'data/races2017.csv', parseRacesForCalendar)
   .await(dataLoaded);
 
 
