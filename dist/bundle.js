@@ -435,7 +435,7 @@ function choroplethMap(container, props, box) {
 
   // note: these colors must match the css above
   // TODO: DRY principle: perhaps do colors programmatically
-  const legendColors = ["#7b3294", "#c2a5cf", "#a6dba0"];
+  const legendColors = ["#67001f", "#d6604d", "#92c5de"];
   const legendLabels = ["Race within 1 week", "Race within 2 weeks", "Town already run"];
 
   // Extract the width and height that was computed by CSS.
@@ -452,7 +452,7 @@ function choroplethMap(container, props, box) {
 
   const sliderScale = d3.scaleLinear()
     .domain([0, sliderParameters.width])
-    .range([0, 120])
+    .range([0, 150])
     .clamp(true);
 
   carSlider.x = sliderScale.invert(carSlider.value);
@@ -504,9 +504,9 @@ function choroplethMap(container, props, box) {
 
   car
     .enter().append('path')
-      .attr('class', 'car')
       .attr('d', pathString)
     .merge(car)
+      .attr('class', myTown == outOfState ? 'car inactive' : 'car')
       .attr('transform', d => 'translate(' + d.x + ') scale(' + carScale + ')')
       .call(d3.drag()
           .on('start', myTown == outOfState ? () => {} : dragstarted)
@@ -673,7 +673,8 @@ function calendar(container, props, box) {
     cellSize = d3.min([width/(nWeeks+13), height/(nDays+8)]);
 
   
-  const legendColors = ['#fff', '#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
+  //const legendColors = ['#fff', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'];
+  const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
   const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
   const color = d3.scaleThreshold()
       .domain([1, 6, 11, 16, 21])
