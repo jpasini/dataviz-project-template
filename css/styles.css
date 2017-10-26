@@ -9,7 +9,7 @@ body {
   position: fixed;
   left: 0px;
   right: 0px;
-  top: 4em;
+  top: 12em;
   bottom: 0px;
 }
 
@@ -19,6 +19,15 @@ body {
   fill: #eaeaea; 
   stroke: #666;
   stroke-width:  1px;
+}
+
+.car:hover {
+  fill: #ff7f00;
+}
+
+.inactive, .inactive:hover {
+  fill: #fff;
+  stroke: #ccc;
 }
 
 .active {
@@ -63,15 +72,15 @@ body {
 }
 
 .alreadyRun {
-  fill: #a6dba0;
+  fill: #92c5de;
 }
 
 .hasRaceSoon {
-  fill: #c2a5cf;
+  fill: #d6604d;
 }
 
 .hasRaceVerySoon {
-  fill: #7b3294;
+  fill: #67001f;
 }
 
 .color-legend text {
@@ -127,7 +136,7 @@ body {
 /************ calendar CSS *********/
 
 .day_with_race:hover {
-  fill: #339;
+  fill: #ff7f00;
 }
 
 .yearLabel {
