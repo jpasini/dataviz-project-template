@@ -75,7 +75,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const margin = { left: 120, right: 300, top: 20, bottom: 120 };
+const margin = { left: 0, right: 0, top: 0, bottom: 0 };
 
 const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
@@ -115,6 +115,7 @@ function drawBox(name, box, functions, props) {
       .attr('width', width)
       .attr('height', height);
   */
+
   // call the specific renderer
   functions[name](g, props[name], box);
 };
@@ -149,7 +150,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
 
-  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getTownNames */])(drivingTimes);
+  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getTownNames */])(drivingTimes);
   const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildTownIndex */])(townNames);
   const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])(membersTowns, townNames);
   const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildRaceHorizon */])(racesForMap, townNames);
@@ -210,8 +211,10 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     // Extract the width and height that was computed by CSS.
-    const width = visualizationDiv.clientWidth;
-    const height = visualizationDiv.clientHeight;
+    //const width = visualizationDiv.clientWidth;
+    const containerBox = $('.ui.container').get(0).getBoundingClientRect();
+    const width = containerBox.width + containerBox.left;
+    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(width) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
     svg
       .attr('width', width)
       .attr('height', height);
@@ -221,7 +224,14 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       height: height
     };
 
-    const boxes = d3.boxes(layout, sizes, box);
+    //const boxes = d3.boxes(layout, sizes, box);
+
+    const boxes = {
+      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width)},
+      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
+    };
+
+
 
     // Render the choropleth map.
     Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
@@ -264,10 +274,10 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
 d3.queue()
   .defer(d3.json, 'data/ct_towns_simplified.topojson')
-  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* parseDrivingMap */])
+  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* parseDrivingMap */])
   .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* parseRaces */])
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* parseRace */])
+  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* parseRaces */])
+  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
   .await(dataLoaded);
 
 
@@ -279,13 +289,18 @@ d3.queue()
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return choroplethMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return parseDrivingMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return parseDrivingMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRacesRunMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return parseRaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getTownNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return parseRaces; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getTownNames; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildTownIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return buildRaceHorizon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getMapHeight; });
+function getMapHeight(width) {
+  return width*3/4;
+}
+
 function getTownNames(drivingTimeData) {
   return drivingTimeData.columns;
 }
@@ -681,7 +696,8 @@ function choroplethMap(container, props, box) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return calendar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return parseRace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseRace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCalendarHeight; });
 const fmt = d3.format("02");
 const parseRace = d => {
   d.Month = +d.Month;
@@ -693,16 +709,30 @@ const parseRace = d => {
 
 const formatCell = d3.format("0");
 
+const nWeeks = 52;
+const nDays = 7;
+
+function getNumRows(width) {
+  return width > 800 ? 1 : width > 400 ? 2 : 4;
+}
+
+function getCellSize(width) {
+  return width/(nWeeks+13)*Math.sqrt(getNumRows(width));
+}
+
+function getCalendarHeight(width) {
+  return getCellSize(width)*10 * getNumRows(width);
+}
+
 function calendar(container, props, box) {
   const [racesData] = props.data;
 
-  const nWeeks = 52;
-  const nDays = 7;
 
-  const width = box.width,
-    height = box.height,
-    cellSize = d3.min([width/(nWeeks+13), height/(nDays+8)]);
+  const width = box.width, height = box.height;
 
+  // note: wrapping algorithm designed for nRows = 1, 2, and 4
+  const nRows = getNumRows(width);
+  const cellSize = getCellSize(width);
   
   //const legendColors = ['#fff', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'];
   const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
@@ -721,8 +751,8 @@ function calendar(container, props, box) {
       .attr('class', 'calendargroup');
   calendarG = calendarEnter.merge(calendarG)
       .attr("transform", "translate(" + 
-        ((width - cellSize * 53) / 2 - 2*cellSize) + "," + 
-        (height - cellSize * 7 - 1)/2 + ")");
+        ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
+        2*cellSize + ")");
 
   // year label
   const yearLabel = calendarG.selectAll('.yearLabel').data([null]);
@@ -747,6 +777,28 @@ function calendar(container, props, box) {
     .selectAll('rect')
     .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
 
+
+  function getQuarter(d) {
+    return Math.floor(d.getMonth()/3);
+  }
+
+  function getRow(d) {
+    return Math.floor(getQuarter(d)/4*nRows);
+  }
+
+  function getColumn(d) {
+    const week = d3.timeWeek.count(d3.timeYear(d), d);
+    return week - getRow(d)*(52/nRows);
+  }
+
+  function getDateX(d) {
+    return getColumn(d)*cellSize;
+  }
+
+  function getDateY(d) {
+    return d.getDay()*cellSize + getRow(d)*10*cellSize;
+  }
+
   rect = rect
     .enter().append("rect")
       .attr('fill', 'none')
@@ -755,8 +807,8 @@ function calendar(container, props, box) {
     .merge(rect)
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", d => d3.timeWeek.count(d3.timeYear(d), d) * cellSize)
-      .attr("y", d => d.getDay() * cellSize);
+      .attr("x", d => getDateX(d))
+      .attr("y", d => getDateY(d));
 
   // fill the rects for each day
   const fmt2 = d3.timeFormat("%Y-%m-%d");
@@ -773,7 +825,7 @@ function calendar(container, props, box) {
     .enter().append('g')
       .attr('class', 'calendarLegendG')
     .merge(colorLegendG)
-      .attr("transform", "translate(" + (54*cellSize) + "," + (0.5*cellSize) + ")");
+      .attr("transform", "translate(" + (54*cellSize/nRows) + "," + (0.5*cellSize) + ")");
 
   const colorLegend = colorLegendG.selectAll('rect').data(legendColors.slice(1));
   const legendLineHeight = cellSize*1.4;
@@ -791,7 +843,6 @@ function calendar(container, props, box) {
     .enter().append('text')
       .attr('fill', d => d)
       .attr('fill', '#666')
-      //.attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .html(d => d)
     .merge(colorLegendText)
@@ -814,7 +865,7 @@ function calendar(container, props, box) {
 
   // frame for today's date
   const today = d3.timeDay(new Date());
-  const todayRect = calendarG.selectAll('.todayDate').data([null]);
+  const todayRect = calendarG.selectAll('.todayDate').data([today]);
   todayRect
     .enter().append('rect')
       .attr('class', 'todayDate')
@@ -824,8 +875,8 @@ function calendar(container, props, box) {
       .attr('width', cellSize)
       .attr('height', cellSize)
       .attr('stroke-width', d3.min([3, cellSize/5]))
-      .attr('x', d3.timeWeek.count(d3.timeYear(today), today)*cellSize)
-      .attr('y', today.getDay() * cellSize);
+      .attr("x", d => getDateX(d))
+      .attr("y", d => getDateY(d));
 
   // monthOutlines
   let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
@@ -853,13 +904,16 @@ function calendar(container, props, box) {
   // add the labels
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const monthLabels = calendarG.selectAll('.monthLabel').data(months);
+  function getMonthLabelRow(m) {
+    return Math.floor(m/(12/nRows));
+  }
   monthLabels
     .enter().append('text')
       .attr('class', 'monthLabel')
-      .attr('y', -10)
       .text(d => d)
     .merge(monthLabels)
-      .attr('x', (d,i) => monthX[i])
+      .attr('x', (d, i) => monthX[i])
+      .attr('y', (d, i) => -10 + getMonthLabelRow(i)*10*cellSize)
       .attr('font-size', cellSize*1.2);
 
   const weekDayText = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -875,16 +929,17 @@ function calendar(container, props, box) {
       .attr('y', (d, i) => cellSize*(i + 0.8));
 
 
-
   function pathMonth(t0) {
     const t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
         d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
         d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
-    return "M" + (w0 + 1) * cellSize + "," + d0 * cellSize
-        + "H" + w0 * cellSize + "V" + 7 * cellSize
-        + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
-        + "H" + (w1 + 1) * cellSize + "V" + 0
-        + "H" + (w0 + 1) * cellSize + "Z";
+    const c0 = getColumn(t0), c1 = getColumn(t1);
+    const rowOffset = getRow(t0)*10*cellSize;
+    return "M" + (c0 + 1)*cellSize + "," + (d0*cellSize + rowOffset)
+        + "H" + c0*cellSize + "V" + (7*cellSize + rowOffset)
+        + "H" + c1 * cellSize + "V" + ((d1 + 1)*cellSize + rowOffset)
+        + "H" + (c1 + 1) * cellSize + "V" + rowOffset
+        + "H" + (c0 + 1) * cellSize + "Z";
   }
 }
 
