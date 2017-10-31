@@ -62,30 +62,6 @@ function drawBox(name, box, functions, props) {
 };
 
 
-const layout = {
-  orientation: "vertical",
-  children: [
-    {
-      orientation: "horizontal",
-      children: [
-        "map"
-      ],
-      size: 3
-    },
-    "calendar"
-  ]
-};
-
-const sizes = {
-  calendar: {
-    size: 1
-  },
-  map: {
-    size: 2
-  }
-};
-
-
 function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar) {
 
   const outOfState = 'Out of State';
@@ -154,18 +130,18 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
     const containerBox = $('.ui.container').get(0).getBoundingClientRect();
-    const width = containerBox.width + containerBox.left;
+    const width = containerBox.width; // + containerBox.left;
     const height = getMapHeight(width) + getCalendarHeight(width);
+    // include a left margin inside the svg, to account for elements
+    // that overflow (e.g., d3-tips)
     svg
-      .attr('width', width)
+      .attr('width', width + containerBox.left)
       .attr('height', height);
 
     const box = {
       width: width,
       height: height
     };
-
-    //const boxes = d3.boxes(layout, sizes, box);
 
     const boxes = {
       map: {x: containerBox.left, y: 0, width: containerBox.width, height: getMapHeight(containerBox.width)},
