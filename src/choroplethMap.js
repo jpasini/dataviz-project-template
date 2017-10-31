@@ -1,5 +1,6 @@
 function getMapHeight(width) {
-  return width*3/4;
+  const threshold_width = 800;
+  return width >= threshold_width ? threshold_width*3/4 : width*3/4;
 }
 
 function getTownNames(drivingTimeData) {
