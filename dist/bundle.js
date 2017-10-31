@@ -274,7 +274,8 @@ d3.queue()
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getMapHeight; });
 function getMapHeight(width) {
-  return width*3/4;
+  const threshold_width = 800;
+  return width >= threshold_width ? threshold_width*3/4 : width*3/4;
 }
 
 function getTownNames(drivingTimeData) {
