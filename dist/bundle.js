@@ -125,12 +125,14 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
+  let highlightElusive = $('.ui.toggle.button').state('is active');
 
-  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getTownNames */])(drivingTimes);
+  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getTownNames */])(drivingTimes);
   const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildTownIndex */])(townNames);
   const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])(membersTowns, townNames);
   const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildRaceHorizon */])(racesForMap, townNames);
   const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesSoonTables */])(racesForMap);
+  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeNumberOfRacesByTown */])(racesForMap, townNames);
 
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
@@ -165,7 +167,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     const props = {
       calendar: {
         data: [
-          racesForCalendar
+          racesForCalendar,
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       },
@@ -180,7 +184,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           racesSoonByTown,
           raceHorizonByTown,
           myTown,
-          myName
+          myName,
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       }
@@ -190,7 +196,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     //const width = visualizationDiv.clientWidth;
     const containerBox = $('.ui.container').get(0).getBoundingClientRect();
     const width = containerBox.width; // + containerBox.left;
-    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(width) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
+    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(width) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
     // include a left margin inside the svg, to account for elements
     // that overflow (e.g., d3-tips)
     svg
@@ -203,11 +209,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     const boxes = {
-      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width)},
-      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
+      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(containerBox.width)},
+      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
     };
-
-
 
     // Render the choropleth map.
     Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
@@ -246,13 +250,18 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     }
   });
 
+  $('.ui.toggle.button').state();
+  $('.ui.toggle.button').on('click', () => {
+    highlightElusive = $('.ui.toggle.button').state('is active');
+    render();
+  });
 }
 
 d3.queue()
   .defer(d3.json, 'data/ct_towns_simplified.topojson')
-  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* parseDrivingMap */])
+  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* parseDrivingMap */])
   .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* parseRaces */])
+  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["j" /* parseRaces */])
   .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
   .await(dataLoaded);
 
@@ -265,14 +274,15 @@ d3.queue()
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return choroplethMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return parseDrivingMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return parseDrivingMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRacesRunMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return parseRaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getTownNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return parseRaces; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getTownNames; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildTownIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return buildRaceHorizon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getMapHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getMapHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return computeNumberOfRacesByTown; });
 function getMapHeight(width) {
   const threshold_width = 800;
   return width >= threshold_width ? threshold_width*3/4 : width*3/4;
@@ -333,6 +343,24 @@ function buildRacesRunMap(memberTownsRun, townNames) {
 function parseTownsRunByMembers(row) {
   row.TotalTowns = +row.TotalTowns;
   return row;
+}
+
+function computeNumberOfRacesByTown(races, townNames) {
+  const numberOfRacesByTown = {};
+  races.forEach(row => {
+    if(row.Town in numberOfRacesByTown) {
+      numberOfRacesByTown[row.Town] += 1;
+    } else {
+      numberOfRacesByTown[row.Town] = 1;
+    }
+  });
+  // complete with missing towns (there shouldn't be any missing!)
+  townNames.forEach(t => {
+    if(!(t in numberOfRacesByTown)) {
+      numberOfRacesByTown[t] = 0;
+    }
+  });
+  return numberOfRacesByTown;
 }
 
 function buildRaceHorizon(races, townNames) {
@@ -446,7 +474,9 @@ function choroplethMap(container, props, box) {
     racesSoonByTown,
     raceHorizonByTown,
     myTown,
-    myName
+    myName,
+    highlightElusive,
+    numberOfRacesByTown
   ] = props.data;
 
   // string marker
@@ -611,9 +641,11 @@ function choroplethMap(container, props, box) {
     .translate([centerX, centerY]);
   const path = d3.geoPath().projection(projection);
 
+  const mapFeatures = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
+
   const pathClassName = 'areapath';
   let areas = container.selectAll('.' + pathClassName)
-    .data(topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features);
+    .data(mapFeatures);
 
   areas = areas
     .enter().append('path')
@@ -628,6 +660,22 @@ function choroplethMap(container, props, box) {
             pathClassName + ' area alreadyRun' + reachableClass : 
             pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
       });
+
+  const highlightPathClassName = 'highlightareapath';
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+  let highlightAreas = container.selectAll('.' + highlightPathClassName)
+    .data(mapFeatures.filter(d => isElusive(d.properties.NAME10)));
+
+  highlightAreas = highlightAreas
+    .enter().append('path')
+      .attr('class', highlightPathClassName)
+      .attr('fill', 'none')
+      .attr('stroke-width', 3)
+    .merge(highlightAreas)
+      .attr('stroke', highlightElusive ? '#33a02c' : 'none')
+      .attr('d', path);
 
   function dragstarted(d) {
     d3.select(this).raise().classed('active', true);
@@ -709,7 +757,11 @@ function getCalendarHeight(width) {
 }
 
 function calendar(container, props, box) {
-  const [racesData] = props.data;
+  const [
+    racesData,
+    highlightElusive,
+    numberOfRacesByTown
+  ] = props.data;
 
 
   const width = box.width, height = box.height;
@@ -719,7 +771,6 @@ function calendar(container, props, box) {
   const cellSize = getCellSize(width);
   
   const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
-  //`const legendColors = ['#fff', '#e6f598', '#abdda4', '#66c2a5', '#3288bd', '#5e4fa2'];
   const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
   const color = d3.scaleThreshold()
       .domain([1, 6, 11, 16, 21])
@@ -754,6 +805,16 @@ function calendar(container, props, box) {
       .key(d => d.DateString)
       .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
     .object(racesData);
+
+  // roll up data, but only for elusive towns
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  const dataElusive = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return { length: d.length } } )
+    .object(racesData.filter(d => isElusive(d.Town)));
 
   // draw the background grid
   // Note: this relies on the top-left corner of this group being (0,0)
@@ -801,6 +862,12 @@ function calendar(container, props, box) {
       .attr("class", "day_with_race")
     .append("title")
       .text(d => fmt2(d) + ": " + formatCell(data[fmt2(d)].length) + " races\n" +  data[fmt2(d)].races);
+
+  // for days with elusive races
+  if(highlightElusive) {
+    rect.filter(d => fmt2(d) in dataElusive)
+        .attr('fill', '#d73027');
+  }
 
   // draw the color legend manually
   // use the "manage only one thing" version of the General Update Pattern
