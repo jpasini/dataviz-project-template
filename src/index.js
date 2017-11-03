@@ -7,7 +7,8 @@ import {
   buildTownIndex,
   buildRaceHorizon,
   buildRacesSoonTables,
-  getMapHeight
+  getMapHeight,
+  computeNumberOfRacesByTown
 } from './choroplethMap'
 
 import {
@@ -73,6 +74,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
   const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
+  const numberOfRacesByTown = computeNumberOfRacesByTown(racesForMap, townNames);
 
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
@@ -123,7 +125,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           raceHorizonByTown,
           myTown,
           myName,
-          highlightElusive
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       }
