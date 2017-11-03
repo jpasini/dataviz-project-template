@@ -192,7 +192,12 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     }
   });
 
-  $('.ui.toggle.button').state();
+  $('.ui.toggle.button').state({
+    text : {
+      active: 'Hide elusive towns',
+      inactive: 'Show elusive towns'
+    }
+  });
   $('.ui.toggle.button').on('click', () => {
     highlightElusive = $('.ui.toggle.button').state('is active');
     render();
