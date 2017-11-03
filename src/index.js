@@ -66,6 +66,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
+  let highlightElusive = $('.ui.toggle.button').state('is active');
 
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
@@ -121,7 +122,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           racesSoonByTown,
           raceHorizonByTown,
           myTown,
-          myName
+          myName,
+          highlightElusive
         ],
         margin: margin
       }
@@ -147,8 +149,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       map: {x: containerBox.left, y: 0, width: containerBox.width, height: getMapHeight(containerBox.width)},
       calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
-
-
 
     // Render the choropleth map.
     Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
@@ -188,7 +188,10 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   });
 
   $('.ui.toggle.button').state();
-
+  $('.ui.toggle.button').on('click', () => {
+    highlightElusive = $('.ui.toggle.button').state('is active');
+    render();
+  });
 }
 
 d3.queue()

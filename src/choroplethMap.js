@@ -171,7 +171,8 @@ function choroplethMap(container, props, box) {
     racesSoonByTown,
     raceHorizonByTown,
     myTown,
-    myName
+    myName,
+    highlightElusive
   ] = props.data;
 
   // string marker
