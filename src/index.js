@@ -109,7 +109,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     const props = {
       calendar: {
         data: [
-          racesForCalendar
+          racesForCalendar,
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       },
