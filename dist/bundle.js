@@ -517,6 +517,7 @@ function choroplethMap(container, props, box) {
       .attr('class', 'carLabel')
       .attr('text-anchor', 'middle')
     .merge(carLabel)
+      .attr('opacity', myTown == outOfState ? 0.3 : 1)
       .text(d => drivingTimeToString(sliderScale(d.x)))
       .attr('x', d => d.x + 300*sliderParameters.scale)
       .attr('y', -50*sliderParameters.scale)
@@ -586,8 +587,12 @@ function choroplethMap(container, props, box) {
   instructions
     .enter().append('text')
       .attr('class', 'instructions')
-      .text('drag car to filter by driving time')
     .merge(instructions)
+      .text(
+        myTown == outOfState ?
+          'select a town to filter by driving time' :
+          'drag car to filter by driving time'
+      )
       .attr('x', d => d.x + 3*legendLineHeight)
       .attr('y', d => d.y + 2.2*legendLineHeight)
       .attr('font-size', d => 0.75*legendLineHeight);
