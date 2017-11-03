@@ -187,6 +187,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     }
   });
 
+  $('.ui.toggle.button').state();
+
 }
 
 d3.queue()
