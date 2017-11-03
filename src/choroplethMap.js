@@ -60,6 +60,24 @@ function parseTownsRunByMembers(row) {
   return row;
 }
 
+function computeNumberOfRacesByTown(races, townNames) {
+  const numberOfRacesByTown = {};
+  races.forEach(row => {
+    if(row.Town in numberOfRacesByTown) {
+      numberOfRacesByTown[row.Town] += 1;
+    } else {
+      numberOfRacesByTown[row.Town] = 1;
+    }
+  });
+  // complete with missing towns (there shouldn't be any missing!)
+  townNames.forEach(t => {
+    if(!(t in numberOfRacesByTown)) {
+      numberOfRacesByTown[t] = 0;
+    }
+  });
+  return numberOfRacesByTown;
+}
+
 function buildRaceHorizon(races, townNames) {
   const today = d3.timeDay(new Date());
   const raceHorizonByTown = {};
@@ -171,7 +189,9 @@ function choroplethMap(container, props, box) {
     racesSoonByTown,
     raceHorizonByTown,
     myTown,
-    myName
+    myName,
+    highlightElusive,
+    numberOfRacesByTown
   ] = props.data;
 
   // string marker
@@ -336,9 +356,11 @@ function choroplethMap(container, props, box) {
     .translate([centerX, centerY]);
   const path = d3.geoPath().projection(projection);
 
+  const mapFeatures = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
+
   const pathClassName = 'areapath';
   let areas = container.selectAll('.' + pathClassName)
-    .data(topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features);
+    .data(mapFeatures);
 
   areas = areas
     .enter().append('path')
@@ -353,6 +375,22 @@ function choroplethMap(container, props, box) {
             pathClassName + ' area alreadyRun' + reachableClass : 
             pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
       });
+
+  const highlightPathClassName = 'highlightareapath';
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+  let highlightAreas = container.selectAll('.' + highlightPathClassName)
+    .data(mapFeatures.filter(d => isElusive(d.properties.NAME10)));
+
+  highlightAreas = highlightAreas
+    .enter().append('path')
+      .attr('class', highlightPathClassName)
+      .attr('fill', 'none')
+      .attr('stroke-width', 3)
+    .merge(highlightAreas)
+      .attr('stroke', highlightElusive ? '#33a02c' : 'none')
+      .attr('d', path);
 
   function dragstarted(d) {
     d3.select(this).raise().classed('active', true);
@@ -404,6 +442,7 @@ export {
   buildTownIndex,
   buildRaceHorizon,
   buildRacesSoonTables,
-  getMapHeight
-};
+  getMapHeight, 
+  computeNumberOfRacesByTown
+}
 

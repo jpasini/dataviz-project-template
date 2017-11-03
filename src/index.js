@@ -7,7 +7,8 @@ import {
   buildTownIndex,
   buildRaceHorizon,
   buildRacesSoonTables,
-  getMapHeight
+  getMapHeight,
+  computeNumberOfRacesByTown
 } from './choroplethMap'
 
 import {
@@ -66,12 +67,14 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
+  let highlightElusive = $('.ui.toggle.button').state('is active');
 
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
   const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
   const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
+  const numberOfRacesByTown = computeNumberOfRacesByTown(racesForMap, townNames);
 
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
@@ -106,7 +109,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     const props = {
       calendar: {
         data: [
-          racesForCalendar
+          racesForCalendar,
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       },
@@ -121,7 +126,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           racesSoonByTown,
           raceHorizonByTown,
           myTown,
-          myName
+          myName,
+          highlightElusive,
+          numberOfRacesByTown
         ],
         margin: margin
       }
@@ -147,8 +154,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       map: {x: containerBox.left, y: 0, width: containerBox.width, height: getMapHeight(containerBox.width)},
       calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
-
-
 
     // Render the choropleth map.
     Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
@@ -187,6 +192,11 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     }
   });
 
+  $('.ui.toggle.button').state();
+  $('.ui.toggle.button').on('click', () => {
+    highlightElusive = $('.ui.toggle.button').state('is active');
+    render();
+  });
 }
 
 d3.queue()

@@ -25,7 +25,11 @@ function getCalendarHeight(width) {
 }
 
 function calendar(container, props, box) {
-  const [racesData] = props.data;
+  const [
+    racesData,
+    highlightElusive,
+    numberOfRacesByTown
+  ] = props.data;
 
 
   const width = box.width, height = box.height;
@@ -35,7 +39,6 @@ function calendar(container, props, box) {
   const cellSize = getCellSize(width);
   
   const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
-  //`const legendColors = ['#fff', '#e6f598', '#abdda4', '#66c2a5', '#3288bd', '#5e4fa2'];
   const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
   const color = d3.scaleThreshold()
       .domain([1, 6, 11, 16, 21])
@@ -70,6 +73,16 @@ function calendar(container, props, box) {
       .key(d => d.DateString)
       .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
     .object(racesData);
+
+  // roll up data, but only for elusive towns
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  const dataElusive = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return { length: d.length } } )
+    .object(racesData.filter(d => isElusive(d.Town)));
 
   // draw the background grid
   // Note: this relies on the top-left corner of this group being (0,0)
@@ -117,6 +130,12 @@ function calendar(container, props, box) {
       .attr("class", "day_with_race")
     .append("title")
       .text(d => fmt2(d) + ": " + formatCell(data[fmt2(d)].length) + " races\n" +  data[fmt2(d)].races);
+
+  // for days with elusive races
+  if(highlightElusive) {
+    rect.filter(d => fmt2(d) in dataElusive)
+        .attr('fill', '#d73027');
+  }
 
   // draw the color legend manually
   // use the "manage only one thing" version of the General Update Pattern
