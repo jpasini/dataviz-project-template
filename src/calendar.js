@@ -182,21 +182,6 @@ function calendar(container, props, box) {
       .attr("font-size", cellSize*1.2);
 
 
-  // frame for today's date
-  const today = d3.timeDay(new Date());
-  const todayRect = calendarG.selectAll('.todayDate').data([today]);
-  todayRect
-    .enter().append('rect')
-      .attr('class', 'todayDate')
-      .attr('fill', 'none')
-      .attr('stroke', 'black')
-    .merge(todayRect)
-      .attr('width', cellSize)
-      .attr('height', cellSize)
-      .attr('stroke-width', d3.min([3, cellSize/5]))
-      .attr("x", d => getDateX(d))
-      .attr("y", d => getDateY(d));
-
   // monthOutlines
   let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
   monthOutlinesG = monthOutlinesG
@@ -214,6 +199,21 @@ function calendar(container, props, box) {
       .attr('class', 'monthPath')
     .merge(monthOutlines)
       .attr('d', pathMonth);
+
+  // frame for today's date
+  const today = d3.timeDay(new Date());
+  const todayRect = calendarG.selectAll('.todayDate').data([today]);
+  todayRect
+    .enter().append('rect')
+      .attr('class', 'todayDate')
+      .attr('fill', 'none')
+      .attr('stroke', 'black')
+    .merge(todayRect)
+      .attr('width', cellSize)
+      .attr('height', cellSize)
+      .attr('stroke-width', d3.min([3, cellSize/5]))
+      .attr("x", d => getDateX(d))
+      .attr("y", d => getDateY(d));
 
 
   // get bounding box for each month outline
