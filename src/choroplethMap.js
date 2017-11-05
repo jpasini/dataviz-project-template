@@ -175,12 +175,26 @@ function completeTooltipTables(racesSoonByTown) {
   );
 }
 
+function computeMapFeatures(mapData, numberOfRacesByTown) {
+  // Pre-compute map features for all & elusive towns
+  const mapFeatures = {};
+  mapFeatures.all = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
+
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  mapFeatures.elusive = mapFeatures.all.filter(d => isElusive(d.properties.NAME10));
+
+  return mapFeatures;
+}
+
 
 const carSlider = {value: 40};
 
 function choroplethMap(container, props, box) {
   const [
-    mapData,
+    mapFeatures,
     drivingTimes,
     racesRunMap,
     racesForMap,
@@ -190,8 +204,7 @@ function choroplethMap(container, props, box) {
     raceHorizonByTown,
     myTown,
     myName,
-    highlightElusive,
-    numberOfRacesByTown
+    highlightElusive
   ] = props.data;
 
   // string marker
@@ -356,11 +369,9 @@ function choroplethMap(container, props, box) {
     .translate([centerX, centerY]);
   const path = d3.geoPath().projection(projection);
 
-  const mapFeatures = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
-
   const pathClassName = 'areapath';
   let areas = container.selectAll('.' + pathClassName)
-    .data(mapFeatures);
+    .data(mapFeatures.all);
 
   areas = areas
     .enter().append('path')
@@ -381,7 +392,7 @@ function choroplethMap(container, props, box) {
     return numberOfRacesByTown[town] <= 1;
   }
   let highlightAreas = container.selectAll('.' + highlightPathClassName)
-    .data(mapFeatures.filter(d => isElusive(d.properties.NAME10)));
+    .data(mapFeatures.elusive);
 
   highlightAreas = highlightAreas
     .enter().append('path')
@@ -389,7 +400,7 @@ function choroplethMap(container, props, box) {
       .attr('fill', 'none')
       .attr('stroke-width', 3)
     .merge(highlightAreas)
-      .attr('stroke', highlightElusive ? '#33a02c' : 'none')
+      .attr('stroke', highlightElusive ? 'black' : 'none')
       .attr('d', path);
 
   function dragstarted(d) {
@@ -443,6 +454,7 @@ export {
   buildRaceHorizon,
   buildRacesSoonTables,
   getMapHeight, 
-  computeNumberOfRacesByTown
+  computeNumberOfRacesByTown,
+  computeMapFeatures
 }
 

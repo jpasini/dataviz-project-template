@@ -8,13 +8,15 @@ import {
   buildRaceHorizon,
   buildRacesSoonTables,
   getMapHeight,
-  computeNumberOfRacesByTown
+  computeNumberOfRacesByTown,
+  computeMapFeatures
 } from './choroplethMap'
 
 import {
   calendar,
   parseRace as parseRacesForCalendar,
-  getCalendarHeight
+  getCalendarHeight,
+  rollUpDataForCalendar
 } from './calendar.js'
 
 const margin = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -76,6 +78,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
   const numberOfRacesByTown = computeNumberOfRacesByTown(racesForMap, townNames);
 
+  const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
+  const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
@@ -111,13 +115,13 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
         data: [
           racesForCalendar,
           highlightElusive,
-          numberOfRacesByTown
+          calendarData
         ],
         margin: margin
       },
       map: {
         data: [
-          mapData,
+          mapFeatures,
           drivingTimes,
           racesRunMap,
           racesForMap,
@@ -127,8 +131,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           raceHorizonByTown,
           myTown,
           myName,
-          highlightElusive,
-          numberOfRacesByTown
+          highlightElusive
         ],
         margin: margin
       }
