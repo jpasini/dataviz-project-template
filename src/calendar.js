@@ -70,10 +70,10 @@ function calendar(container, props, box) {
   // use the "manage only one thing" GUP
   // Calendar group
   let calendarG = container.selectAll('.calendargroup').data([null]);
-  const calendarEnter = calendarG
+  calendarG = calendarG
     .enter().append('g')
-      .attr('class', 'calendargroup');
-  calendarG = calendarEnter.merge(calendarG)
+      .attr('class', 'calendargroup')
+    .merge(calendarG)
       .attr("transform", "translate(" + 
         ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
         2*cellSize + ")");
@@ -92,11 +92,6 @@ function calendar(container, props, box) {
 
   // draw the background grid
   // Note: this relies on the top-left corner of this group being (0,0)
-  let rect = calendarG
-    .selectAll('rect')
-    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
-
-
   function getQuarter(d) {
     return Math.floor(d.getMonth()/3);
   }
@@ -118,8 +113,14 @@ function calendar(container, props, box) {
     return d.getDay()*cellSize + getRow(d)*10*cellSize;
   }
 
+  const calendarRectClass = 'calendarRect';
+  let rect = calendarG
+    .selectAll('.' + calendarRectClass)
+    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+
   rect = rect
-    .enter().append("rect")
+    .enter().append('rect')
+      .attr('class', calendarRectClass)
       .attr('fill', 'none')
       .attr("stroke", "#ccc")
       .attr("stroke-width", 1)
@@ -133,15 +134,9 @@ function calendar(container, props, box) {
   const fmt2 = d3.timeFormat("%Y-%m-%d");
   rect.filter(d => fmt2(d) in calendarData.all)
       .attr("fill", d => color(calendarData.all[fmt2(d)].length))
-      .attr("class", "day_with_race")
+      .attr("class", calendarRectClass + ' day_with_race')
     .append("title")
       .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
-
-  // for days with elusive races
-  if(highlightElusive) {
-    rect.filter(d => fmt2(d) in calendarData.elusive)
-        .attr('fill', '#d73027');
-  }
 
   // draw the color legend manually
   // use the "manage only one thing" version of the General Update Pattern
@@ -206,20 +201,41 @@ function calendar(container, props, box) {
     .merge(monthOutlines)
       .attr('d', pathMonth);
 
+  // for days with elusive races
+  const elusiveRectClass = 'elusiveRect';
+  let elusiveRect = calendarG
+    .selectAll('.' + elusiveRectClass)
+    .data(d3.timeDays(
+      new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)
+    ).filter(d => fmt2(d) in calendarData.elusive));
+
+  elusiveRect = elusiveRect
+    .enter().append('rect')
+      .attr('class', elusiveRectClass)
+      .attr('fill', 'none')
+      .attr("stroke-width", 3)
+    .merge(elusiveRect)
+      .attr('stroke', highlightElusive ? 'black' : 'none')
+      .attr("width", cellSize)
+      .attr("height", cellSize)
+      .attr("x", d => getDateX(d))
+      .attr("y", d => getDateY(d));
+
   // frame for today's date
   const today = d3.timeDay(new Date());
   const todayRect = calendarG.selectAll('.todayDate').data([today]);
   todayRect
-    .enter().append('rect')
+    .enter().append('circle')
       .attr('class', 'todayDate')
       .attr('fill', 'none')
-      .attr('stroke', 'black')
+      .attr('stroke', '#d73027')
     .merge(todayRect)
       .attr('width', cellSize)
       .attr('height', cellSize)
+      .attr('r', 1.6*cellSize/2)
       .attr('stroke-width', d3.min([3, cellSize/5]))
-      .attr("x", d => getDateX(d))
-      .attr("y", d => getDateY(d));
+      .attr("cx", d => getDateX(d) + cellSize/2)
+      .attr("cy", d => getDateY(d) + cellSize/2);
 
 
   // get bounding box for each month outline

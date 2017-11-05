@@ -400,7 +400,7 @@ function choroplethMap(container, props, box) {
       .attr('fill', 'none')
       .attr('stroke-width', 3)
     .merge(highlightAreas)
-      .attr('stroke', highlightElusive ? '#33a02c' : 'none')
+      .attr('stroke', highlightElusive ? 'black' : 'none')
       .attr('d', path);
 
   function dragstarted(d) {
