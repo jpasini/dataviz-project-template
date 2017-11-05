@@ -4,6 +4,32 @@ reach the goal of running a race in every one of Connecticut's 169 towns.
 
 ## The visualization
 
+This visualization has two parts
+
+* On top, a map of Connecticut shows towns with races "soon" (today or
+    tomorrow, within one week, or within two weeks).
+    * Hovering over a town shows details of the races coming soon.
+    * Once a member is chosen, it also shows in blue those towns the
+        member has already run.
+    * If a town is chosen, the "car" icon becomes active and can be
+        used to filter towns by driving time (assuming low traffic).
+    * When a member is chosen, the town automatically changes to the
+        town in which the member is registered, but overriden by
+        selecting a new town afterward.
+* Below, a calendar shows the number of races in every day of the
+    year. 
+    * Hovering over a date shows the races scheduled for that day.
+        Note: this hovering action does not work on cell phones yet.
+    * Note how most races are on Saturdays and Sundays, except during
+        the warmer months.
+* "Elusive" towns only have one race a year. The show/hide button
+    displays elusive towns on the map and dates on the calendar with
+    races in elusive towns.
+
+The image below shows the map after a member has been selected, the
+car icon has been dragged to filter out towns farther than 53 minutes,
+and elusive towns are shown in a black frame on the map and calendar.
+
 ![screenshot_2017-11-05_13-03-32](https://user-images.githubusercontent.com/5590117/32417597-e34ea5e4-c229-11e7-88cb-adeca44b6ee4.png)
 
 ## Source data
