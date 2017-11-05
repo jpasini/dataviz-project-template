@@ -24,11 +24,32 @@ function getCalendarHeight(width) {
   return getCellSize(width)*10 * getNumRows(width);
 }
 
+function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
+  // Compute data needed for the calendar
+  // roll up data for all races
+  const calendarData = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
+    .object(racesData);
+
+  // roll up data, but only for races in elusive towns
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  const calendarDataElusive = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return { length: d.length } } )
+    .object(racesData.filter(d => isElusive(d.Town)));
+
+  return { all: calendarData, elusive: calendarDataElusive };
+}
+
 function calendar(container, props, box) {
   const [
     racesData,
     highlightElusive,
-    numberOfRacesByTown
+    calendarData
   ] = props.data;
 
 
@@ -68,21 +89,6 @@ function calendar(container, props, box) {
     .merge(yearLabel)
       .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
       .attr("font-size", cellSize*1.6);
-
-  const data = d3.nest()
-      .key(d => d.DateString)
-      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
-    .object(racesData);
-
-  // roll up data, but only for elusive towns
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
-  const dataElusive = d3.nest()
-      .key(d => d.DateString)
-      .rollup(d => { return { length: d.length } } )
-    .object(racesData.filter(d => isElusive(d.Town)));
 
   // draw the background grid
   // Note: this relies on the top-left corner of this group being (0,0)
@@ -125,15 +131,15 @@ function calendar(container, props, box) {
 
   // fill the rects for each day
   const fmt2 = d3.timeFormat("%Y-%m-%d");
-  rect.filter(d => fmt2(d) in data)
-      .attr("fill", d => color(data[fmt2(d)].length))
+  rect.filter(d => fmt2(d) in calendarData.all)
+      .attr("fill", d => color(calendarData.all[fmt2(d)].length))
       .attr("class", "day_with_race")
     .append("title")
-      .text(d => fmt2(d) + ": " + formatCell(data[fmt2(d)].length) + " races\n" +  data[fmt2(d)].races);
+      .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
 
   // for days with elusive races
   if(highlightElusive) {
-    rect.filter(d => fmt2(d) in dataElusive)
+    rect.filter(d => fmt2(d) in calendarData.elusive)
         .attr('fill', '#d73027');
   }
 
@@ -262,5 +268,5 @@ function calendar(container, props, box) {
   }
 }
 
-export { calendar, parseRace, getCalendarHeight };
+export { calendar, parseRace, getCalendarHeight, rollUpDataForCalendar};
 
