@@ -61,21 +61,22 @@ function parseTownsRunByMembers(row) {
 }
 
 function computeNumberOfRacesByTown(races, townNames) {
-  const numberOfRacesByTown = {};
-  races.forEach(row => {
-    if(row.Town in numberOfRacesByTown) {
-      numberOfRacesByTown[row.Town] += 1;
-    } else {
-      numberOfRacesByTown[row.Town] = 1;
-    }
-  });
-  // complete with missing towns (there shouldn't be any missing!)
-  townNames.forEach(t => {
-    if(!(t in numberOfRacesByTown)) {
-      numberOfRacesByTown[t] = 0;
-    }
-  });
-  return numberOfRacesByTown;
+  // compute distinct races by town
+  // distinct means: if it's on the same date and has the same name
+  // then it's the same race (even if it's the same distance)
+  const distinctRacesByTown = d3.nest()
+      .key(d => d.Town)
+      .rollup(
+        d => {
+          const distinctRacesInTown = d3.nest()
+              .key(d => d.DateString + ':' + d.Name)
+              .rollup(item => ({length: item.length}))
+            .object(d);
+          return Object.keys(distinctRacesInTown).length;
+        }
+      )
+    .object(races);
+  return distinctRacesByTown;
 }
 
 function buildRaceHorizon(races, townNames) {
