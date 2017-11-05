@@ -2,7 +2,7 @@ This is a visualization to help members of [Run169](http://www.debticonn.org/)
 explore races in Connecticut to help them plan what races to run in order to
 reach the goal of running a race in every one of Connecticut's 169 towns.
 
-## The visualization
+## The visualization (and interactions)
 
 This visualization has two parts
 
@@ -31,6 +31,26 @@ car icon has been dragged to filter out towns farther than 53 minutes,
 and elusive towns are shown in a black frame on the map and calendar.
 
 ![screenshot_2017-11-05_13-03-32](https://user-images.githubusercontent.com/5590117/32417597-e34ea5e4-c229-11e7-88cb-adeca44b6ee4.png)
+
+## Tasks
+
+This visualization was designed to help Run 169 members answer the
+following questions:
+
+* What races are happening soon? This includes short-term
+    (today/tomorrow) as well as medium term (next week, next two
+    weeks). The [color
+    scheme](http://colorbrewer2.org/#type=diverging&scheme=RdYlBu&n=7)
+    was chosen to represent urgency.
+* How am I doing on my *Run 169 Towns* journey?
+* I only want to focus on towns in which I haven't already run.
+* If I'm only willing to drive *x* minutes, which towns are
+    reachable? This is encoded through opacity.
+* If I'm looking farther into the future (or the past!), what races
+    are happening on a specific date?
+* When are races going on in *elusive* towns?
+* I'd like to see the pattern in time of races: when do they tend to
+    happen?
 
 ## Source data
 
