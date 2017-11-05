@@ -127,13 +127,15 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const noPersonName = 'noPersonName';
   let highlightElusive = $('.ui.toggle.button').state('is active');
 
-  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getTownNames */])(drivingTimes);
+  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* getTownNames */])(drivingTimes);
   const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildTownIndex */])(townNames);
   const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])(membersTowns, townNames);
   const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildRaceHorizon */])(racesForMap, townNames);
   const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesSoonTables */])(racesForMap);
-  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeNumberOfRacesByTown */])(racesForMap, townNames);
+  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* computeNumberOfRacesByTown */])(racesForMap, townNames);
 
+  const mapFeatures = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeMapFeatures */])(mapData, numberOfRacesByTown);
+  const calendarData = Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["d" /* rollUpDataForCalendar */])(racesForCalendar, numberOfRacesByTown);
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
@@ -169,13 +171,13 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
         data: [
           racesForCalendar,
           highlightElusive,
-          numberOfRacesByTown
+          calendarData
         ],
         margin: margin
       },
       map: {
         data: [
-          mapData,
+          mapFeatures,
           drivingTimes,
           racesRunMap,
           racesForMap,
@@ -185,8 +187,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           raceHorizonByTown,
           myTown,
           myName,
-          highlightElusive,
-          numberOfRacesByTown
+          highlightElusive
         ],
         margin: margin
       }
@@ -196,7 +197,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     //const width = visualizationDiv.clientWidth;
     const containerBox = $('.ui.container').get(0).getBoundingClientRect();
     const width = containerBox.width; // + containerBox.left;
-    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(width) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
+    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(width) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
     // include a left margin inside the svg, to account for elements
     // that overflow (e.g., d3-tips)
     svg
@@ -209,8 +210,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     const boxes = {
-      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(containerBox.width)},
-      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
+      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(containerBox.width)},
+      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
     };
 
     // Render the choropleth map.
@@ -264,9 +265,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
 d3.queue()
   .defer(d3.json, 'data/ct_towns_simplified.topojson')
-  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* parseDrivingMap */])
+  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["j" /* parseDrivingMap */])
   .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["j" /* parseRaces */])
+  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["k" /* parseRaces */])
   .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
   .await(dataLoaded);
 
@@ -279,15 +280,16 @@ d3.queue()
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return choroplethMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return parseDrivingMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return parseDrivingMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRacesRunMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return parseRaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getTownNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return parseRaces; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return getTownNames; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildTownIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return buildRaceHorizon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getMapHeight; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return computeNumberOfRacesByTown; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getMapHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return computeNumberOfRacesByTown; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return computeMapFeatures; });
 function getMapHeight(width) {
   const threshold_width = 800;
   return width >= threshold_width ? threshold_width*3/4 : width*3/4;
@@ -465,12 +467,26 @@ function completeTooltipTables(racesSoonByTown) {
   );
 }
 
+function computeMapFeatures(mapData, numberOfRacesByTown) {
+  // Pre-compute map features for all & elusive towns
+  const mapFeatures = {};
+  mapFeatures.all = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
+
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  mapFeatures.elusive = mapFeatures.all.filter(d => isElusive(d.properties.NAME10));
+
+  return mapFeatures;
+}
+
 
 const carSlider = {value: 40};
 
 function choroplethMap(container, props, box) {
   const [
-    mapData,
+    mapFeatures,
     drivingTimes,
     racesRunMap,
     racesForMap,
@@ -480,8 +496,7 @@ function choroplethMap(container, props, box) {
     raceHorizonByTown,
     myTown,
     myName,
-    highlightElusive,
-    numberOfRacesByTown
+    highlightElusive
   ] = props.data;
 
   // string marker
@@ -646,11 +661,9 @@ function choroplethMap(container, props, box) {
     .translate([centerX, centerY]);
   const path = d3.geoPath().projection(projection);
 
-  const mapFeatures = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
-
   const pathClassName = 'areapath';
   let areas = container.selectAll('.' + pathClassName)
-    .data(mapFeatures);
+    .data(mapFeatures.all);
 
   areas = areas
     .enter().append('path')
@@ -671,7 +684,7 @@ function choroplethMap(container, props, box) {
     return numberOfRacesByTown[town] <= 1;
   }
   let highlightAreas = container.selectAll('.' + highlightPathClassName)
-    .data(mapFeatures.filter(d => isElusive(d.properties.NAME10)));
+    .data(mapFeatures.elusive);
 
   highlightAreas = highlightAreas
     .enter().append('path')
@@ -679,7 +692,7 @@ function choroplethMap(container, props, box) {
       .attr('fill', 'none')
       .attr('stroke-width', 3)
     .merge(highlightAreas)
-      .attr('stroke', highlightElusive ? '#33a02c' : 'none')
+      .attr('stroke', highlightElusive ? 'black' : 'none')
       .attr('d', path);
 
   function dragstarted(d) {
@@ -735,6 +748,7 @@ function choroplethMap(container, props, box) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return calendar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseRace; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCalendarHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return rollUpDataForCalendar; });
 const fmt = d3.format("02");
 const parseRace = d => {
   d.Month = +d.Month;
@@ -761,11 +775,32 @@ function getCalendarHeight(width) {
   return getCellSize(width)*10 * getNumRows(width);
 }
 
+function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
+  // Compute data needed for the calendar
+  // roll up data for all races
+  const calendarData = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
+    .object(racesData);
+
+  // roll up data, but only for races in elusive towns
+  function isElusive(town) {
+    return numberOfRacesByTown[town] <= 1;
+  }
+
+  const calendarDataElusive = d3.nest()
+      .key(d => d.DateString)
+      .rollup(d => { return { length: d.length } } )
+    .object(racesData.filter(d => isElusive(d.Town)));
+
+  return { all: calendarData, elusive: calendarDataElusive };
+}
+
 function calendar(container, props, box) {
   const [
     racesData,
     highlightElusive,
-    numberOfRacesByTown
+    calendarData
   ] = props.data;
 
 
@@ -786,10 +821,10 @@ function calendar(container, props, box) {
   // use the "manage only one thing" GUP
   // Calendar group
   let calendarG = container.selectAll('.calendargroup').data([null]);
-  const calendarEnter = calendarG
+  calendarG = calendarG
     .enter().append('g')
-      .attr('class', 'calendargroup');
-  calendarG = calendarEnter.merge(calendarG)
+      .attr('class', 'calendargroup')
+    .merge(calendarG)
       .attr("transform", "translate(" + 
         ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
         2*cellSize + ")");
@@ -806,28 +841,8 @@ function calendar(container, props, box) {
       .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
       .attr("font-size", cellSize*1.6);
 
-  const data = d3.nest()
-      .key(d => d.DateString)
-      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
-    .object(racesData);
-
-  // roll up data, but only for elusive towns
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
-  const dataElusive = d3.nest()
-      .key(d => d.DateString)
-      .rollup(d => { return { length: d.length } } )
-    .object(racesData.filter(d => isElusive(d.Town)));
-
   // draw the background grid
   // Note: this relies on the top-left corner of this group being (0,0)
-  let rect = calendarG
-    .selectAll('rect')
-    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
-
-
   function getQuarter(d) {
     return Math.floor(d.getMonth()/3);
   }
@@ -849,8 +864,14 @@ function calendar(container, props, box) {
     return d.getDay()*cellSize + getRow(d)*10*cellSize;
   }
 
+  const calendarRectClass = 'calendarRect';
+  let rect = calendarG
+    .selectAll('.' + calendarRectClass)
+    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+
   rect = rect
-    .enter().append("rect")
+    .enter().append('rect')
+      .attr('class', calendarRectClass)
       .attr('fill', 'none')
       .attr("stroke", "#ccc")
       .attr("stroke-width", 1)
@@ -862,17 +883,11 @@ function calendar(container, props, box) {
 
   // fill the rects for each day
   const fmt2 = d3.timeFormat("%Y-%m-%d");
-  rect.filter(d => fmt2(d) in data)
-      .attr("fill", d => color(data[fmt2(d)].length))
-      .attr("class", "day_with_race")
+  rect.filter(d => fmt2(d) in calendarData.all)
+      .attr("fill", d => color(calendarData.all[fmt2(d)].length))
+      .attr("class", calendarRectClass + ' day_with_race')
     .append("title")
-      .text(d => fmt2(d) + ": " + formatCell(data[fmt2(d)].length) + " races\n" +  data[fmt2(d)].races);
-
-  // for days with elusive races
-  if(highlightElusive) {
-    rect.filter(d => fmt2(d) in dataElusive)
-        .attr('fill', '#d73027');
-  }
+      .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
 
   // draw the color legend manually
   // use the "manage only one thing" version of the General Update Pattern
@@ -919,21 +934,6 @@ function calendar(container, props, box) {
       .attr("font-size", cellSize*1.2);
 
 
-  // frame for today's date
-  const today = d3.timeDay(new Date());
-  const todayRect = calendarG.selectAll('.todayDate').data([today]);
-  todayRect
-    .enter().append('rect')
-      .attr('class', 'todayDate')
-      .attr('fill', 'none')
-      .attr('stroke', 'black')
-    .merge(todayRect)
-      .attr('width', cellSize)
-      .attr('height', cellSize)
-      .attr('stroke-width', d3.min([3, cellSize/5]))
-      .attr("x", d => getDateX(d))
-      .attr("y", d => getDateY(d));
-
   // monthOutlines
   let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
   monthOutlinesG = monthOutlinesG
@@ -951,6 +951,42 @@ function calendar(container, props, box) {
       .attr('class', 'monthPath')
     .merge(monthOutlines)
       .attr('d', pathMonth);
+
+  // for days with elusive races
+  const elusiveRectClass = 'elusiveRect';
+  let elusiveRect = calendarG
+    .selectAll('.' + elusiveRectClass)
+    .data(d3.timeDays(
+      new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)
+    ).filter(d => fmt2(d) in calendarData.elusive));
+
+  elusiveRect = elusiveRect
+    .enter().append('rect')
+      .attr('class', elusiveRectClass)
+      .attr('fill', 'none')
+      .attr("stroke-width", 3)
+    .merge(elusiveRect)
+      .attr('stroke', highlightElusive ? 'black' : 'none')
+      .attr("width", cellSize)
+      .attr("height", cellSize)
+      .attr("x", d => getDateX(d))
+      .attr("y", d => getDateY(d));
+
+  // frame for today's date
+  const today = d3.timeDay(new Date());
+  const todayRect = calendarG.selectAll('.todayDate').data([today]);
+  todayRect
+    .enter().append('circle')
+      .attr('class', 'todayDate')
+      .attr('fill', 'none')
+      .attr('stroke', '#d73027')
+    .merge(todayRect)
+      .attr('width', cellSize)
+      .attr('height', cellSize)
+      .attr('r', 1.6*cellSize/2)
+      .attr('stroke-width', d3.min([3, cellSize/5]))
+      .attr("cx", d => getDateX(d) + cellSize/2)
+      .attr("cy", d => getDateY(d) + cellSize/2);
 
 
   // get bounding box for each month outline
