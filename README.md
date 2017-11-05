@@ -2,6 +2,10 @@ This is a visualization to help members of [Run169](http://www.debticonn.org/)
 explore races in Connecticut to help them plan what races to run in order to
 reach the goal of running a race in every one of Connecticut's 169 towns.
 
+## The visualization
+
+![screenshot_2017-11-05_13-03-32](https://user-images.githubusercontent.com/5590117/32417597-e34ea5e4-c229-11e7-88cb-adeca44b6ee4.png)
+
 ## Source data
 
 The data for this visualization comes from three sources. The first
