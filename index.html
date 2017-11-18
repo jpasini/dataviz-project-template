@@ -16,29 +16,38 @@
   <body>
     <div class="ui container">
       <h1><em>Run 169 Towns</em> Tool</h1>
-      <p>This tool for members of <a
-         href="http://www.debticonn.org">Run 169</a> shows Connecticut
-       towns with upcoming races. Find a member to mark towns already
-       run. Enter a town to filter by driving time (under low
-       traffic). The calendar shows races in each day.
-       <em>Elusive</em> towns only have one race a year.</p>
-
-      <p><a class="ui image label" href="mailto:josemiguelpasini@gmail.com?subject=Run 169 Visualization"><i class="mail link icon"></i>josemiguelpasini@gmail.com</a><span class="ui label">updated Nov 17, 2017</span></p>
-      <div class="ui search" id="personSearch">
-        <div class="ui icon input">
-          <input class="prompt" type="text" id="searchPersonText" placeholder="Member last name" title="Find a member to show which towns have already been completed">
-          <i class="search icon"></i>
+      <div class="ui three column stackable grid container">
+        <div class="nine wide column">
+          <p>This tool for members of <a
+             href="http://www.debticonn.org">Run 169</a> shows Connecticut
+           towns with upcoming races. Find a member to mark towns already
+           run. Enter a town to filter by driving time (under low
+           traffic). The calendar shows races in each day.
+           <em>Elusive</em> towns only have one race a year.</p>
         </div>
-        <div class="results"></div>
-      </div>
-      <div class="ui search" id="townSearch">
-        <div class="ui icon input">
-          <input class="prompt" type="text" id="searchTownText" placeholder="Town for driving times" title="The town is used to compute approximate driving times">
-          <i class="search icon"></i>
+        <div class="column">
+          <a class="ui image label" href="mailto:josemiguelpasini@gmail.com?subject=Run 169 Visualization"><i class="mail link icon"></i>josemiguelpasini@gmail.com</a><span class="ui image label">updated Nov 17, 2017</span>
         </div>
-        <div class="results"></div>
+        <div class="nine wide column">
+          <div class="ui search" id="personSearch">
+            <div class="ui icon input">
+              <input class="prompt" type="text" id="searchPersonText" placeholder="Member last name" title="Find a member to show which towns have already been completed">
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+          <div class="ui search" id="townSearch">
+            <div class="ui icon input">
+              <input class="prompt" type="text" id="searchTownText" placeholder="Town for driving times" title="The town is used to compute approximate driving times">
+              <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+        </div>
+        <div class="column">
+          <button class="ui toggle button">Show elusive towns</button>
+        </div>
       </div>
-      <button class="ui toggle button">Show elusive towns</button>
     </div>
     <div id="visualization">
       <svg></svg>
