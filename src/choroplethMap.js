@@ -289,14 +289,14 @@ function choroplethMap(container, props, box) {
   const carRect = car.selectAll('rect').data([carSlider]);
   carRect
     .enter().append('rect')
-      .attr('stroke', 'black')
+      .attr('stroke', 'none')
       .attr('fill', '#fff')
-      .attr('y', -15)
+      .attr('y', -20)
       .attr('width', 60)
-      .attr('height', 40);
+      .attr('height', 45);
 
   // draw the label with the driving time
-  let carLabel = sliderG.selectAll('.carLabel').data([carSlider]);
+  let carLabel = car.selectAll('.carLabel').data([carSlider]);
   carLabel = carLabel
     .enter().append('text')
       .attr('class', 'carLabel')
@@ -304,9 +304,9 @@ function choroplethMap(container, props, box) {
     .merge(carLabel)
       .attr('opacity', myTown == outOfState ? 0.3 : 1)
       .text(d => drivingTimeToString(sliderScale(d.x)))
-      .attr('x', d => d.x + 300*sliderParameters.scale)
-      .attr('y', -50*sliderParameters.scale)
-      .attr('font-size', (120*sliderParameters.scale) + 'px');
+      .attr('x', 27)
+      .attr('y', -7)
+      .attr('font-size', '1em');
 
 
   // draw the actual car
@@ -442,7 +442,6 @@ function choroplethMap(container, props, box) {
         .attr('transform', 'scale(1) translate('+ d.x + ') scale(' + carScale + ')');
 
     carLabel.merge(carLabel)
-        .attr('x', d.x + 300*sliderParameters.scale)
         .text(d => drivingTimeToString(sliderScale(d.x)));
 
     carLine.merge(carLine)
