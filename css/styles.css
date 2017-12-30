@@ -54,6 +54,7 @@ body {
 .carLabel {
   fill: #333;
   transition: opacity 0.3s;
+  stroke: none;
 }
 
 .carLine {
