@@ -211,8 +211,8 @@ d3.queue()
   .defer(d3.json, 'data/ct_towns_simplified.topojson')
   .defer(d3.csv, 'data/driving_times_full_symmetric.csv', parseDrivingMap)
   .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2017.csv', parseRacesForMap)
-  .defer(d3.csv, 'data/races2017.csv', parseRacesForCalendar)
+  .defer(d3.csv, 'data/races2018.csv', parseRacesForMap)
+  .defer(d3.csv, 'data/races2018.csv', parseRacesForCalendar)
   .await(dataLoaded);
 
 
