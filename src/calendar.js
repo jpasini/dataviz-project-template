@@ -3,7 +3,7 @@ const parseRace = d => {
   d.Month = +d.Month;
   d.Day = +d.Day;
   d.Weekday = +d.Weekday;
-  d.DateString = "2017-" + fmt(d.Month) + "-" + fmt(d.Day);
+  d.DateString = "2018-" + fmt(d.Month) + "-" + fmt(d.Day);
   return d;
 };
 
@@ -65,7 +65,7 @@ function calendar(container, props, box) {
       .domain([1, 6, 11, 16, 21])
       .range(legendColors);
 
-  const currentYear = 2017;
+  const currentYear = 2018;
 
   // use the "manage only one thing" GUP
   // Calendar group

@@ -139,7 +139,7 @@ function parseRaces(row) {
   row.Day = +row.Day;
   row.Weekday = +row.Weekday;
   row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2017, row.Month-1, row.Day));
+  row.raceDay = d3.timeDay(new Date(2018, row.Month-1, row.Day));
   return row;
 }
 
