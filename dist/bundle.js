@@ -267,8 +267,8 @@ d3.queue()
   .defer(d3.json, 'data/ct_towns_simplified.topojson')
   .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["j" /* parseDrivingMap */])
   .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["k" /* parseRaces */])
-  .defer(d3.csv, 'data/races2017.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
+  .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["k" /* parseRaces */])
+  .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
   .await(dataLoaded);
 
 
@@ -431,7 +431,7 @@ function parseRaces(row) {
   row.Day = +row.Day;
   row.Weekday = +row.Weekday;
   row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2017, row.Month-1, row.Day));
+  row.raceDay = d3.timeDay(new Date(2018, row.Month-1, row.Day));
   return row;
 }
 
@@ -773,7 +773,7 @@ const parseRace = d => {
   d.Month = +d.Month;
   d.Day = +d.Day;
   d.Weekday = +d.Weekday;
-  d.DateString = "2017-" + fmt(d.Month) + "-" + fmt(d.Day);
+  d.DateString = "2018-" + fmt(d.Month) + "-" + fmt(d.Day);
   return d;
 };
 
@@ -835,7 +835,7 @@ function calendar(container, props, box) {
       .domain([1, 6, 11, 16, 21])
       .range(legendColors);
 
-  const currentYear = 2017;
+  const currentYear = 2018;
 
   // use the "manage only one thing" GUP
   // Calendar group
