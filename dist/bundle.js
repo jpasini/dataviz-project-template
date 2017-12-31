@@ -835,7 +835,8 @@ function calendar(container, props, box) {
       .domain([1, 6, 11, 16, 21])
       .range(legendColors);
 
-  const currentYear = 2018;
+  const currentYear = (new Date()).getFullYear();
+  const shownYear = 2018;
 
   // use the "manage only one thing" GUP
   // Calendar group
@@ -855,7 +856,7 @@ function calendar(container, props, box) {
     .append("text")
       .attr("class", "yearLabel")
       .attr("text-anchor", "middle")
-      .text(currentYear)
+      .text(shownYear)
     .merge(yearLabel)
       .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
       .attr("font-size", cellSize*1.6);
@@ -886,7 +887,7 @@ function calendar(container, props, box) {
   const calendarRectClass = 'calendarRect';
   let rect = calendarG
     .selectAll('.' + calendarRectClass)
-    .data(d3.timeDays(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+    .data(d3.timeDays(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
 
   rect = rect
     .enter().append('rect')
@@ -964,7 +965,7 @@ function calendar(container, props, box) {
       .attr('stroke-width', d3.min([2, cellSize/5]));
 
   const monthOutlines = monthOutlinesG.selectAll('.monthPath')
-    .data(d3.timeMonths(new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)));
+    .data(d3.timeMonths(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
   monthOutlines
     .enter().append('path')
       .attr('class', 'monthPath')
@@ -976,7 +977,7 @@ function calendar(container, props, box) {
   let elusiveRect = calendarG
     .selectAll('.' + elusiveRectClass)
     .data(d3.timeDays(
-      new Date(currentYear, 0, 1), new Date(currentYear + 1, 0, 1)
+      new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)
     ).filter(d => fmt2(d) in calendarData.elusive));
 
   elusiveRect = elusiveRect
@@ -991,21 +992,23 @@ function calendar(container, props, box) {
       .attr("x", d => getDateX(d))
       .attr("y", d => getDateY(d));
 
-  // frame for today's date
-  const today = d3.timeDay(new Date());
-  const todayRect = calendarG.selectAll('.todayDate').data([today]);
-  todayRect
-    .enter().append('circle')
-      .attr('class', 'todayDate')
-      .attr('fill', 'none')
-      .attr('stroke', '#d73027')
-    .merge(todayRect)
-      .attr('width', cellSize)
-      .attr('height', cellSize)
-      .attr('r', 1.6*cellSize/2)
-      .attr('stroke-width', d3.min([3, cellSize/5]))
-      .attr("cx", d => getDateX(d) + cellSize/2)
-      .attr("cy", d => getDateY(d) + cellSize/2);
+  // frame for today's date: only if relevant
+  if(currentYear == shownYear) {
+    const today = d3.timeDay(new Date());
+    const todayMarker = calendarG.selectAll('.todayDate').data([today]);
+    todayMarker
+      .enter().append('circle')
+        .attr('class', 'todayDate')
+        .attr('fill', 'none')
+        .attr('stroke', '#d73027')
+      .merge(todayMarker)
+        .attr('width', cellSize)
+        .attr('height', cellSize)
+        .attr('r', 1.6*cellSize/2)
+        .attr('stroke-width', d3.min([3, cellSize/5]))
+        .attr("cx", d => getDateX(d) + cellSize/2)
+        .attr("cy", d => getDateY(d) + cellSize/2);
+  }
 
 
   // get bounding box for each month outline
