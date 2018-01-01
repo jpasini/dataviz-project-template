@@ -121,7 +121,7 @@ function drawBox(name, box, functions, props) {
 };
 
 
-function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar) {
+function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -132,7 +132,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])(membersTowns, townNames);
   const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildRaceHorizon */])(racesForMap, townNames);
   const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesSoonTables */])(racesForMap);
-  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* computeNumberOfRacesByTown */])(racesForMap, townNames);
+  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* computeNumberOfRacesByTown */])(num_races_by_town_2017);
 
   const mapFeatures = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeMapFeatures */])(mapData, numberOfRacesByTown);
   const calendarData = Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["d" /* rollUpDataForCalendar */])(racesForCalendar, numberOfRacesByTown);
@@ -269,6 +269,7 @@ d3.queue()
   .defer(d3.csv, 'data/members_towns_clean.csv')
   .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["k" /* parseRaces */])
   .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
+  .defer(d3.csv, 'data/num_races_by_town_2017.csv')
   .await(dataLoaded);
 
 
@@ -352,7 +353,8 @@ function parseTownsRunByMembers(row) {
   return row;
 }
 
-function computeNumberOfRacesByTown(races, townNames) {
+function computeNumberOfRacesByTown(num_races_by_town_2017) {
+  /*
   // compute distinct races by town
   // distinct means: if it's on the same date and has the same name
   // then it's the same race (even if it's the same distance)
@@ -369,6 +371,10 @@ function computeNumberOfRacesByTown(races, townNames) {
       )
     .object(races);
   return distinctRacesByTown;
+  */
+  const dictionary = {};
+  num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
+  return dictionary;
 }
 
 function buildRaceHorizon(races, townNames) {
