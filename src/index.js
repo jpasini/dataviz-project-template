@@ -65,7 +65,7 @@ function drawBox(name, box, functions, props) {
 };
 
 
-function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar) {
+function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -76,7 +76,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
   const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
-  const numberOfRacesByTown = computeNumberOfRacesByTown(racesForMap, townNames);
+  const numberOfRacesByTown = computeNumberOfRacesByTown(num_races_by_town_2017);
 
   const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
   const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
@@ -213,6 +213,7 @@ d3.queue()
   .defer(d3.csv, 'data/members_towns_clean.csv')
   .defer(d3.csv, 'data/races2018.csv', parseRacesForMap)
   .defer(d3.csv, 'data/races2018.csv', parseRacesForCalendar)
+  .defer(d3.csv, 'data/num_races_by_town_2017.csv')
   .await(dataLoaded);
 
 

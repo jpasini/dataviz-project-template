@@ -60,7 +60,8 @@ function parseTownsRunByMembers(row) {
   return row;
 }
 
-function computeNumberOfRacesByTown(races, townNames) {
+function computeNumberOfRacesByTown(num_races_by_town_2017) {
+  /*
   // compute distinct races by town
   // distinct means: if it's on the same date and has the same name
   // then it's the same race (even if it's the same distance)
@@ -77,6 +78,10 @@ function computeNumberOfRacesByTown(races, townNames) {
       )
     .object(races);
   return distinctRacesByTown;
+  */
+  const dictionary = {};
+  num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
+  return dictionary;
 }
 
 function buildRaceHorizon(races, townNames) {
