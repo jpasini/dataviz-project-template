@@ -57,3 +57,7 @@ repeatedNames <- members %>% count(Name) %>% filter(n>1)
 repeatedMembers <- members %>% filter(Name %in% repeatedNames$Name)
 
 write_csv(members, 'data/members_towns_clean.csv')
+
+# Update the timestamp ----
+last_downloaded <- format(today(), format='%b %d, %Y')
+write_lines(last_downloaded, 'data/last_downloaded.txt') # overwrites the file
