@@ -9,7 +9,7 @@ year_of_interest <- 2017
 
 filename <- paste0('data/races', year_of_interest, '.csv')
 
-races <- read_csv('data/races2017.csv')
+races <- read_csv(filename)
 
 # make sure we don't count the same race more than once
 # This is relevant for single events that have multiple distances.
@@ -68,4 +68,5 @@ numRacesByTown$numRaces[is.na(numRacesByTown$numRaces)] <- 0
 numRacesByTown <- numRacesByTown %>% mutate(isElusive = ifelse(numRaces < 2,  1, 0))
 
 # write results
-write_csv(numRacesByTown, 'data/num_races_by_town_2017.csv')
+results_filename <- paste0('data/num_races_by_town_', year_of_interest, '.csv')
+write_csv(numRacesByTown, results_filename)
