@@ -8,10 +8,12 @@ library(readxl)
 
 
 # Get data ----
+year_of_interest <- 2018
+
 races_basefilename <- 'data/DEBTiConnSchedule'
 races_xlsx_name <- paste0(races_basefilename, '.xlsx')
 curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
-races <- read_excel(races_xlsx_name, sheet='2018 Races')
+races <- read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races'))
 
 # Data wrangling ----
 
@@ -54,4 +56,5 @@ towns_not_in_list <- races %>% filter(!(Town %in% townNames)) %>% select(Town)
 # fix remaining problems if needed
 
 # write results
-write_csv(races, 'data/races2018.csv')
+write_csv(races, paste0('data/races', year_of_interest, '.csv'))
+
