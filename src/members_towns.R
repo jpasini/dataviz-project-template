@@ -5,6 +5,7 @@ library(tidyverse)
 library(stringi)
 library(curl)
 library(readxl)
+library(lubridate)
 
 # Get data ----
 curl_download('https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!365&app=Excel&authkey=!ADVujkY8Qh3SXfc', destfile='data/members_towns.xlsx')
