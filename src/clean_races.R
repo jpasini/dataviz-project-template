@@ -50,8 +50,11 @@ races <- races %>% mutate(Town=gsub(' \\(.*\\)', '', Town))
 races <- races %>% mutate(Town = gsub('MIddlebury', 'Middlebury', Town))
 races <- races %>% mutate(Town = gsub('CHaplin', 'Chaplin', Town))
 
-# find races with towns not in the list - check by hand
+# find races with towns not in the list - if so, write file to alert
 towns_not_in_list <- races %>% filter(!(Town %in% townNames)) %>% select(Town)
+if(nrow(towns_not_in_list) > 0) {
+  write_csv(towns_not_in_list, 'data/towns_not_in_list.csv') # overwrites the file
+}
 
 # fix remaining problems if needed
 
