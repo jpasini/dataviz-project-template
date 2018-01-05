@@ -18,7 +18,7 @@ races <- read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races'))
 # Data wrangling ----
 
 # Remove columns
-races <- races %>% select(-Results, -`Timing Co.`)
+#races <- races %>% select(-Results, -`Timing Co.`)
 
 # Remove non-races (e.g., headers for months)
 races <- races %>% filter(!is.na(Name))
