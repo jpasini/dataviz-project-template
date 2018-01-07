@@ -19,8 +19,8 @@ T,Stafford,"Sat, 02/03 11:00",5k,Stafford Springs February Fun Run,.$20 SOLD OUT
 W,Pomfret,"Sat, 02/03 13:00",5k,February Freeze,"$25, $75 for family (up to 5)",Results,Last Mile,NA,2018-02-03T13:00:00Z,2,3,6
 NH,New Haven,"Sun, 02/04 10:00",5K,IRIS Run for Refugees,"Adult - $25 through 12/1, $30 through 12/31, $32 through 2/3, $35 raceday;
 18 and under - $15 through 12/1, $20 through 12/31, $22 through 2/3, $25 raceday",Results,JB Sports,NA,2018-02-04T10:00:00Z,2,4,7
+W,Windham,"Sat, 02/10 10:00",2M,Cupid Made Me Do It,.$25,Results,First Mile,NA,2018-02-10T10:00:00Z,2,10,6
 F,Fairfield,"Sun, 02/11 09:00",20K,Boston Build-Up Series,"$47 pre, $50 post ($45 online) for the four race Series.  $20 ($18 online) for first individual race (subsequent races $17/$15)",Results,ClubCT,NA,2018-02-11T09:00:00Z,2,11,7
-W,Windham,"Sat, 02/17 10:00",2M,Cupid Made Me Do It,.$25,Results,First Mile,NA,2018-02-17T10:00:00Z,2,17,6
 L,Litchfield,"Sat, 02/17 11:00",5M,Sweetheart Run & Walk,"$25 thru 2/7, $30 afterwards; $10 under 10. Over 80 free",Results,Fast Track,NA,2018-02-17T11:00:00Z,2,17,6
 F,Danbury,"Sun, 02/18 10:00",5K,Big Chili 5K,.$25,Results,Greystone,NA,2018-02-18T10:00:00Z,2,18,7
 NL,Griswold,"Sun, 02/18 10:00",2M,A Mile Or Two In My Shoes Race,"$20, $25 raceday",Results,Time To TRI,NA,2018-02-18T10:00:00Z,2,18,7
@@ -71,10 +71,11 @@ H,Rocky Hill,"Sat, 04/14 09:00",5K,Rocky Hill Library 5K,.$25,Results,Empire,NA,
 H,Avon,"Sat, 04/14 09:00",5K,Avon Vol. Fire Dept. 75th Anniversary,TBD,Results,Rat Race,NA,2018-04-14T09:00:00Z,4,14,6
 NH,New Haven,"Sun, 04/15 10:00",4M,Julia's Run,"$20 through 3/1, $22 through 4/14, $25 race day",Results,JB Sports,NA,2018-04-15T10:00:00Z,4,15,7
 W,Killingly,"Sun, 04/15 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,NA,2018-04-15T17:30:00Z,4,15,7
+L,Washington,"Sat, 04/21 08:00",5K,Earth Day 5K,TBD,Results,Fast Track,NA,2018-04-21T08:00:00Z,4,21,6
 F,Stratford,"Sat, 04/21 08:30",6 hours,Enchanted Forest Ultra,"$79,  $89 after 10/31",Results,3C,NA,2018-04-21T08:30:00Z,4,21,6
 H,Windsor,"Sat, 04/21 10:40",5K,1040 EZ Run,"$25,  $35 raceday",Results,Its Your Race,NA,2018-04-21T10:40:00Z,4,21,6
+L,New Milford,"Sat, 04/21 12:00",5K,Dirt Dash,TBD,Results,Fast Track,NA,2018-04-21T12:00:00Z,4,21,6
 F,Greenwich,"Sun, 04/22 07:30",13.1M,Greenwich Cup Half Marathon,.$70,Results,Chronotrack,NA,2018-04-22T07:30:00Z,4,22,7
-L,Washington,"Sun, 04/22 08:00",5K,Earth Day 5K,TBD,Results,Fast Track,NA,2018-04-22T08:00:00Z,4,22,7
 NH,Waterbury,"Sun, 04/22 08:30",5K,Chris Corbett 5k,.$25,Results,Greystone,NA,2018-04-22T08:30:00Z,4,22,7
 L,Bethlehem,"Sun, 04/22 09:00",5K,Bring on the Heat,"$25,  $30 raceday",Results,First Mile,NA,2018-04-22T09:00:00Z,4,22,7
 H,Farmington,"Sun, 04/22 09:00",5K,East Farms Spring Ahead,"$20 through 4/6, $25 after",Results,Its Your Race,NA,2018-04-22T09:00:00Z,4,22,7
@@ -83,7 +84,6 @@ H,Simsbury,"Sun, 04/22 10:00",5K,Northeast Classic - Hope On the Hill,.$25,Resul
 NL,East Lyme,"Sun, 04/22 10:00",5K,Niantic Bay Boardwalk 5K,".$25, $20 for 18 and under.  After 4/18, $30 and $25",Results,SNERRO,NA,2018-04-22T10:00:00Z,4,22,7
 NH,Meriden,"Sun, 04/22 10:00",5K,Rotary Daffodil 5K,TBD,Results,Rat Race,NA,2018-04-22T10:00:00Z,4,22,7
 F,Danbury,"Sun, 04/22 10:30",5K,DAWS Run Your Tail Off,"$30,  $35 with a dog,  $15 youth 8-17",Results,Active,NA,2018-04-22T10:30:00Z,4,22,7
-L,New Milford,"Sun, 04/22 12:00",5K,Dirt Dash,TBD,Results,Fast Track,NA,2018-04-22T12:00:00Z,4,22,7
 W,Killingly,"Sun, 04/22 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,NA,2018-04-22T17:30:00Z,4,22,7
 H,Windsor,"Sat, 04/28 08:00",5K,Blue & Green 5K,TBD,Results,Empire TC,NA,2018-04-28T08:00:00Z,4,28,6
 W,Windham,"Sat, 04/28 08:30",13.1M,Willimantic Classic Half Marathon,.$45,Results,Last Mile,NA,2018-04-28T08:30:00Z,4,28,6
