@@ -210,7 +210,8 @@ function choroplethMap(container, props, box) {
     raceHorizonByTown,
     myTown,
     myName,
-    highlightElusive
+    highlightElusive,
+    dateHighlighter
   ] = props.data;
 
   // string marker
@@ -400,8 +401,8 @@ function choroplethMap(container, props, box) {
 
   areas = areas
     .enter().append('path')
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
+      .on('mouseover', d => { tip.show(d); dateHighlighter(d.properties.NAME10); } )
+      .on('mouseout', d => { tip.hide(d); } )
     .merge(areas)
       .attr('d', path)
       .attr('class', d => {

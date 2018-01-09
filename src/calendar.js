@@ -45,6 +45,13 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   return { all: calendarData, elusive: calendarDataElusive };
 }
 
+function getDateHighlighter(racesData) {
+  // collect dates for each town
+  // create highlighter based on list of dates
+  // return highlighter after binding to data
+  return townName => { console.log(townName); };
+}
+
 function calendar(container, props, box) {
   const [
     racesData,
@@ -287,5 +294,5 @@ function calendar(container, props, box) {
   }
 }
 
-export { calendar, parseRace, getCalendarHeight, rollUpDataForCalendar};
+export { calendar, parseRace, getCalendarHeight, rollUpDataForCalendar, getDateHighlighter };
 

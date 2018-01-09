@@ -16,7 +16,8 @@ import {
   calendar,
   parseRace as parseRacesForCalendar,
   getCalendarHeight,
-  rollUpDataForCalendar
+  rollUpDataForCalendar,
+  getDateHighlighter 
 } from './calendar.js'
 
 const margin = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -80,6 +81,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
   const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
+  const dateHighlighter = getDateHighlighter(racesForCalendar);
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
@@ -131,7 +133,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
           raceHorizonByTown,
           myTown,
           myName,
-          highlightElusive
+          highlightElusive,
+          dateHighlighter
         ],
         margin: margin
       }
@@ -158,7 +161,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
 
-    // Render the choropleth map.
+    // Render the content of the boxes (choropleth map and calendar)
     Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
 
   }
