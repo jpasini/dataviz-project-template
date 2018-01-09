@@ -34,7 +34,7 @@ L,Watertown,"Sat, 03/10 10:00",3.5M,Shamrock Shuffle,TBD,Results,Fast Track,NA,2
 F,Monroe,"Sun, 03/11 09:00",5K,Pi Day 5K,"$25, $30 day of",Results,Last Mile,NA,2018-03-11T09:00:00Z,3,11,7
 W,Putnam,"Sun, 03/11 13:00",5K,Courthouse O'Putnam 5K,"$25 through 1/4, $30 through 2/28, $35 afterwards; Ages 18-22 - $5 off; Ages 5 - 17 - $15 through 2/28, $20 afterwards",Results,HMF,NA,2018-03-11T13:00:00Z,3,11,7
 T,Bolton,"Sun, 03/11 13:00",5M,Bolton Road Race,"$20 through 12/31, $25 through 2/15, $30 through 3/10, $35 raceday",Results,Last Mile,NA,2018-03-11T13:00:00Z,3,11,7
-M,Old Saybrook,"Sat, 03/17 09:00",5K,Seaside Shuffle,.$20,Results,Rat Race,NA,2018-03-17T09:00:00Z,3,17,6
+M,Old Saybrook,"Sat, 03/17 09:00",5K,Shamrock Run,".$20, $25 raceday",Results,Rat Race,NA,2018-03-17T09:00:00Z,3,17,6
 H,Bristol,"Sat, 03/17 09:15",2M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,NA,2018-03-17T09:15:00Z,3,17,6
 H,Bristol,"Sat, 03/17 09:15",5M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,NA,2018-03-17T09:15:00Z,3,17,6
 NL,East Lyme,"Sat, 03/17 09:45",5K,O'Niantic 5K,"$25, $20 18-22, $15 5-17, prices go up $5 for 18-over 1/2,  prices go up another $5 3/8",Results,HMF,NA,2018-03-17T09:45:00Z,3,17,6
@@ -53,7 +53,7 @@ F,Fairfield,"Sun, 03/25 07:30",20K,Boston Blowout,".$18, $23 day of",Results,Clu
 F,Fairfield,"Sun, 03/25 07:30",30K,Boston Blowout,".$20, $25 day of",Results,Club CT,NA,2018-03-25T07:30:00Z,3,25,7
 NH,Waterbury,"Sun, 03/25 10:00",5K/1.8M,NVCC Food Pantry Fund Raiser Run,$25 (rescheduled from 12/17),Results,NA,NA,2018-03-25T10:00:00Z,3,25,7
 H,West Hartford,"Sun, 03/25 10:30",5K,Johnny's Jog for Charity,TBD,Results,Fast Track,NA,2018-03-25T10:30:00Z,3,25,7
-NH,Madison,"Sun, 03/25 11:00",5M,Leprechaun 5 Mile,TBD,Results,Platt,NA,2018-03-25T11:00:00Z,3,25,7
+NH,Madison,"Sun, 03/25 11:00",5M,Leprechaun 5 Mile,"$25, $30 raceday",Results,Platt,NA,2018-03-25T11:00:00Z,3,25,7
 NL,Sprague,"Sat, 03/31 08:30",1M,Lickety Split Mile,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,NA,2018-03-31T08:30:00Z,3,31,6
 NL,Sprague,"Sat, 03/31 09:30",3M,St. Joseph School 3-Mile Road Race,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,NA,2018-03-31T09:30:00Z,3,31,6
 H,Windsor Locks,"Sat, 03/31 10:00",10K,Bradley Road Race,"$25, after 3/17 $30",Results,Last Mile,NA,2018-03-31T10:00:00Z,3,31,6
@@ -116,11 +116,11 @@ H,Enfield,"Sat, 05/05 09:00",5K,Cinco K Mayo,"$25,  $30 raceday",Results,Its You
 F,Westport,"Sat, 05/05 09:00",5K,Susan Koman Race for the Cure,".$10?(but this says it includes a $25 discount)...This is a fundraising race, so there are many pricing options.",Results,NA,NA,2018-05-05T09:00:00Z,5,5,6
 L,Barkhamsted,"Sat, 05/05 09:30",5K,River Run,TBD,Results,Greystone,NA,2018-05-05T09:30:00Z,5,5,6
 L,Plymouth,"Sun, 05/06 00:00",5K,Terryville Rotary 5K,TBD,Results,Greystone,NA,2018-05-06T00:00:00Z,5,6,7
-NH,Wolcott,"Sun, 05/06 00:00",5K,Wolcott Circle of Sports 5K,TBD,Results,Hi-Tek,NA,2018-05-06T00:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:00",13.1M,Redding Road Race,.$60SOLD OUT,Results,RunSignUp,NA,2018-05-06T08:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:15",7M,Redding Road Race,.$45 SOLD OUT,Results,RunSignUp,NA,2018-05-06T08:15:00Z,5,6,7
 H,Burlington,"Sun, 05/06 08:30",10K,Burlington to Collinsville Classic,"$40, $35 for 9-22 through 1/1, $45, $40 9-22 through 4/5, $50, $45 9-22 through 4/25, $55, $50 9-22 after",Results,HMF,NA,2018-05-06T08:30:00Z,5,6,7
 NH,New Haven,"Sun, 05/06 09:00",5K Obstacle,Denali Run the Gauntlet,.$50,Results,JB Sports,NA,2018-05-06T09:00:00Z,5,6,7
+NH,Wolcott,"Sun, 05/06 10:00",5K,Wolcott Circle of Sports 5K,TBD,Results,Hi-Tek,NA,2018-05-06T10:00:00Z,5,6,7
 NH,Orange,"Sun, 05/06 10:00",5K,Cohen and Wolf Cinco de Mayo,TBD,Results,Platt,NA,2018-05-06T10:00:00Z,5,6,7
 M,East Hampton,"Sun, 05/06 10:00",5K,Belltown Spring Sprint,TBD,Results,Its Your Race,NA,2018-05-06T10:00:00Z,5,6,7
 L,Litchfield,"Sun, 05/06 12:00",5K,Girls Just Wanna Run,".$30 13 and over ($35 after 4/15), $18 under 13",Results,Empire TC,NA,2018-05-06T12:00:00Z,5,6,7
@@ -157,12 +157,12 @@ H,Hartford,"Sun, 05/20 09:00",5K,Wag Walk/Run for Kenway's Cause,.$25,Results,Fi
 NH,North Branford,"Sun, 05/20 09:30",5K,Matt's Mission,"$26 through 4/1, $28 through 5/19, $30 race day",Results,JB Sports,NA,2018-05-20T09:30:00Z,5,20,7
 L,Morris,"Sun, 05/20 12:00",5K,The Retro Run,.$20,Results,Platt,NA,2018-05-20T12:00:00Z,5,20,7
 NL,Griswold,"Sun, 05/20 13:00",Youth Du,"You Can ""Du"" It","$15 through 5/3, then $20",Results,Run Sign Up,NA,2018-05-20T13:00:00Z,5,20,7
-NL,North Stonington,"Sat, 05/26 00:00",5K,North Stonington Education Foundation,TBD,Results,Platt,NA,2018-05-26T00:00:00Z,5,26,6
 F,Weston,"Sat, 05/26 00:00",5K,Weston Memorial Day 5K,TBD,Results,ChronoTrack,NA,2018-05-26T00:00:00Z,5,26,6
 T,Willington,"Sat, 05/26 00:00",5K,Willington PTA 5K,TBD,Results,Last Mile,NA,2018-05-26T00:00:00Z,5,26,6
 NH,Hamden,"Sat, 05/26 08:00",13.1M,Hamden Hills Half Marathon,.$60,Results,Second Wind,NA,2018-05-26T08:00:00Z,5,26,6
 NH,Hamden,"Sat, 05/26 08:00",5K,Hamden Hills Half Marathon,.$25,Results,Second Wind,NA,2018-05-26T08:00:00Z,5,26,6
 M,Old Saybrook,"Sat, 05/26 09:00",4M,Delaney Dash,.$18,Results,SNERRO,NA,2018-05-26T09:00:00Z,5,26,6
+NL,North Stonington,"Sat, 05/26 10:00",5K,North Stonington Education Foundation,TBD,Results,Platt,NA,2018-05-26T10:00:00Z,5,26,6
 M,Deep River,"Sun, 05/27 09:00",Youth Du,Shoreline Splash and Dash,$20 through 5/11,Results,NA,NA,2018-05-27T09:00:00Z,5,27,7
 H,Marlborough,"Sun, 05/27 10:30",5K,Marlborough Lions Club,TBD,Results,Platt,NA,2018-05-27T10:30:00Z,5,27,7
 F,Easton,"Mon, 05/28 00:00",1M,Easton Exchange Memorial Mile,TBD,Results,Run Sign Up,NA,2018-05-28T00:00:00Z,5,28,1
@@ -260,6 +260,10 @@ T,Somers,"Sun, 07/29 09:00",5.5M,Soapstone Assault,"$10,  $5 Shenipsit Striders 
 H,Farmington,"Tue, 07/31 18:10",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,NA,2018-07-31T18:10:00Z,7,31,2
 H,Farmington,"Tue, 07/31 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,NA,2018-07-31T18:10:00Z,7,31,2
 H,Hartford,"Thu, 08/02 18:20",5K,CFA Society Hartford Corporate 5K,$27 through ???,Results,JBSports,NA,2018-08-02T18:20:00Z,8,2,4
+L,Washington,"Sat, 08/04 00:00",10K,XTERRA Steep Rock Trail Run,TBD,Results,Fast Track,NA,2018-08-04T00:00:00Z,8,4,6
+L,Washington,"Sat, 08/04 00:00",25K,XTERRA Steep Rock Trail Run,TBD,Results,Fast Track,NA,2018-08-04T00:00:00Z,8,4,6
+L,Washington,"Sat, 08/04 00:00",50K,XTERRA Steep Rock Trail Run,TBD,Results,Fast Track,NA,2018-08-04T00:00:00Z,8,4,6
+L,Washington,"Sat, 08/04 00:00",50M,XTERRA Steep Rock Trail Run,TBD,Results,Fast Track,NA,2018-08-04T00:00:00Z,8,4,6
 F,Westport,"Sat, 08/04 08:00",5.85M,Westport Road Runners Summer Series,"$10,  $60 for whole series, $5 for Westport residents or $30 for series",Results,WRR,NA,2018-08-04T08:00:00Z,8,4,6
 NL,New London,"Sat, 08/04 09:00",13.1M,Kelley Road Race,Free,Results,SNERRO,NA,2018-08-04T09:00:00Z,8,4,6
 T,Andover,"Sat, 08/04 09:00",10K,Hop River 5K & 10K,.$25,Results,First Mile,NA,2018-08-04T09:00:00Z,8,4,6
