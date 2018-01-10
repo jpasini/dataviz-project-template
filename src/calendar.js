@@ -47,9 +47,19 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
 
 function getDateHighlighter(racesData) {
   // collect dates for each town
+  // access elements as datesPerTown['Canton'] 
+  // yields a set of unique date strings for each town
+  const datesPerTown = racesData.reduce((accumulator, currentValue) => {
+    if(!(currentValue.Town in accumulator)) {
+      accumulator[currentValue.Town] = new Set();
+    }
+    accumulator[currentValue.Town].add(currentValue.DateString);
+    return accumulator;
+  }, {});
   // create highlighter based on list of dates
   // return highlighter after binding to data
-  return townName => { console.log(townName); };
+
+  return townName => { console.log(townName, datesPerTown[townName]); };
 }
 
 function calendar(container, props, box) {
