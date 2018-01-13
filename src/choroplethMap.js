@@ -469,8 +469,16 @@ function choroplethMap(container, props, box) {
   }
 }
 
+class ChoroplethMap {
+  constructor(opts) {
+  }
+  draw(container, props, box) {
+    choroplethMap(container, props, box);
+  }
+}
+
 export {
-  choroplethMap, 
+  ChoroplethMap,
   parseDrivingMap, 
   buildRacesRunMap, 
   parseRaces, 

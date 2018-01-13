@@ -304,5 +304,13 @@ function calendar(container, props, box) {
   }
 }
 
-export { calendar, parseRace, getCalendarHeight, rollUpDataForCalendar, getDateHighlighter };
+class Calendar {
+  constructor(opts) {
+  }
+  draw(container, props, box) {
+    calendar(container, props, box);
+  }
+}
+
+export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar, getDateHighlighter };
 

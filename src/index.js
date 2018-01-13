@@ -1,5 +1,5 @@
 import {
-  choroplethMap,
+  ChoroplethMap,
   parseDrivingMap,
   buildRacesRunMap,
   parseRaces as parseRacesForMap,
@@ -13,7 +13,7 @@ import {
 } from './choroplethMap'
 
 import {
-  calendar,
+  Calendar,
   parseRace as parseRacesForCalendar,
   getCalendarHeight,
   rollUpDataForCalendar,
@@ -26,14 +26,12 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-const functions = {
-  calendar: calendar,
-  map: choroplethMap,
-  selector: () => {},
-  drivingTimesFilter: () => {}
+const charts = {
+  calendar: new Calendar(),
+  map: new ChoroplethMap()
 }
 
-function drawBox(name, box, functions, props) {
+function drawBox(name, box, props) {
   // From sample code
   // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
   const x = box.x;
@@ -48,21 +46,8 @@ function drawBox(name, box, functions, props) {
   g = gEnter.merge(g)
       .attr('transform', 'translate(' + x + ',' + y + ')');
 
-  /*
-  // Draw a box (will remove this later)
-  const rect = g.selectAll('.boxFrame').data([null]);
-  rect
-    .enter().append('rect')
-      .attr('class', 'boxFrame')
-      .attr('fill', 'none')
-      .attr('stroke', '#666')
-    .merge(rect)
-      .attr('width', width)
-      .attr('height', height);
-  */
-
   // call the specific renderer
-  functions[name](g, props[name], box);
+  charts[name].draw(g, props[name], box);
 };
 
 
@@ -162,7 +147,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     // Render the content of the boxes (choropleth map and calendar)
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], props); } );
 
   }
 
