@@ -306,9 +306,20 @@ function calendar(container, props, box) {
 
 class Calendar {
   constructor(opts) {
+    this.data = opts.data;
+    this.margin = opts.margin;
   }
-  draw(container, props, box) {
+
+  draw(container, box) {
+    const props = {
+      data: this.data,
+      margin: this.margin
+    };
     calendar(container, props, box);
+  }
+
+  setElusiveHighlight(trueFalse) {
+    this.data[1] = trueFalse;
   }
 }
 

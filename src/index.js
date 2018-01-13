@@ -26,12 +26,7 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-const charts = {
-  calendar: new Calendar(),
-  map: new ChoroplethMap()
-}
-
-function drawBox(name, box, props) {
+function drawBox(name, box, chart) {
   // From sample code
   // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
   const x = box.x;
@@ -47,7 +42,7 @@ function drawBox(name, box, props) {
       .attr('transform', 'translate(' + x + ',' + y + ')');
 
   // call the specific renderer
-  charts[name].draw(g, props[name], box);
+  chart.draw(g, box);
 };
 
 
@@ -92,38 +87,38 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     }
   }
 
+  const charts = {
+    calendar: new Calendar({
+      data: [
+        racesForCalendar,
+        highlightElusive,
+        calendarData
+      ],
+      margin: margin
+    }),
+    map: new ChoroplethMap({
+      data: [
+        mapFeatures,
+        drivingTimes,
+        racesRunMap,
+        racesForMap,
+        townNames,
+        townIndex,
+        racesSoonByTown,
+        raceHorizonByTown,
+        myTown,
+        myName,
+        highlightElusive,
+        dateHighlighter
+      ],
+      margin: margin
+    })
+  }
+
   const render = (params) => {
     const defaultName = memberNames[0].title;
 
     setPersonAndTownName(params);
-
-    const props = {
-      calendar: {
-        data: [
-          racesForCalendar,
-          highlightElusive,
-          calendarData
-        ],
-        margin: margin
-      },
-      map: {
-        data: [
-          mapFeatures,
-          drivingTimes,
-          racesRunMap,
-          racesForMap,
-          townNames,
-          townIndex,
-          racesSoonByTown,
-          raceHorizonByTown,
-          myTown,
-          myName,
-          highlightElusive,
-          dateHighlighter
-        ],
-        margin: margin
-      }
-    };
 
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
@@ -147,7 +142,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     // Render the content of the boxes (choropleth map and calendar)
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], props); } );
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
 
   }
 
@@ -191,6 +186,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   });
   $('.ui.toggle.button').on('click', () => {
     highlightElusive = $('.ui.toggle.button').state('is active');
+    charts.calendar.setElusiveHighlight(highlightElusive);
+    charts.map.setElusiveHighlight(highlightElusive);
     render();
   });
 }

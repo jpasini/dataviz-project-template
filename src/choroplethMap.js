@@ -471,9 +471,20 @@ function choroplethMap(container, props, box) {
 
 class ChoroplethMap {
   constructor(opts) {
+    this.data = opts.data;
+    this.margin = opts.margin;
   }
-  draw(container, props, box) {
+
+  draw(container, box) {
+    const props = {
+      data: this.data,
+      margin: this.margin
+    };
     choroplethMap(container, props, box);
+  }
+
+  setElusiveHighlight(trueFalse) {
+    this.data[10] = trueFalse;
   }
 }
 
