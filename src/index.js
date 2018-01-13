@@ -42,7 +42,9 @@ function drawBox(name, box, chart) {
       .attr('transform', 'translate(' + x + ',' + y + ')');
 
   // call the specific renderer
-  chart.draw(g, box);
+  chart.setContainer(g);
+  chart.setBox(box);
+  chart.draw();
 };
 
 

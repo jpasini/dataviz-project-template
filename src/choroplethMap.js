@@ -475,12 +475,20 @@ class ChoroplethMap {
     this.margin = opts.margin;
   }
 
-  draw(container, box) {
+  draw() {
     const props = {
       data: this.data,
       margin: this.margin
     };
-    choroplethMap(container, props, box);
+    choroplethMap(this.container, props, this.box);
+  }
+
+  setContainer(container) {
+    this.container = container;
+  }
+
+  setBox(box) {
+    this.box = box;
   }
 
   setElusiveHighlight(trueFalse) {
