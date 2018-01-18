@@ -58,7 +58,7 @@ known_out_of_state_towns <- c(
   "Hampden, MA"       , "Alexandria, VA"      , "Westfield, MA"   ,     "Twin Lake, MI"     ,   "Webster, MA"       ,   "Nashua, NH"          ,
   "Greenville, SC"    , "Hornell, NY"         , "Space"           ,     "Cummings, GA"      ,   "Hampden, MA"       ,   "Westfield, MA"       ,
   "Springfield, MA"   , "Brooklyn, NY"        , "Stowe, VT "      ,     "E. Longmeadow, MA" ,   "Sutton, MA"        ,   "Chicopee, Mass "     ,
-  "Bradenton, FL"       
+  "Bradenton, FL"     , "Southbridge,MA" 
 )
 out_towns_not_in_known_list <- outTowns %>% filter(!(Town %in% known_out_of_state_towns))
 if(nrow(out_towns_not_in_known_list) > 0) {

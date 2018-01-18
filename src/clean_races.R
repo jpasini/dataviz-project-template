@@ -49,6 +49,7 @@ races <- races %>% mutate(Town=gsub(' \\(.*\\)', '', Town))
 # fix known problems
 races <- races %>% mutate(Town = gsub('MIddlebury', 'Middlebury', Town))
 races <- races %>% mutate(Town = gsub('CHaplin', 'Chaplin', Town))
+races <- races %>% mutate(Town = gsub('South WIndsor', 'South Windsor', Town))
 
 # find races with towns not in the list - if so, write file to alert
 towns_not_in_list <- races %>% filter(!(Town %in% townNames)) %>% select(Town)
