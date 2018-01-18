@@ -62,13 +62,13 @@ function getDateHighlighter(racesData) {
   return townName => { console.log(townName, datesPerTown[townName]); };
 }
 
-function calendar(container, props, box) {
+function calendar(container, props, box, options) {
   const [
     racesData,
-    highlightElusive,
     calendarData
   ] = props.data;
 
+  const highlightElusive = options.highlightElusive;
 
   const width = box.width, height = box.height;
 
@@ -315,7 +315,11 @@ class Calendar {
       data: this.data,
       margin: this.margin
     };
-    calendar(this.container, props, this.box);
+    calendar(this.container, props, this.box, this.options);
+  }
+
+  setOptions(options) {
+    this.options = options;
   }
   
   setContainer(container) {
@@ -327,7 +331,7 @@ class Calendar {
   }
 
   setElusiveHighlight(trueFalse) {
-    this.data[1] = trueFalse;
+    this.options.highlightElusive = trueFalse;
   }
 }
 

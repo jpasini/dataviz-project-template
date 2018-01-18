@@ -93,7 +93,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     calendar: new Calendar({
       data: [
         racesForCalendar,
-        highlightElusive,
         calendarData
       ],
       margin: margin
@@ -108,9 +107,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
         townIndex,
         racesSoonByTown,
         raceHorizonByTown,
-        myTown,
-        myName,
-        highlightElusive,
         dateHighlighter
       ],
       margin: margin
@@ -121,6 +117,13 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     const defaultName = memberNames[0].title;
 
     setPersonAndTownName(params);
+
+    const options = {
+      myTown:  myTown,
+      myName:  myName,
+      highlightElusive: highlightElusive
+    };
+    Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
 
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;

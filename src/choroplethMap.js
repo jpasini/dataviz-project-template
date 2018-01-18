@@ -198,7 +198,7 @@ function computeMapFeatures(mapData, numberOfRacesByTown) {
 
 const carSlider = {value: 40};
 
-function choroplethMap(container, props, box) {
+function choroplethMap(container, props, box, options) {
   const [
     mapFeatures,
     drivingTimes,
@@ -208,11 +208,12 @@ function choroplethMap(container, props, box) {
     townIndex,
     racesSoonByTown,
     raceHorizonByTown,
-    myTown,
-    myName,
-    highlightElusive,
     dateHighlighter
   ] = props.data;
+
+  const myTown = options.myTown;
+  const myName = options.myName;
+  const highlightElusive = options.highlightElusive;
 
   // string marker
   // TODO: find a 'DRY' way of doing this -- these are also set in index.js
@@ -480,7 +481,11 @@ class ChoroplethMap {
       data: this.data,
       margin: this.margin
     };
-    choroplethMap(this.container, props, this.box);
+    choroplethMap(this.container, props, this.box, this.options);
+  }
+
+  setOptions(options) {
+    this.options = options;
   }
 
   setContainer(container) {
@@ -492,7 +497,7 @@ class ChoroplethMap {
   }
 
   setElusiveHighlight(trueFalse) {
-    this.data[10] = trueFalse;
+    this.options.highlightElusive = trueFalse;
   }
 }
 
