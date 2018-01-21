@@ -27,8 +27,9 @@ F,Danbury,"Sun, 02/18 10:00",5K,Big Chili 5K,.$25,Results,Greystone,2018-02-18T1
 NL,Griswold,"Sun, 02/18 10:00",2M,A Mile Or Two In My Shoes Race,"$20, $25 raceday",Results,Time To TRI,2018-02-18T10:00:00Z,2,18,7
 NL,Colchester,"Sat, 02/24 10:00",13.1M,Colchester Half Marathon,"$14, $20 raceday",Results,Last Mile,2018-02-24T10:00:00Z,2,24,6
 F,Stratford,"Sat, 02/24 10:00",3M,Last Chance for Romance,.$23,Results,ClubCT,2018-02-24T10:00:00Z,2,24,6
+H,Bloomfield,"Sun, 02/25 11:00",2M,Winter Warrior Workout,.$25,Results,NA,2018-02-25T11:00:00Z,2,25,7
 NL,Stonington,"Sat, 03/03 08:00",5K,Kelley's Pace Hare Hop 5K,"$25, $15 students 5-19",Results,SNERRO,2018-03-03T08:00:00Z,3,3,6
-H,South Windsor,"Sat, 03/03 08:00",4M,South Windsor Main Street 4 Miler,".$15, $20 raceday",Results,Platt,2018-03-03T08:00:00Z,3,3,6
+H,South Windsor,"Sat, 03/03 09:00",4M,South Windsor Main Street 4 Miler,".$15, $20 raceday",Results,Platt,2018-03-03T09:00:00Z,3,3,6
 F,Norwalk,"Sun, 03/04 09:00",25K,Boston Build-Up Series,"$47 pre, $50 post ($45 online) for the four race Series.  $20 ($18 online) for first individual race (subsequent races $17/$15)",Results,ClubCT,2018-03-04T09:00:00Z,3,4,7
 NH,New Haven,"Sun, 03/04 09:00",5K,99.1 PLR Shamrock Run,"$28 through 1/1, $30 through 2/8, $32 through 3/3, $35 day of",Results,JB Sports,2018-03-04T09:00:00Z,3,4,7
 H,Southington,"Sat, 03/10 10:00",5K,O'Shenanigans 5K,"$25 through 1/4, $30 through 2/27, $35 afterwards; Ages 18-22 - $5 off; Ages 5 - 17 - $15 through 2/27, $20 afterwards [800 Runner Limit]",Results,HMF,2018-03-10T10:00:00Z,3,10,6
@@ -37,8 +38,8 @@ F,Monroe,"Sun, 03/11 09:00",5K,Pi Day 5K,"$25, $30 day of (I put the current reg
 W,Putnam,"Sun, 03/11 13:00",5K,Courthouse O'Putnam 5K,"$25 through 1/4, $30 through 2/28, $35 afterwards; Ages 18-22 - $5 off; Ages 5 - 17 - $15 through 2/28, $20 afterwards",Results,HMF,2018-03-11T13:00:00Z,3,11,7
 T,Bolton,"Sun, 03/11 13:00",5M,Bolton Road Race,"$20 through 12/31, $25 through 2/15, $30 through 3/10, $35 raceday",Results,Last Mile,2018-03-11T13:00:00Z,3,11,7
 M,Old Saybrook,"Sat, 03/17 09:00",5K,St. Johns School Shamrock Run,".$20, $25 raceday",Results,Rat Race,2018-03-17T09:00:00Z,3,17,6
-H,Bristol,"Sat, 03/17 09:15",2M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,2018-03-17T09:15:00Z,3,17,6
-H,Bristol,"Sat, 03/17 09:15",5M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,2018-03-17T09:15:00Z,3,17,6
+H,Bristol,"Sat, 03/17 09:30",2M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,2018-03-17T09:30:00Z,3,17,6
+H,Bristol,"Sat, 03/17 10:30",5M,Shamrock Run,"$22 through 3/10, $25 afterwards",Results,Platt,2018-03-17T10:30:00Z,3,17,6
 NL,East Lyme,"Sat, 03/17 09:45",5K,O'Niantic 5K,"$25, $20 18-22, $15 5-17, prices go up $5 for 18-over 1/2,  prices go up another $5 3/8",Results,HMF,2018-03-17T09:45:00Z,3,17,6
 NL,Groton,"Sat, 03/17 10:00",5K,Mystic Irish 5k Road Race,"$20 by 2/24, $25 by 3/20, $30 raceday",Results,SNERRO,2018-03-17T10:00:00Z,3,17,6
 F,Fairfield,"Sun, 03/18 11:00",4M,WSSAC St. Patrick's 4 Miler,".$22 until 3/10, then $27",Results,Fast Track,2018-03-18T11:00:00Z,3,18,7
@@ -252,6 +253,7 @@ NH,Milford,"Sat, 06/09 09:00",5K,Pirate Day 5K,.$25,Results,Second Wind,2018-06-
 H,Enfield,"Sat, 06/09 09:00",5K,HMS Fun Run Day,"$15, $10 for students",Results,School PTO,2018-06-09T09:00:00Z,6,9,6
 NL,Norwich,"Sat, 06/09 09:00",5K,Norwich Tech Warrior 5k,.$20,Results,Platt,2018-06-09T09:00:00Z,6,9,6
 NL,Groton,"Sat, 06/09 10:00",5K,Tour de Noank,TBD,Results,SNERRO,2018-06-09T10:00:00Z,6,9,6
+H,Granby,"Sat, 06/09 09:30",5K,Granby Bear 5K Challenge,".$25, $30 day of",Results,Its Your Race,2018-06-09T09:30:00Z,6,9,6
 T,Mansfield,"Sun, 06/10 09:00",14.1M,Nipmuck South Trail Race,.$25,Results,Ultra Signup/Rat Race,2018-06-10T09:00:00Z,6,10,7
 F,Bridgeport,"Sun, 06/10 09:00",5K,Run for the Rock,TBD,Results,Last Mile,2018-06-10T09:00:00Z,6,10,7
 H,West Hartford,"Sun, 06/10 09:30",5K,Celebrate West Hartford,"$25 through 6/1,  $30 after",Results,Platt,2018-06-10T09:30:00Z,6,10,7
