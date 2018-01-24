@@ -72,22 +72,34 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     });
   });
 
-  // defaults
-  let myName = noPersonName;
-  let myTown = outOfState;
-
-  function setPersonAndTownName(params) {
-    if(params == undefined) return;
-    if('personName' in params) {
-      // if a person is provided, override the town selection
-      myName = params.personName;
-      myTown = memberTownsMap[myName];
-      // also set the town selector to the town to avoid confusion
-      $('#townSearch').search('set value', myTown);
-    } else if('townName' in params) {
-      myTown = params.townName;
+  class PersonAndTownName {
+    constructor() {
+      // start with defaults
+      this.data = {
+        name: noPersonName,
+        town: outOfState
+      };
     }
-  }
+
+    update(params) {
+      if(params == undefined) return;
+      if('personName' in params) {
+        // if a person is provided, override the town selection
+        this.data.name = params.personName;
+        this.data.town = memberTownsMap[this.data.name];
+        // also set the town selector to the town to avoid confusion
+        $('#townSearch').search('set value', this.data.town);
+      } else if('townName' in params) {
+        this.data.town = params.townName;
+      }
+    }
+
+    getValues() {
+      return this.data;
+    }
+  };
+
+  const townName = new PersonAndTownName();
 
   const charts = {
     calendar: new Calendar({
@@ -114,11 +126,13 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   }
 
   const render = (params) => {
-    setPersonAndTownName(params);
+   
+    townName.update(params);
+    const townAndName = townName.getValues();
 
     const options = {
-      myTown:  myTown,
-      myName:  myName,
+      myTown:  townAndName.town,
+      myName:  townAndName.name,
       highlightElusive: highlightElusive
     };
     Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
