@@ -114,8 +114,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   }
 
   const render = (params) => {
-    const defaultName = memberNames[0].title;
-
     setPersonAndTownName(params);
 
     const options = {
