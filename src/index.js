@@ -75,27 +75,29 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   class PersonAndTownName {
     constructor() {
       // start with defaults
-      this.data = {
-        name: noPersonName,
-        town: outOfState
-      };
+      this.name = noPersonName;
+      this.town = outOfState;
     }
 
     update(params) {
       if(params == undefined) return;
       if('personName' in params) {
         // if a person is provided, override the town selection
-        this.data.name = params.personName;
-        this.data.town = memberTownsMap[this.data.name];
+        this.name = params.personName;
+        this.town = memberTownsMap[this.name];
         // also set the town selector to the town to avoid confusion
-        $('#townSearch').search('set value', this.data.town);
+        $('#townSearch').search('set value', this.town);
       } else if('townName' in params) {
-        this.data.town = params.townName;
+        this.town = params.townName;
       }
     }
 
-    getValues() {
-      return this.data;
+    getName() {
+      return this.name;
+    }
+
+    getTown() {
+      return this.town;
     }
   };
 
@@ -128,11 +130,10 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const render = (params) => {
    
     townName.update(params);
-    const townAndName = townName.getValues();
 
     const options = {
-      myTown:  townAndName.town,
-      myName:  townAndName.name,
+      myTown:  townName.getTown(),
+      myName:  townName.getName(),
       highlightElusive: highlightElusive
     };
     Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
