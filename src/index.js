@@ -63,7 +63,6 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
   const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
-  const dateHighlighter = getDateHighlighter(racesForCalendar);
   const memberNames = [];
   membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
@@ -103,29 +102,31 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const townName = new PersonAndTownName();
 
+  const myCalendar = new Calendar({
+    data: [
+      racesForCalendar,
+      calendarData
+    ],
+    margin: margin
+  });
+  const myMap = new ChoroplethMap({
+    data: [
+      mapFeatures,
+      drivingTimes,
+      racesRunMap,
+      racesForMap,
+      townNames,
+      townIndex,
+      racesSoonByTown,
+      raceHorizonByTown,
+      myCalendar.getDateHighlighter()
+    ],
+    margin: margin
+  });
   const charts = {
-    calendar: new Calendar({
-      data: [
-        racesForCalendar,
-        calendarData
-      ],
-      margin: margin
-    }),
-    map: new ChoroplethMap({
-      data: [
-        mapFeatures,
-        drivingTimes,
-        racesRunMap,
-        racesForMap,
-        townNames,
-        townIndex,
-        racesSoonByTown,
-        raceHorizonByTown,
-        dateHighlighter
-      ],
-      margin: margin
-    })
-  }
+    calendar: myCalendar,
+    map: myMap
+  };
 
   const render = (params) => {
    

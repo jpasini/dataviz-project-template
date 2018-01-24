@@ -45,23 +45,6 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   return { all: calendarData, elusive: calendarDataElusive };
 }
 
-function getDateHighlighter(racesData) {
-  // collect dates for each town
-  // access elements as datesPerTown['Canton'] 
-  // yields a set of unique date strings for each town
-  const datesPerTown = racesData.reduce((accumulator, currentValue) => {
-    if(!(currentValue.Town in accumulator)) {
-      accumulator[currentValue.Town] = new Set();
-    }
-    accumulator[currentValue.Town].add(currentValue.DateString);
-    return accumulator;
-  }, {});
-  // create highlighter based on list of dates
-  // return highlighter after binding to data
-
-  return townName => { console.log(townName, datesPerTown[townName]); };
-}
-
 class Calendar {
   constructor(opts) {
     this.data = opts.data;
@@ -308,6 +291,23 @@ class Calendar {
           + "H" + (c1 + 1) * cellSize + "V" + rowOffset
           + "H" + (c0 + 1) * cellSize + "Z";
     }
+  }
+
+  getDateHighlighter() {
+    // collect dates for each town
+    // access elements as datesPerTown['Canton'] 
+    // yields a set of unique date strings for each town
+    const datesPerTown = this.data[0].reduce((accumulator, currentValue) => {
+      if(!(currentValue.Town in accumulator)) {
+        accumulator[currentValue.Town] = new Set();
+      }
+      accumulator[currentValue.Town].add(currentValue.DateString);
+      return accumulator;
+    }, {});
+    // create highlighter based on list of dates
+    // return highlighter after binding to data
+
+    return townName => { console.log(townName, datesPerTown[townName]); };
   }
 
   setOptions(options) {
