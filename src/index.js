@@ -1,5 +1,5 @@
 import {
-  choroplethMap,
+  ChoroplethMap,
   parseDrivingMap,
   buildRacesRunMap,
   parseRaces as parseRacesForMap,
@@ -13,10 +13,11 @@ import {
 } from './choroplethMap'
 
 import {
-  calendar,
+  Calendar,
   parseRace as parseRacesForCalendar,
   getCalendarHeight,
-  rollUpDataForCalendar
+  rollUpDataForCalendar,
+  getDateHighlighter 
 } from './calendar.js'
 
 const margin = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -25,14 +26,7 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-const functions = {
-  calendar: calendar,
-  map: choroplethMap,
-  selector: () => {},
-  drivingTimesFilter: () => {}
-}
-
-function drawBox(name, box, functions, props) {
+function drawBox(name, box, chart) {
   // From sample code
   // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
   const x = box.x;
@@ -47,21 +41,10 @@ function drawBox(name, box, functions, props) {
   g = gEnter.merge(g)
       .attr('transform', 'translate(' + x + ',' + y + ')');
 
-  /*
-  // Draw a box (will remove this later)
-  const rect = g.selectAll('.boxFrame').data([null]);
-  rect
-    .enter().append('rect')
-      .attr('class', 'boxFrame')
-      .attr('fill', 'none')
-      .attr('stroke', '#666')
-    .merge(rect)
-      .attr('width', width)
-      .attr('height', height);
-  */
-
   // call the specific renderer
-  functions[name](g, props[name], box);
+  chart.setContainer(g);
+  chart.setBox(box);
+  chart.draw();
 };
 
 
@@ -88,54 +71,73 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     });
   });
 
-  // defaults
-  let myName = noPersonName;
-  let myTown = outOfState;
-
-  function setPersonAndTownName(params) {
-    if(params == undefined) return;
-    if('personName' in params) {
-      // if a person is provided, override the town selection
-      myName = params.personName;
-      myTown = memberTownsMap[myName];
-      // also set the town selector to the town to avoid confusion
-      $('#townSearch').search('set value', myTown);
-    } else if('townName' in params) {
-      myTown = params.townName;
+  class PersonAndTownName {
+    constructor() {
+      // start with defaults
+      this.name = noPersonName;
+      this.town = outOfState;
     }
-  }
+
+    update(params) {
+      if(params == undefined) return;
+      if('personName' in params) {
+        // if a person is provided, override the town selection
+        this.name = params.personName;
+        this.town = memberTownsMap[this.name];
+        // also set the town selector to the town to avoid confusion
+        $('#townSearch').search('set value', this.town);
+      } else if('townName' in params) {
+        this.town = params.townName;
+      }
+    }
+
+    getName() {
+      return this.name;
+    }
+
+    getTown() {
+      return this.town;
+    }
+  };
+
+  const townName = new PersonAndTownName();
+
+  const myCalendar = new Calendar({
+    data: [
+      racesForCalendar,
+      calendarData
+    ],
+    margin: margin
+  });
+  const myMap = new ChoroplethMap({
+    data: [
+      mapFeatures,
+      drivingTimes,
+      racesRunMap,
+      racesForMap,
+      townNames,
+      townIndex,
+      racesSoonByTown,
+      raceHorizonByTown,
+      myCalendar.getDateHighlighter()
+    ],
+    margin: margin
+  });
+  const charts = {
+    calendar: myCalendar,
+    map: myMap
+  };
 
   const render = (params) => {
-    const defaultName = memberNames[0].title;
+   
+    townName.update(params);
 
-    setPersonAndTownName(params);
-
-    const props = {
-      calendar: {
-        data: [
-          racesForCalendar,
-          highlightElusive,
-          calendarData
-        ],
-        margin: margin
-      },
-      map: {
-        data: [
-          mapFeatures,
-          drivingTimes,
-          racesRunMap,
-          racesForMap,
-          townNames,
-          townIndex,
-          racesSoonByTown,
-          raceHorizonByTown,
-          myTown,
-          myName,
-          highlightElusive
-        ],
-        margin: margin
-      }
+    const options = {
+      myTown:  townName.getTown(),
+      myName:  townName.getName(),
+      highlightElusive: highlightElusive
     };
+    Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
 
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
@@ -158,8 +160,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
 
-    // Render the choropleth map.
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
+    // Render the content of the boxes (choropleth map and calendar)
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
 
   }
 
@@ -203,6 +205,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   });
   $('.ui.toggle.button').on('click', () => {
     highlightElusive = $('.ui.toggle.button').state('is active');
+    charts.calendar.setElusiveHighlight(highlightElusive);
+    charts.map.setElusiveHighlight(highlightElusive);
     render();
   });
 }
