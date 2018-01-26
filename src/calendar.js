@@ -49,6 +49,26 @@ class Calendar {
   constructor(opts) {
     this.data = opts.data;
     this.margin = opts.margin;
+    this.shownYear = 2018;
+  }
+
+  drawYearLabel(container) {
+    // year label
+    const yearLabel = container.selectAll('.yearLabel').data([null]);
+    const cs = this.cellSize;
+    yearLabel
+      .enter()
+      .append("text")
+        .attr("class", "yearLabel")
+        .attr("text-anchor", "middle")
+        .text(this.shownYear)
+      .merge(yearLabel)
+        .attr("transform", "translate(-" + 1.9*cs + "," + cs * 3.5 + ")rotate(-90)")
+        .attr("font-size", cs*1.6);
+  }
+
+  setCellSize(width) {
+    this.cellSize = getCellSize(width);
   }
 
   draw() {
@@ -63,7 +83,8 @@ class Calendar {
 
     // note: wrapping algorithm designed for nRows = 1, 2, and 4
     const nRows = getNumRows(width);
-    const cellSize = getCellSize(width);
+    this.setCellSize(width);
+    const cellSize = this.cellSize;
     
     const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
     const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
@@ -72,7 +93,6 @@ class Calendar {
         .range(legendColors);
 
     const currentYear = (new Date()).getFullYear();
-    const shownYear = 2018;
 
     // use the "manage only one thing" GUP
     // Calendar group
@@ -85,17 +105,7 @@ class Calendar {
           ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
           2*cellSize + ")");
 
-    // year label
-    const yearLabel = calendarG.selectAll('.yearLabel').data([null]);
-    yearLabel
-      .enter()
-      .append("text")
-        .attr("class", "yearLabel")
-        .attr("text-anchor", "middle")
-        .text(shownYear)
-      .merge(yearLabel)
-        .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
-        .attr("font-size", cellSize*1.6);
+    this.drawYearLabel(calendarG);
 
     // draw the background grid
     // Note: this relies on the top-left corner of this group being (0,0)
@@ -123,7 +133,7 @@ class Calendar {
     const calendarRectClass = 'calendarRect';
     let rect = calendarG
       .selectAll('.' + calendarRectClass)
-      .data(d3.timeDays(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
+      .data(d3.timeDays(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
 
     rect = rect
       .enter().append('rect')
@@ -201,7 +211,7 @@ class Calendar {
         .attr('stroke-width', d3.min([2, cellSize/5]));
 
     const monthOutlines = monthOutlinesG.selectAll('.monthPath')
-      .data(d3.timeMonths(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
+      .data(d3.timeMonths(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
     monthOutlines
       .enter().append('path')
         .attr('class', 'monthPath')
@@ -213,7 +223,7 @@ class Calendar {
     let elusiveRect = calendarG
       .selectAll('.' + elusiveRectClass)
       .data(d3.timeDays(
-        new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)
+        new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)
       ).filter(d => fmt2(d) in calendarData.elusive));
 
     elusiveRect = elusiveRect
@@ -229,7 +239,7 @@ class Calendar {
         .attr("y", d => getDateY(d));
 
     // frame for today's date: only if relevant
-    if(currentYear == shownYear) {
+    if(currentYear == this.shownYear) {
       const today = d3.timeDay(new Date());
       const todayMarker = calendarG.selectAll('.todayDate').data([today]);
       todayMarker
