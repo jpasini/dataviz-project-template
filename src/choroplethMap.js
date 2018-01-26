@@ -410,7 +410,7 @@ class ChoroplethMap {
     areas = areas
       .enter().append('path')
         .on('mouseover', d => { tip.show(d); dateHighlighter(d.properties.NAME10); } )
-        .on('mouseout', d => { tip.hide(d); } )
+        .on('mouseout', d => { tip.hide(d); dateHighlighter(); } )
       .merge(areas)
         .attr('d', path)
         .attr('class', d => {

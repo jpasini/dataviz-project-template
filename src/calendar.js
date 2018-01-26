@@ -181,6 +181,7 @@ class Calendar {
         .attr("transform", "translate(" + 
           ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
           2*cellSize + ")");
+    this.calendarG = calendarG;
 
     this.drawYearLabel(calendarG);
 
@@ -325,17 +326,48 @@ class Calendar {
     // collect dates for each town
     // access elements as datesPerTown['Canton'] 
     // yields a set of unique date strings for each town
-    const datesPerTown = this.data[0].reduce((accumulator, currentValue) => {
+    this.datesPerTown = this.data[0].reduce((accumulator, currentValue) => {
       if(!(currentValue.Town in accumulator)) {
         accumulator[currentValue.Town] = new Set();
       }
-      accumulator[currentValue.Town].add(currentValue.DateString);
+      const yr = currentValue.DateString.substr(0,4);
+      const mo = currentValue.DateString.substr(5,2);
+      const dy = currentValue.DateString.substr(8);
+      const d = new Date(yr, mo - 1, dy);
+      // use getTime to have set equality avoid duplicate dates
+      accumulator[currentValue.Town].add(d.getTime());
       return accumulator;
     }, {});
     // create highlighter based on list of dates
     // return highlighter after binding to data
 
-    return townName => { console.log(townName, datesPerTown[townName]); };
+    return townName => { this.highlightDatesForTown(townName); };
+  }
+  
+  highlightDatesForTown(townName) {
+    // if town is empty, remove highlighting
+    const highlightRectClass = 'highlightTownRect';
+    let data = [];
+    if(townName in this.datesPerTown) {
+      data = Array.from(this.datesPerTown[townName], d => new Date(d));
+    }
+    let highlightRect = this.calendarG
+      .selectAll('.' + highlightRectClass)
+      .data(data);
+
+    highlightRect
+      .enter().append('rect')
+        .attr('class', highlightRectClass)
+        .attr('fill', 'green')
+        .attr("stroke-width", 3)
+      .merge(highlightRect)
+        .attr('stroke', 'none')
+        .attr("width", this.cellSize)
+        .attr("height", this.cellSize)
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
+
+    highlightRect.exit().remove();
   }
 
   setOptions(options) {
