@@ -8,6 +8,7 @@ const parseRace = d => {
 };
 
 const formatCell = d3.format("0");
+const fmt2 = d3.timeFormat("%Y-%m-%d");
 
 const nWeeks = 52;
 const nDays = 7;
@@ -71,6 +72,82 @@ class Calendar {
     this.cellSize = getCellSize(width);
   }
 
+  setNumRows(width) {
+    this.nRows = getNumRows(width);
+  };
+
+  getQuarter(d) {
+    return Math.floor(d.getMonth()/3);
+  }
+
+  getRow(d) {
+    return Math.floor(this.getQuarter(d)/4*this.nRows);
+  }
+
+  getColumn(d) {
+    const week = d3.timeWeek.count(d3.timeYear(d), d);
+    return week - this.getRow(d)*(52/this.nRows);
+  }
+
+  getDateX(d) {
+    return this.getColumn(d)*this.cellSize;
+  }
+
+  getDateY(d) {
+    return d.getDay()*this.cellSize + this.getRow(d)*10*this.cellSize;
+  }
+
+  drawBackgroundGrid(container) {
+    // draw the background grid
+    // Note: this relies on the top-left corner of this group being (0,0)
+    const calendarData = this.data[1];
+    const calendarRectClass = 'calendarRect';
+    let rect = container
+      .selectAll('.' + calendarRectClass)
+      .data(d3.timeDays(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
+
+    rect = rect
+      .enter().append('rect')
+        .attr('class', calendarRectClass)
+        .attr('fill', 'none')
+        .attr("stroke", "#ccc")
+        .attr("stroke-width", 1)
+      .merge(rect)
+        .attr("width", this.cellSize)
+        .attr("height", this.cellSize)
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
+
+    // fill the rects for each day
+    rect.filter(d => fmt2(d) in calendarData.all)
+        .attr("fill", d => this.color(calendarData.all[fmt2(d)].length))
+        .attr("class", calendarRectClass + ' day_with_race')
+      .append("title")
+        .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
+  }
+
+  setColors() {
+    this.legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
+    this.legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
+    this.color = d3.scaleThreshold()
+        .domain([1, 6, 11, 16, 21])
+        .range(this.legendColors);
+  }
+
+  pathMonth(t0) {
+    const t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
+        d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
+        d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
+    const c0 = this.getColumn(t0), c1 = this.getColumn(t1);
+    const cs = this.cellSize;
+    const rowOffset = this.getRow(t0)*10*cs;
+    return "M" + (c0 + 1)*cs + "," + (d0*cs + rowOffset)
+        + "H" + c0*cs + "V" + (7*cs + rowOffset)
+        + "H" + c1 * cs + "V" + ((d1 + 1)*cs + rowOffset)
+        + "H" + (c1 + 1) * cs + "V" + rowOffset
+        + "H" + (c0 + 1) * cs + "Z";
+  }
+
   draw() {
     const [
       racesData,
@@ -82,15 +159,15 @@ class Calendar {
     const width = this.box.width, height = this.box.height;
 
     // note: wrapping algorithm designed for nRows = 1, 2, and 4
-    const nRows = getNumRows(width);
+    this.setNumRows(width);
+    const nRows = this.nRows;
     this.setCellSize(width);
     const cellSize = this.cellSize;
-    
-    const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
-    const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
-    const color = d3.scaleThreshold()
-        .domain([1, 6, 11, 16, 21])
-        .range(legendColors);
+   
+    this.setColors();
+    const legendColors = this.legendColors;
+    const legendLabels = this.legendLabels;
+    const color = this.color;
 
     const currentYear = (new Date()).getFullYear();
 
@@ -107,53 +184,7 @@ class Calendar {
 
     this.drawYearLabel(calendarG);
 
-    // draw the background grid
-    // Note: this relies on the top-left corner of this group being (0,0)
-    function getQuarter(d) {
-      return Math.floor(d.getMonth()/3);
-    }
-
-    function getRow(d) {
-      return Math.floor(getQuarter(d)/4*nRows);
-    }
-
-    function getColumn(d) {
-      const week = d3.timeWeek.count(d3.timeYear(d), d);
-      return week - getRow(d)*(52/nRows);
-    }
-
-    function getDateX(d) {
-      return getColumn(d)*cellSize;
-    }
-
-    function getDateY(d) {
-      return d.getDay()*cellSize + getRow(d)*10*cellSize;
-    }
-
-    const calendarRectClass = 'calendarRect';
-    let rect = calendarG
-      .selectAll('.' + calendarRectClass)
-      .data(d3.timeDays(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
-
-    rect = rect
-      .enter().append('rect')
-        .attr('class', calendarRectClass)
-        .attr('fill', 'none')
-        .attr("stroke", "#ccc")
-        .attr("stroke-width", 1)
-      .merge(rect)
-        .attr("width", cellSize)
-        .attr("height", cellSize)
-        .attr("x", d => getDateX(d))
-        .attr("y", d => getDateY(d));
-
-    // fill the rects for each day
-    const fmt2 = d3.timeFormat("%Y-%m-%d");
-    rect.filter(d => fmt2(d) in calendarData.all)
-        .attr("fill", d => color(calendarData.all[fmt2(d)].length))
-        .attr("class", calendarRectClass + ' day_with_race')
-      .append("title")
-        .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
+    this.drawBackgroundGrid(calendarG);
 
     // draw the color legend manually
     // use the "manage only one thing" version of the General Update Pattern
@@ -216,7 +247,7 @@ class Calendar {
       .enter().append('path')
         .attr('class', 'monthPath')
       .merge(monthOutlines)
-        .attr('d', pathMonth);
+        .attr('d', t => this.pathMonth(t) );
 
     // for days with elusive races
     const elusiveRectClass = 'elusiveRect';
@@ -235,8 +266,8 @@ class Calendar {
         .attr('stroke', highlightElusive ? 'black' : 'none')
         .attr("width", cellSize)
         .attr("height", cellSize)
-        .attr("x", d => getDateX(d))
-        .attr("y", d => getDateY(d));
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
 
     // frame for today's date: only if relevant
     if(currentYear == this.shownYear) {
@@ -252,8 +283,8 @@ class Calendar {
           .attr('height', cellSize)
           .attr('r', 1.6*cellSize/2)
           .attr('stroke-width', d3.min([3, cellSize/5]))
-          .attr("cx", d => getDateX(d) + cellSize/2)
-          .attr("cy", d => getDateY(d) + cellSize/2);
+          .attr("cx", d => this.getDateX(d) + cellSize/2)
+          .attr("cy", d => this.getDateY(d) + cellSize/2);
     }
 
 
@@ -288,19 +319,6 @@ class Calendar {
         .attr("font-size", 0.8*cellSize)
         .attr('y', (d, i) => cellSize*(i + 0.8));
 
-
-    function pathMonth(t0) {
-      const t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-          d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
-          d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
-      const c0 = getColumn(t0), c1 = getColumn(t1);
-      const rowOffset = getRow(t0)*10*cellSize;
-      return "M" + (c0 + 1)*cellSize + "," + (d0*cellSize + rowOffset)
-          + "H" + c0*cellSize + "V" + (7*cellSize + rowOffset)
-          + "H" + c1 * cellSize + "V" + ((d1 + 1)*cellSize + rowOffset)
-          + "H" + (c1 + 1) * cellSize + "V" + rowOffset
-          + "H" + (c0 + 1) * cellSize + "Z";
-    }
   }
 
   getDateHighlighter() {
