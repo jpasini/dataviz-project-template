@@ -81,14 +81,7 @@ const visualization = d3.select('#visualization');
 const visualizationDiv = visualization.node();
 const svg = visualization.select('svg');
 
-const functions = {
-  calendar: __WEBPACK_IMPORTED_MODULE_1__calendar_js__["a" /* calendar */],
-  map: __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["e" /* choroplethMap */],
-  selector: () => {},
-  drivingTimesFilter: () => {}
-}
-
-function drawBox(name, box, functions, props) {
+function drawBox(name, box, chart) {
   // From sample code
   // https://bl.ocks.org/curran/ad6d4eaa6cf39bf58769697307ec5f3a
   const x = box.x;
@@ -103,21 +96,10 @@ function drawBox(name, box, functions, props) {
   g = gEnter.merge(g)
       .attr('transform', 'translate(' + x + ',' + y + ')');
 
-  /*
-  // Draw a box (will remove this later)
-  const rect = g.selectAll('.boxFrame').data([null]);
-  rect
-    .enter().append('rect')
-      .attr('class', 'boxFrame')
-      .attr('fill', 'none')
-      .attr('stroke', '#666')
-    .merge(rect)
-      .attr('width', width)
-      .attr('height', height);
-  */
-
   // call the specific renderer
-  functions[name](g, props[name], box);
+  chart.setContainer(g);
+  chart.setBox(box);
+  chart.draw();
 };
 
 
@@ -128,10 +110,10 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   let highlightElusive = $('.ui.toggle.button').state('is active');
 
   const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* getTownNames */])(drivingTimes);
-  const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildTownIndex */])(townNames);
-  const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRacesRunMap */])(membersTowns, townNames);
-  const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* buildRaceHorizon */])(racesForMap, townNames);
-  const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesSoonTables */])(racesForMap);
+  const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["e" /* buildTownIndex */])(townNames);
+  const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesRunMap */])(membersTowns, townNames);
+  const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRaceHorizon */])(racesForMap, townNames);
+  const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildRacesSoonTables */])(racesForMap);
   const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* computeNumberOfRacesByTown */])(num_races_by_town_2017);
 
   const mapFeatures = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeMapFeatures */])(mapData, numberOfRacesByTown);
@@ -144,54 +126,73 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     });
   });
 
-  // defaults
-  let myName = noPersonName;
-  let myTown = outOfState;
-
-  function setPersonAndTownName(params) {
-    if(params == undefined) return;
-    if('personName' in params) {
-      // if a person is provided, override the town selection
-      myName = params.personName;
-      myTown = memberTownsMap[myName];
-      // also set the town selector to the town to avoid confusion
-      $('#townSearch').search('set value', myTown);
-    } else if('townName' in params) {
-      myTown = params.townName;
+  class PersonAndTownName {
+    constructor() {
+      // start with defaults
+      this.name = noPersonName;
+      this.town = outOfState;
     }
-  }
+
+    update(params) {
+      if(params == undefined) return;
+      if('personName' in params) {
+        // if a person is provided, override the town selection
+        this.name = params.personName;
+        this.town = memberTownsMap[this.name];
+        // also set the town selector to the town to avoid confusion
+        $('#townSearch').search('set value', this.town);
+      } else if('townName' in params) {
+        this.town = params.townName;
+      }
+    }
+
+    getName() {
+      return this.name;
+    }
+
+    getTown() {
+      return this.town;
+    }
+  };
+
+  const townName = new PersonAndTownName();
+
+  const myCalendar = new __WEBPACK_IMPORTED_MODULE_1__calendar_js__["a" /* Calendar */]({
+    data: [
+      racesForCalendar,
+      calendarData
+    ],
+    margin: margin
+  });
+  const myMap = new __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["a" /* ChoroplethMap */]({
+    data: [
+      mapFeatures,
+      drivingTimes,
+      racesRunMap,
+      racesForMap,
+      townNames,
+      townIndex,
+      racesSoonByTown,
+      raceHorizonByTown,
+      myCalendar.getDateHighlighter()
+    ],
+    margin: margin
+  });
+  const charts = {
+    calendar: myCalendar,
+    map: myMap
+  };
 
   const render = (params) => {
-    const defaultName = memberNames[0].title;
+   
+    townName.update(params);
 
-    setPersonAndTownName(params);
-
-    const props = {
-      calendar: {
-        data: [
-          racesForCalendar,
-          highlightElusive,
-          calendarData
-        ],
-        margin: margin
-      },
-      map: {
-        data: [
-          mapFeatures,
-          drivingTimes,
-          racesRunMap,
-          racesForMap,
-          townNames,
-          townIndex,
-          racesSoonByTown,
-          raceHorizonByTown,
-          myTown,
-          myName,
-          highlightElusive
-        ],
-        margin: margin
-      }
+    const options = {
+      myTown:  townName.getTown(),
+      myName:  townName.getName(),
+      highlightElusive: highlightElusive
     };
+    Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
 
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
@@ -214,8 +215,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(containerBox.width), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
     };
 
-    // Render the choropleth map.
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], functions, props); } );
+    // Render the content of the boxes (choropleth map and calendar)
+    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
 
   }
 
@@ -259,6 +260,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   });
   $('.ui.toggle.button').on('click', () => {
     highlightElusive = $('.ui.toggle.button').state('is active');
+    charts.calendar.setElusiveHighlight(highlightElusive);
+    charts.map.setElusiveHighlight(highlightElusive);
     render();
   });
 }
@@ -280,14 +283,14 @@ d3.queue()
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return choroplethMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChoroplethMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return parseDrivingMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRacesRunMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesRunMap; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return parseRaces; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return getTownNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildTownIndex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return buildRaceHorizon; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return buildTownIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRaceHorizon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildRacesSoonTables; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getMapHeight; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return computeNumberOfRacesByTown; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return computeMapFeatures; });
@@ -491,273 +494,300 @@ function computeMapFeatures(mapData, numberOfRacesByTown) {
 
 const carSlider = {value: 40};
 
-function choroplethMap(container, props, box) {
-  const [
-    mapFeatures,
-    drivingTimes,
-    racesRunMap,
-    racesForMap,
-    townNames,
-    townIndex,
-    racesSoonByTown,
-    raceHorizonByTown,
-    myTown,
-    myName,
-    highlightElusive
-  ] = props.data;
 
-  // string marker
-  // TODO: find a 'DRY' way of doing this -- these are also set in index.js
-  const outOfState = 'Out of State'; 
-  const noPersonName = 'noPersonName';
-
-  const myTownIndex = townIndex[myTown];
-
-  completeTooltipTables(racesSoonByTown);
-
-  // note: these colors must match the css above
-  // TODO: DRY principle: perhaps do colors programmatically
-  const legendColors = ['#d73027', '#fc8d59', '#fee090', '#2c7bb6'];
-  const legendLabels = ['Race today or tomorrow', 'Race within 1 week', 'Race within 2 weeks', 'Town already run'];
-
-  // Extract the width and height that was computed by CSS.
-  const width = box.width;
-  const height = box.height;
-  const innerWidth = width - props.margin.left - props.margin.right;
-  const innerHeight = height - props.margin.top - props.margin.bottom;
-
-  const centerX = width/2;
-  const centerY = height/2;
-
-  // Slider
-  const sliderParameters = getSliderParameters(width, height);
-
-  const sliderScale = d3.scaleLinear()
-    .domain([0, sliderParameters.width])
-    .range([0, 150])
-    .clamp(true);
-
-  carSlider.x = sliderScale.invert(carSlider.value);
-
-  let sliderG = container.selectAll('.sliderGroup').data([sliderParameters]);
-  sliderG = sliderG
-    .enter().append('g')
-      .attr('class', 'sliderGroup')
-    .merge(sliderG)
-      .attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
-
-  const labelText = myTown;
-  let drivingTimeLabel = sliderG.selectAll('.townLabel').data([labelText]);
-  drivingTimeLabel = drivingTimeLabel
-    .enter().append('text')
-      .attr('class', 'townLabel')
-      .attr('text-anchor', 'end')
-    .merge(drivingTimeLabel)
-      .attr('x', -10*sliderParameters.scale)
-      .attr('y', 160*sliderParameters.scale)
-      .attr('font-size', (175*sliderParameters.scale) + 'px')
-      .text(d => d);
-
-  let carLine = sliderG.selectAll('.carLine').data([carSlider]);
-  carLine = carLine
-    .enter().append('rect')
-      .attr('class', 'carLine')
-    .merge(carLine)
-      .attr('x', 0)
-      .attr('y', 100*sliderParameters.scale)
-      .attr('width', d => d.x)
-      .attr('height', 10*sliderParameters.scale);
-
-  let car = sliderG.selectAll('.car').data([carSlider]);
-  const pathString = "m 25,0 c -4.53004,0.0112 -12.12555,0.69055 -14.0625,6.05859 -5.07703,1.58895 -10.49326,2.14878 -10.14649,9.23437 l 6.23633,0.75782 c 0,0 0.45836,3.05148 3.51563,3.13672 3.05727,0.0852 4.03125,-2.89454 4.03125,-2.89454 l 28.49609,0.0684 c 0,0 1.50286,3.40622 5.20508,3.37696 3.70222,-0.0293 4.85742,-4.37696 4.85742,-4.37696 1.52171,0.005 3.11558,0.0922 4.37695,-0.20703 0.72421,-1.0742 0.63022,-2.1633 -0.33203,-2.23828 -0.0635,-0.005 0.70644,-2.07399 -0.16797,-3.46484 l -0.0859,-1.51563 c -0.85704,-0.4383 -1.83605,-0.7606 -2.92969,-0.74023 -1.55827,-2.22881 -10.56728,-1.44901 -16.36719,-1.96485 -1.45014,-0.83459 -2.9249,-2.47089 -4.51367,-4.27343 0,0 -2.90328,-0.91128 -4.92774,-0.89453 -0.50611,0.004 -1.67553,-0.0662 -3.18554,-0.0625 z m 1.83594,1.23437 c 1.42376,-0.0226 4.15534,0.26141 4.65625,0.51563 0.66787,0.33894 3.90428,3.44039 3.58398,3.87695 -0.3203,0.43656 -8.54696,0.58251 -9.01953,0.26758 -0.47258,-0.31493 -0.28696,-4.16971 -0.0762,-4.52344 0.0527,-0.0884 0.38088,-0.12919 0.85547,-0.13672 z m -3.3418,0.16016 c 0.19862,0.0111 0.33328,0.0434 0.38281,0.10156 0.39621,0.46517 0.29788,4.24032 -0.0234,4.38477 -0.26357,0.11849 -7.94003,0.75278 -8.31054,0.43945 -0.37051,-0.31334 0.16129,-2.35076 1.14648,-3.24024 0.86204,-0.77829 5.41436,-1.76307 6.80469,-1.68554 z"
-  const carScale = 10*sliderParameters.scale;
-
-  car = car
-    .enter().append('g')
-    .merge(car)
-      .attr('class', myTown == outOfState ? 'car inactive' : 'car')
-      .attr('transform', d => 'translate(' + d.x + ') scale(' + carScale + ')')
-      .call(d3.drag()
-          .on('start', myTown == outOfState ? () => {} : dragstarted)
-          .on('drag', myTown == outOfState ? () => {} : dragged)
-          .on('end', myTown == outOfState ? () => {} : dragended));
-
-  // Add an invisible rectangle on top, to enlarge the sensitive area.
-  // This makes it easier to click on a cell phone.
-  const carRect = car.selectAll('rect').data([carSlider]);
-  carRect
-    .enter().append('rect')
-      .attr('stroke', 'none')
-      .attr('fill', '#fff')
-      .attr('y', -20)
-      .attr('width', 60)
-      .attr('height', 45);
-
-  // draw the label with the driving time
-  let carLabel = car.selectAll('.carLabel').data([carSlider]);
-  carLabel = carLabel
-    .enter().append('text')
-      .attr('class', 'carLabel')
-      .attr('text-anchor', 'middle')
-    .merge(carLabel)
-      .attr('opacity', myTown == outOfState ? 0.3 : 1)
-      .text(d => drivingTimeToString(sliderScale(d.x)))
-      .attr('x', 27)
-      .attr('y', -7)
-      .attr('font-size', '1em');
-
-
-  // draw the actual car
-  const carCar = car.selectAll('path').data([carSlider]);
-  carCar
-    .enter().append('path')
-      .attr('d', pathString)
-    .merge(carCar);
-
-
-  tip
-    .html(d => '<span class="townname">' + d.properties.NAME10 + '</span>'
-        + (myTown == outOfState ? '' :
-          '<br><span>' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
-        + ' driving</span>')
-        + '<span>' 
-        + (d.properties.NAME10 in racesSoonByTown ?
-          racesSoonByTown[d.properties.NAME10]
-          : '')
-        + '</span>'
-    );
-
-  // draw the color legend manually
-  let colorLegendG = container.selectAll('.mapColorLegendG').data([sliderParameters]);
-  colorLegendG = colorLegendG
-    .enter().append('g')
-      .attr('class', 'mapColorLegendG')
-    .merge(colorLegendG)
-      .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale) + ")");
-
-  const colorLegend = colorLegendG.selectAll('rect').data(legendColors);
-  const legendLineHeight = 140*sliderParameters.scale;
-  colorLegend
-    .enter().append('rect')
-      .attr('x', 0)
-    .merge(colorLegend)
-      .attr('fill', d => d)
-      .attr('width', legendLineHeight*.9)
-      .attr('height', legendLineHeight*.9)
-      .attr('y', (d, i) => (i-0.3)*legendLineHeight);
-  
-  const colorLegendText = colorLegendG.selectAll('text').data(legendLabels);
-  colorLegendText
-    .enter().append('text')
-      .attr('fill', d => d)
-      .attr('fill', '#666')
-      .attr('alignment-baseline', 'middle')
-      .html(d => d)
-    .merge(colorLegendText)
-      .attr('font-size', 0.75*legendLineHeight)
-      .attr('x', legendLineHeight)
-      .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
-
-  // add instructions and title
-  const instructions = container.selectAll('.instructions').data([sliderParameters]);
-  instructions
-    .enter().append('text')
-      .attr('class', 'instructions')
-    .merge(instructions)
-      .text(
-        myTown == outOfState ?
-          'select a town to filter by driving time' :
-          'drag car to filter by driving time'
-      )
-      .attr('x', d => d.x + 3*legendLineHeight)
-      .attr('y', d => d.y + 2.2*legendLineHeight)
-      .attr('font-size', d => 0.75*legendLineHeight);
-
-  function isReachable(town) {
-    return myTown == outOfState ? true : drivingTimes[myTownIndex][town] <= Math.round(carSlider.value);
+class ChoroplethMap {
+  constructor(opts) {
+    this.data = opts.data;
+    this.margin = opts.margin;
   }
 
-  // Start work on the choropleth map
-  // idea from https://www.youtube.com/watch?v=lJgEx_yb4u0&t=23s
-  const mapScale = getMapScale(width, height);
-  const CT_coords = [-72.7,41.6032];
-  const projection = d3.geoMercator()
-    .center(CT_coords)
-    .scale(mapScale)
-    .translate([centerX, centerY]);
-  const path = d3.geoPath().projection(projection);
+  draw() {
+    const [
+      mapFeatures,
+      drivingTimes,
+      racesRunMap,
+      racesForMap,
+      townNames,
+      townIndex,
+      racesSoonByTown,
+      raceHorizonByTown,
+      dateHighlighter
+    ] = this.data;
 
-  const pathClassName = 'areapath';
-  let areas = container.selectAll('.' + pathClassName)
-    .data(mapFeatures.all);
+    const myTown = this.options.myTown;
+    const myName = this.options.myName;
+    const highlightElusive = this.options.highlightElusive;
 
-  areas = areas
-    .enter().append('path')
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
-    .merge(areas)
-      .attr('d', path)
-      .attr('class', d => {
-        const reachableClass = isReachable(d.properties.NAME10) ?
-          ' reachable' : ' unreachable';
-        return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
-            pathClassName + ' area alreadyRun' + reachableClass : 
-            pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
-      });
+    // string marker
+    // TODO: find a 'DRY' way of doing this -- these are also set in index.js
+    const outOfState = 'Out of State'; 
+    const noPersonName = 'noPersonName';
 
-  const highlightPathClassName = 'highlightareapath';
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-  let highlightAreas = container.selectAll('.' + highlightPathClassName)
-    .data(mapFeatures.elusive);
+    const myTownIndex = townIndex[myTown];
 
-  highlightAreas = highlightAreas
-    .enter().append('path')
-      .attr('class', highlightPathClassName)
-      .attr('fill', 'none')
-      .attr('stroke-width', 3)
-    .merge(highlightAreas)
-      .attr('stroke', highlightElusive ? 'black' : 'none')
-      .attr('d', path);
+    completeTooltipTables(racesSoonByTown);
 
-  function dragstarted(d) {
-    d3.select(this).raise().classed('active', true);
-  }
+    // note: these colors must match the css above
+    // TODO: DRY principle: perhaps do colors programmatically
+    const legendColors = ['#d73027', '#fc8d59', '#fee090', '#2c7bb6'];
+    const legendLabels = ['Race today or tomorrow', 'Race within 1 week', 'Race within 2 weeks', 'Town already run'];
 
-  function dragged(d) {
-    d.x = d3.event.x < 0 ?
-      0 : 
-      d3.event.x >  sliderParameters.width ?
-        sliderParameters.width :
-        d3.event.x;
+    // Extract the width and height that was computed by CSS.
+    const width = this.box.width;
+    const height = this.box.height;
+    const innerWidth = width - this.margin.left - this.margin.right;
+    const innerHeight = height - this.margin.top - this.margin.bottom;
 
-    d.value = sliderScale(d.x);
+    const centerX = width/2;
+    const centerY = height/2;
 
-    // note trick: scale(1) before translate to ensure 1-to-1 ratio
-    // of pixels dragged and pixels translated
-    d3.select(this)
-        .attr('transform', 'scale(1) translate('+ d.x + ') scale(' + carScale + ')');
+    // Slider
+    const sliderParameters = getSliderParameters(width, height);
 
-    carLabel.merge(carLabel)
-        .text(d => drivingTimeToString(sliderScale(d.x)));
+    const sliderScale = d3.scaleLinear()
+      .domain([0, sliderParameters.width])
+      .range([0, 150])
+      .clamp(true);
 
-    carLine.merge(carLine)
-      .attr('x', 0)
-      .attr('width', d => d.x);
+    carSlider.x = sliderScale.invert(carSlider.value);
 
-    areas.merge(areas)
-        .attr("class", d => {
-            const reachableClass = isReachable(d.properties.NAME10) ?
-              ' reachable' : ' unreachable';
-            return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+    let sliderG = this.container.selectAll('.sliderGroup').data([sliderParameters]);
+    sliderG = sliderG
+      .enter().append('g')
+        .attr('class', 'sliderGroup')
+      .merge(sliderG)
+        .attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
+
+    const labelText = myTown;
+    let drivingTimeLabel = sliderG.selectAll('.townLabel').data([labelText]);
+    drivingTimeLabel = drivingTimeLabel
+      .enter().append('text')
+        .attr('class', 'townLabel')
+        .attr('text-anchor', 'end')
+      .merge(drivingTimeLabel)
+        .attr('x', -10*sliderParameters.scale)
+        .attr('y', 160*sliderParameters.scale)
+        .attr('font-size', (175*sliderParameters.scale) + 'px')
+        .text(d => d);
+
+    let carLine = sliderG.selectAll('.carLine').data([carSlider]);
+    carLine = carLine
+      .enter().append('rect')
+        .attr('class', 'carLine')
+      .merge(carLine)
+        .attr('x', 0)
+        .attr('y', 100*sliderParameters.scale)
+        .attr('width', d => d.x)
+        .attr('height', 10*sliderParameters.scale);
+
+    let car = sliderG.selectAll('.car').data([carSlider]);
+    const pathString = "m 25,0 c -4.53004,0.0112 -12.12555,0.69055 -14.0625,6.05859 -5.07703,1.58895 -10.49326,2.14878 -10.14649,9.23437 l 6.23633,0.75782 c 0,0 0.45836,3.05148 3.51563,3.13672 3.05727,0.0852 4.03125,-2.89454 4.03125,-2.89454 l 28.49609,0.0684 c 0,0 1.50286,3.40622 5.20508,3.37696 3.70222,-0.0293 4.85742,-4.37696 4.85742,-4.37696 1.52171,0.005 3.11558,0.0922 4.37695,-0.20703 0.72421,-1.0742 0.63022,-2.1633 -0.33203,-2.23828 -0.0635,-0.005 0.70644,-2.07399 -0.16797,-3.46484 l -0.0859,-1.51563 c -0.85704,-0.4383 -1.83605,-0.7606 -2.92969,-0.74023 -1.55827,-2.22881 -10.56728,-1.44901 -16.36719,-1.96485 -1.45014,-0.83459 -2.9249,-2.47089 -4.51367,-4.27343 0,0 -2.90328,-0.91128 -4.92774,-0.89453 -0.50611,0.004 -1.67553,-0.0662 -3.18554,-0.0625 z m 1.83594,1.23437 c 1.42376,-0.0226 4.15534,0.26141 4.65625,0.51563 0.66787,0.33894 3.90428,3.44039 3.58398,3.87695 -0.3203,0.43656 -8.54696,0.58251 -9.01953,0.26758 -0.47258,-0.31493 -0.28696,-4.16971 -0.0762,-4.52344 0.0527,-0.0884 0.38088,-0.12919 0.85547,-0.13672 z m -3.3418,0.16016 c 0.19862,0.0111 0.33328,0.0434 0.38281,0.10156 0.39621,0.46517 0.29788,4.24032 -0.0234,4.38477 -0.26357,0.11849 -7.94003,0.75278 -8.31054,0.43945 -0.37051,-0.31334 0.16129,-2.35076 1.14648,-3.24024 0.86204,-0.77829 5.41436,-1.76307 6.80469,-1.68554 z"
+    const carScale = 10*sliderParameters.scale;
+
+    car = car
+      .enter().append('g')
+      .merge(car)
+        .attr('class', myTown == outOfState ? 'car inactive' : 'car')
+        .attr('transform', d => 'translate(' + d.x + ') scale(' + carScale + ')')
+        .call(d3.drag()
+            .on('start', myTown == outOfState ? () => {} : dragstarted)
+            .on('drag', myTown == outOfState ? () => {} : dragged)
+            .on('end', myTown == outOfState ? () => {} : dragended));
+
+    // Add an invisible rectangle on top, to enlarge the sensitive area.
+    // This makes it easier to click on a cell phone.
+    const carRect = car.selectAll('rect').data([carSlider]);
+    carRect
+      .enter().append('rect')
+        .attr('stroke', 'none')
+        .attr('fill', '#fff')
+        .attr('y', -20)
+        .attr('width', 60)
+        .attr('height', 45);
+
+    // draw the label with the driving time
+    let carLabel = car.selectAll('.carLabel').data([carSlider]);
+    carLabel = carLabel
+      .enter().append('text')
+        .attr('class', 'carLabel')
+        .attr('text-anchor', 'middle')
+      .merge(carLabel)
+        .attr('opacity', myTown == outOfState ? 0.3 : 1)
+        .text(d => drivingTimeToString(sliderScale(d.x)))
+        .attr('x', 27)
+        .attr('y', -7)
+        .attr('font-size', '1em');
+
+
+    // draw the actual car
+    const carCar = car.selectAll('path').data([carSlider]);
+    carCar
+      .enter().append('path')
+        .attr('d', pathString)
+      .merge(carCar);
+
+
+    tip
+      .html(d => '<span class="townname">' + d.properties.NAME10 + '</span>'
+          + (myTown == outOfState ? '' :
+            '<br><span>' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
+          + ' driving</span>')
+          + '<span>' 
+          + (d.properties.NAME10 in racesSoonByTown ?
+            racesSoonByTown[d.properties.NAME10]
+            : '')
+          + '</span>'
+      );
+
+    // draw the color legend manually
+    let colorLegendG = this.container.selectAll('.mapColorLegendG').data([sliderParameters]);
+    colorLegendG = colorLegendG
+      .enter().append('g')
+        .attr('class', 'mapColorLegendG')
+      .merge(colorLegendG)
+        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale) + ")");
+
+    const colorLegend = colorLegendG.selectAll('rect').data(legendColors);
+    const legendLineHeight = 140*sliderParameters.scale;
+    colorLegend
+      .enter().append('rect')
+        .attr('x', 0)
+      .merge(colorLegend)
+        .attr('fill', d => d)
+        .attr('width', legendLineHeight*.9)
+        .attr('height', legendLineHeight*.9)
+        .attr('y', (d, i) => (i-0.3)*legendLineHeight);
+    
+    const colorLegendText = colorLegendG.selectAll('text').data(legendLabels);
+    colorLegendText
+      .enter().append('text')
+        .attr('fill', d => d)
+        .attr('fill', '#666')
+        .attr('alignment-baseline', 'middle')
+        .html(d => d)
+      .merge(colorLegendText)
+        .attr('font-size', 0.75*legendLineHeight)
+        .attr('x', legendLineHeight)
+        .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
+
+    // add instructions and title
+    const instructions = this.container.selectAll('.instructions').data([sliderParameters]);
+    instructions
+      .enter().append('text')
+        .attr('class', 'instructions')
+      .merge(instructions)
+        .text(
+          myTown == outOfState ?
+            'select a town to filter by driving time' :
+            'drag car to filter by driving time'
+        )
+        .attr('x', d => d.x + 3*legendLineHeight)
+        .attr('y', d => d.y + 2.2*legendLineHeight)
+        .attr('font-size', d => 0.75*legendLineHeight);
+
+    function isReachable(town) {
+      return myTown == outOfState ? true : drivingTimes[myTownIndex][town] <= Math.round(carSlider.value);
+    }
+
+    // Start work on the choropleth map
+    // idea from https://www.youtube.com/watch?v=lJgEx_yb4u0&t=23s
+    const mapScale = getMapScale(width, height);
+    const CT_coords = [-72.7,41.6032];
+    const projection = d3.geoMercator()
+      .center(CT_coords)
+      .scale(mapScale)
+      .translate([centerX, centerY]);
+    const path = d3.geoPath().projection(projection);
+
+    const pathClassName = 'areapath';
+    let areas = this.container.selectAll('.' + pathClassName)
+      .data(mapFeatures.all);
+
+    areas = areas
+      .enter().append('path')
+        .on('mouseover', d => { tip.show(d); dateHighlighter(d.properties.NAME10); } )
+        .on('mouseout', d => { tip.hide(d); dateHighlighter(); } )
+      .merge(areas)
+        .attr('d', path)
+        .attr('class', d => {
+          const reachableClass = isReachable(d.properties.NAME10) ?
+            ' reachable' : ' unreachable';
+          return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
               pathClassName + ' area alreadyRun' + reachableClass : 
               pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
         });
+
+    const highlightPathClassName = 'highlightareapath';
+    function isElusive(town) {
+      return numberOfRacesByTown[town] <= 1;
+    }
+    let highlightAreas = this.container.selectAll('.' + highlightPathClassName)
+      .data(mapFeatures.elusive);
+
+    highlightAreas = highlightAreas
+      .enter().append('path')
+        .attr('class', highlightPathClassName)
+        .attr('fill', 'none')
+        .attr('stroke-width', 3)
+      .merge(highlightAreas)
+        .attr('stroke', highlightElusive ? 'black' : 'none')
+        .attr('d', path);
+
+    function dragstarted(d) {
+      d3.select(this).raise().classed('active', true);
+    }
+
+    function dragged(d) {
+      d.x = d3.event.x < 0 ?
+        0 : 
+        d3.event.x >  sliderParameters.width ?
+          sliderParameters.width :
+          d3.event.x;
+
+      d.value = sliderScale(d.x);
+
+      // note trick: scale(1) before translate to ensure 1-to-1 ratio
+      // of pixels dragged and pixels translated
+      d3.select(this)
+          .attr('transform', 'scale(1) translate('+ d.x + ') scale(' + carScale + ')');
+
+      carLabel.merge(carLabel)
+          .text(d => drivingTimeToString(sliderScale(d.x)));
+
+      carLine.merge(carLine)
+        .attr('x', 0)
+        .attr('width', d => d.x);
+
+      areas.merge(areas)
+          .attr("class", d => {
+              const reachableClass = isReachable(d.properties.NAME10) ?
+                ' reachable' : ' unreachable';
+              return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+                pathClassName + ' area alreadyRun' + reachableClass : 
+                pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
+          });
+    }
+
+    function dragended(d) {
+      d3.select(this).classed('active', false);
+    }
+  //}
   }
 
-  function dragended(d) {
-    d3.select(this).classed('active', false);
+  setOptions(options) {
+    this.options = options;
+  }
+
+  setContainer(container) {
+    this.container = container;
+  }
+
+  setBox(box) {
+    this.box = box;
+  }
+
+  setElusiveHighlight(trueFalse) {
+    this.options.highlightElusive = trueFalse;
   }
 }
 
@@ -770,10 +800,11 @@ function choroplethMap(container, props, box) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return calendar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Calendar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseRace; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCalendarHeight; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return rollUpDataForCalendar; });
+/* unused harmony export getDateHighlighter */
 const fmt = d3.format("02");
 const parseRace = d => {
   d.Month = +d.Month;
@@ -784,6 +815,7 @@ const parseRace = d => {
 };
 
 const formatCell = d3.format("0");
+const fmt2 = d3.timeFormat("%Y-%m-%d");
 
 const nWeeks = 52;
 const nDays = 7;
@@ -821,245 +853,344 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   return { all: calendarData, elusive: calendarDataElusive };
 }
 
-function calendar(container, props, box) {
-  const [
-    racesData,
-    highlightElusive,
-    calendarData
-  ] = props.data;
+class Calendar {
+  constructor(opts) {
+    this.data = opts.data;
+    this.margin = opts.margin;
+    this.shownYear = 2018;
+  }
 
+  drawYearLabel(container) {
+    // year label
+    const yearLabel = container.selectAll('.yearLabel').data([null]);
+    const cs = this.cellSize;
+    yearLabel
+      .enter()
+      .append("text")
+        .attr("class", "yearLabel")
+        .attr("text-anchor", "middle")
+        .text(this.shownYear)
+      .merge(yearLabel)
+        .attr("transform", "translate(-" + 1.9*cs + "," + cs * 3.5 + ")rotate(-90)")
+        .attr("font-size", cs*1.6);
+  }
 
-  const width = box.width, height = box.height;
+  setCellSize(width) {
+    this.cellSize = getCellSize(width);
+  }
 
-  // note: wrapping algorithm designed for nRows = 1, 2, and 4
-  const nRows = getNumRows(width);
-  const cellSize = getCellSize(width);
-  
-  const legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
-  const legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
-  const color = d3.scaleThreshold()
-      .domain([1, 6, 11, 16, 21])
-      .range(legendColors);
+  setNumRows(width) {
+    this.nRows = getNumRows(width);
+  };
 
-  const currentYear = (new Date()).getFullYear();
-  const shownYear = 2018;
-
-  // use the "manage only one thing" GUP
-  // Calendar group
-  let calendarG = container.selectAll('.calendargroup').data([null]);
-  calendarG = calendarG
-    .enter().append('g')
-      .attr('class', 'calendargroup')
-    .merge(calendarG)
-      .attr("transform", "translate(" + 
-        ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
-        2*cellSize + ")");
-
-  // year label
-  const yearLabel = calendarG.selectAll('.yearLabel').data([null]);
-  yearLabel
-    .enter()
-    .append("text")
-      .attr("class", "yearLabel")
-      .attr("text-anchor", "middle")
-      .text(shownYear)
-    .merge(yearLabel)
-      .attr("transform", "translate(-" + 1.9*cellSize + "," + cellSize * 3.5 + ")rotate(-90)")
-      .attr("font-size", cellSize*1.6);
-
-  // draw the background grid
-  // Note: this relies on the top-left corner of this group being (0,0)
-  function getQuarter(d) {
+  getQuarter(d) {
     return Math.floor(d.getMonth()/3);
   }
 
-  function getRow(d) {
-    return Math.floor(getQuarter(d)/4*nRows);
+  getRow(d) {
+    return Math.floor(this.getQuarter(d)/4*this.nRows);
   }
 
-  function getColumn(d) {
+  getColumn(d) {
     const week = d3.timeWeek.count(d3.timeYear(d), d);
-    return week - getRow(d)*(52/nRows);
+    return week - this.getRow(d)*(52/this.nRows);
   }
 
-  function getDateX(d) {
-    return getColumn(d)*cellSize;
+  getDateX(d) {
+    return this.getColumn(d)*this.cellSize;
   }
 
-  function getDateY(d) {
-    return d.getDay()*cellSize + getRow(d)*10*cellSize;
+  getDateY(d) {
+    return d.getDay()*this.cellSize + this.getRow(d)*10*this.cellSize;
   }
 
-  const calendarRectClass = 'calendarRect';
-  let rect = calendarG
-    .selectAll('.' + calendarRectClass)
-    .data(d3.timeDays(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
+  drawBackgroundGrid(container) {
+    // draw the background grid
+    // Note: this relies on the top-left corner of this group being (0,0)
+    const calendarData = this.data[1];
+    const calendarRectClass = 'calendarRect';
+    let rect = container
+      .selectAll('.' + calendarRectClass)
+      .data(d3.timeDays(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
 
-  rect = rect
-    .enter().append('rect')
-      .attr('class', calendarRectClass)
-      .attr('fill', 'none')
-      .attr("stroke", "#ccc")
-      .attr("stroke-width", 1)
-    .merge(rect)
-      .attr("width", cellSize)
-      .attr("height", cellSize)
-      .attr("x", d => getDateX(d))
-      .attr("y", d => getDateY(d));
-
-  // fill the rects for each day
-  const fmt2 = d3.timeFormat("%Y-%m-%d");
-  rect.filter(d => fmt2(d) in calendarData.all)
-      .attr("fill", d => color(calendarData.all[fmt2(d)].length))
-      .attr("class", calendarRectClass + ' day_with_race')
-    .append("title")
-      .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
-
-  // draw the color legend manually
-  // use the "manage only one thing" version of the General Update Pattern
-  let colorLegendG = calendarG.selectAll('.calendarLegendG').data([null]);
-  colorLegendG = colorLegendG
-    .enter().append('g')
-      .attr('class', 'calendarLegendG')
-    .merge(colorLegendG)
-      .attr("transform", "translate(" + (54*cellSize/nRows) + "," + (0.5*cellSize) + ")");
-
-  const colorLegend = colorLegendG.selectAll('rect').data(legendColors.slice(1));
-  const legendLineHeight = cellSize*1.4;
-  colorLegend
-    .enter().append('rect')
-      .attr('x', 0)
-    .merge(colorLegend)
-      .attr('fill', d => d)
-      .attr('width', legendLineHeight*.9)
-      .attr('height', legendLineHeight*.9)
-      .attr('y', (d, i) => (i-0.3)*legendLineHeight);
-  
-  const colorLegendText = colorLegendG.selectAll('text').data(legendLabels.slice(1));
-  colorLegendText
-    .enter().append('text')
-      .attr('fill', d => d)
-      .attr('fill', '#666')
-      .attr('alignment-baseline', 'middle')
-      .html(d => d)
-    .merge(colorLegendText)
-      .attr('font-size', cellSize)
-      .attr('x', cellSize*2)
-      .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
-
-  // legend title
-  const legendTitle = colorLegendG.selectAll('.legendTitle').data([null]);
-  legendTitle
-    .enter()
-    .append("text")
-      .attr("class", "legendTitle")
-      .attr('fill', '#666')
-      .text('# of Races')
-    .merge(legendTitle)
-      .attr('transform', 'translate(0,-' + cellSize + ')')
-      .attr("font-size", cellSize*1.2);
-
-
-  // monthOutlines
-  let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
-  monthOutlinesG = monthOutlinesG
-    .enter().append('g')
-      .attr('id', 'monthOutlines')
-    .merge(monthOutlinesG)
-      .attr('fill', 'none')
-      .attr('stroke', '#666')
-      .attr('stroke-width', d3.min([2, cellSize/5]));
-
-  const monthOutlines = monthOutlinesG.selectAll('.monthPath')
-    .data(d3.timeMonths(new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)));
-  monthOutlines
-    .enter().append('path')
-      .attr('class', 'monthPath')
-    .merge(monthOutlines)
-      .attr('d', pathMonth);
-
-  // for days with elusive races
-  const elusiveRectClass = 'elusiveRect';
-  let elusiveRect = calendarG
-    .selectAll('.' + elusiveRectClass)
-    .data(d3.timeDays(
-      new Date(shownYear, 0, 1), new Date(shownYear + 1, 0, 1)
-    ).filter(d => fmt2(d) in calendarData.elusive));
-
-  elusiveRect = elusiveRect
-    .enter().append('rect')
-      .attr('class', elusiveRectClass)
-      .attr('fill', 'none')
-      .attr("stroke-width", 3)
-    .merge(elusiveRect)
-      .attr('stroke', highlightElusive ? 'black' : 'none')
-      .attr("width", cellSize)
-      .attr("height", cellSize)
-      .attr("x", d => getDateX(d))
-      .attr("y", d => getDateY(d));
-
-  // frame for today's date: only if relevant
-  if(currentYear == shownYear) {
-    const today = d3.timeDay(new Date());
-    const todayMarker = calendarG.selectAll('.todayDate').data([today]);
-    todayMarker
-      .enter().append('circle')
-        .attr('class', 'todayDate')
+    rect = rect
+      .enter().append('rect')
+        .attr('class', calendarRectClass)
         .attr('fill', 'none')
-        .attr('stroke', '#d73027')
-      .merge(todayMarker)
-        .attr('width', cellSize)
-        .attr('height', cellSize)
-        .attr('r', 1.6*cellSize/2)
-        .attr('stroke-width', d3.min([3, cellSize/5]))
-        .attr("cx", d => getDateX(d) + cellSize/2)
-        .attr("cy", d => getDateY(d) + cellSize/2);
+        .attr("stroke", "#ccc")
+        .attr("stroke-width", 1)
+      .merge(rect)
+        .attr("width", this.cellSize)
+        .attr("height", this.cellSize)
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
+
+    // fill the rects for each day
+    rect.filter(d => fmt2(d) in calendarData.all)
+        .attr("fill", d => this.color(calendarData.all[fmt2(d)].length))
+        .attr("class", calendarRectClass + ' day_with_race')
+      .append("title")
+        .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
   }
 
-
-  // get bounding box for each month outline
-  const mp = document.getElementById("monthOutlines").childNodes;
-  const BB = Array.prototype.slice.call(mp).map(d => d.getBBox());
-  const monthX = BB.map(d => d.x + d.width/2);
-  // add the labels
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const monthLabels = calendarG.selectAll('.monthLabel').data(months);
-  function getMonthLabelRow(m) {
-    return Math.floor(m/(12/nRows));
+  setColors() {
+    this.legendColors = ['#fff', '#d1e5f0', '#92c5de', '#4393c3', '#2166ac', '#053061'];
+    this.legendLabels = [null, '&nbsp;&nbsp;1&ndash;5', '&nbsp;&nbsp;6&ndash;10', '11&ndash;15', '16&ndash;20', 'over 20'];
+    this.color = d3.scaleThreshold()
+        .domain([1, 6, 11, 16, 21])
+        .range(this.legendColors);
   }
-  monthLabels
-    .enter().append('text')
-      .attr('class', 'monthLabel')
-      .text(d => d)
-    .merge(monthLabels)
-      .attr('x', (d, i) => monthX[i])
-      .attr('y', (d, i) => -10 + getMonthLabelRow(i)*10*cellSize)
-      .attr('font-size', cellSize*1.2);
 
-  const weekDayText = ['Su','Mo','Tu','We','Th','Fr','Sa'];
-  const weekDayLabels = calendarG.selectAll('.weekDayLabel').data(weekDayText);
-  weekDayLabels
-    .enter().append('text')
-      .attr('class', 'weekDayLabel')
-      .text(d => d)
-      .attr('fill', '#666')
-    .merge(weekDayLabels)
-      .attr('x', -1.4*cellSize)
-      .attr("font-size", 0.8*cellSize)
-      .attr('y', (d, i) => cellSize*(i + 0.8));
-
-
-  function pathMonth(t0) {
+  pathMonth(t0) {
     const t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
         d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
         d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
-    const c0 = getColumn(t0), c1 = getColumn(t1);
-    const rowOffset = getRow(t0)*10*cellSize;
-    return "M" + (c0 + 1)*cellSize + "," + (d0*cellSize + rowOffset)
-        + "H" + c0*cellSize + "V" + (7*cellSize + rowOffset)
-        + "H" + c1 * cellSize + "V" + ((d1 + 1)*cellSize + rowOffset)
-        + "H" + (c1 + 1) * cellSize + "V" + rowOffset
-        + "H" + (c0 + 1) * cellSize + "Z";
+    const c0 = this.getColumn(t0), c1 = this.getColumn(t1);
+    const cs = this.cellSize;
+    const rowOffset = this.getRow(t0)*10*cs;
+    return "M" + (c0 + 1)*cs + "," + (d0*cs + rowOffset)
+        + "H" + c0*cs + "V" + (7*cs + rowOffset)
+        + "H" + c1 * cs + "V" + ((d1 + 1)*cs + rowOffset)
+        + "H" + (c1 + 1) * cs + "V" + rowOffset
+        + "H" + (c0 + 1) * cs + "Z";
+  }
+
+  draw() {
+    const [
+      racesData,
+      calendarData
+    ] = this.data;
+
+    const highlightElusive = this.options.highlightElusive;
+
+    const width = this.box.width, height = this.box.height;
+
+    // note: wrapping algorithm designed for nRows = 1, 2, and 4
+    this.setNumRows(width);
+    const nRows = this.nRows;
+    this.setCellSize(width);
+    const cellSize = this.cellSize;
+   
+    this.setColors();
+    const legendColors = this.legendColors;
+    const legendLabels = this.legendLabels;
+    const color = this.color;
+
+    const currentYear = (new Date()).getFullYear();
+
+    // use the "manage only one thing" GUP
+    // Calendar group
+    let calendarG = this.container.selectAll('.calendargroup').data([null]);
+    calendarG = calendarG
+      .enter().append('g')
+        .attr('class', 'calendargroup')
+      .merge(calendarG)
+        .attr("transform", "translate(" + 
+          ((width - cellSize * 53/nRows) / 2 - 1*2*cellSize/nRows) + "," + 
+          2*cellSize + ")");
+    this.calendarG = calendarG;
+
+    this.drawYearLabel(calendarG);
+
+    this.drawBackgroundGrid(calendarG);
+
+    // draw the color legend manually
+    // use the "manage only one thing" version of the General Update Pattern
+    let colorLegendG = calendarG.selectAll('.calendarLegendG').data([null]);
+    colorLegendG = colorLegendG
+      .enter().append('g')
+        .attr('class', 'calendarLegendG')
+      .merge(colorLegendG)
+        .attr("transform", "translate(" + (54*cellSize/nRows) + "," + (0.5*cellSize) + ")");
+
+    const colorLegend = colorLegendG.selectAll('rect').data(legendColors.slice(1));
+    const legendLineHeight = cellSize*1.4;
+    colorLegend
+      .enter().append('rect')
+        .attr('x', 0)
+      .merge(colorLegend)
+        .attr('fill', d => d)
+        .attr('width', legendLineHeight*.9)
+        .attr('height', legendLineHeight*.9)
+        .attr('y', (d, i) => (i-0.3)*legendLineHeight);
+    
+    const colorLegendText = colorLegendG.selectAll('text').data(legendLabels.slice(1));
+    colorLegendText
+      .enter().append('text')
+        .attr('fill', d => d)
+        .attr('fill', '#666')
+        .attr('alignment-baseline', 'middle')
+        .html(d => d)
+      .merge(colorLegendText)
+        .attr('font-size', cellSize)
+        .attr('x', cellSize*2)
+        .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
+
+    // legend title
+    const legendTitle = colorLegendG.selectAll('.legendTitle').data([null]);
+    legendTitle
+      .enter()
+      .append("text")
+        .attr("class", "legendTitle")
+        .attr('fill', '#666')
+        .text('# of Races')
+      .merge(legendTitle)
+        .attr('transform', 'translate(0,-' + cellSize + ')')
+        .attr("font-size", cellSize*1.2);
+
+
+    // monthOutlines
+    let monthOutlinesG = calendarG.selectAll('#monthOutlines').data([null]);
+    monthOutlinesG = monthOutlinesG
+      .enter().append('g')
+        .attr('id', 'monthOutlines')
+      .merge(monthOutlinesG)
+        .attr('fill', 'none')
+        .attr('stroke', '#666')
+        .attr('stroke-width', d3.min([2, cellSize/5]));
+
+    const monthOutlines = monthOutlinesG.selectAll('.monthPath')
+      .data(d3.timeMonths(new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)));
+    monthOutlines
+      .enter().append('path')
+        .attr('class', 'monthPath')
+      .merge(monthOutlines)
+        .attr('d', t => this.pathMonth(t) );
+
+    // for days with elusive races
+    const elusiveRectClass = 'elusiveRect';
+    let elusiveRect = calendarG
+      .selectAll('.' + elusiveRectClass)
+      .data(d3.timeDays(
+        new Date(this.shownYear, 0, 1), new Date(this.shownYear + 1, 0, 1)
+      ).filter(d => fmt2(d) in calendarData.elusive));
+
+    elusiveRect = elusiveRect
+      .enter().append('rect')
+        .attr('class', elusiveRectClass)
+        .attr('fill', 'none')
+        .attr("stroke-width", 3)
+      .merge(elusiveRect)
+        .attr('stroke', highlightElusive ? 'black' : 'none')
+        .attr("width", cellSize)
+        .attr("height", cellSize)
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
+
+    // frame for today's date: only if relevant
+    if(currentYear == this.shownYear) {
+      const today = d3.timeDay(new Date());
+      const todayMarker = calendarG.selectAll('.todayDate').data([today]);
+      todayMarker
+        .enter().append('circle')
+          .attr('class', 'todayDate')
+          .attr('fill', 'none')
+          .attr('stroke', '#d73027')
+        .merge(todayMarker)
+          .attr('width', cellSize)
+          .attr('height', cellSize)
+          .attr('r', 1.6*cellSize/2)
+          .attr('stroke-width', d3.min([3, cellSize/5]))
+          .attr("cx", d => this.getDateX(d) + cellSize/2)
+          .attr("cy", d => this.getDateY(d) + cellSize/2);
+    }
+
+
+    // get bounding box for each month outline
+    const mp = document.getElementById("monthOutlines").childNodes;
+    const BB = Array.prototype.slice.call(mp).map(d => d.getBBox());
+    const monthX = BB.map(d => d.x + d.width/2);
+    // add the labels
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthLabels = calendarG.selectAll('.monthLabel').data(months);
+    function getMonthLabelRow(m) {
+      return Math.floor(m/(12/nRows));
+    }
+    monthLabels
+      .enter().append('text')
+        .attr('class', 'monthLabel')
+        .text(d => d)
+      .merge(monthLabels)
+        .attr('x', (d, i) => monthX[i])
+        .attr('y', (d, i) => -10 + getMonthLabelRow(i)*10*cellSize)
+        .attr('font-size', cellSize*1.2);
+
+    const weekDayText = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const weekDayLabels = calendarG.selectAll('.weekDayLabel').data(weekDayText);
+    weekDayLabels
+      .enter().append('text')
+        .attr('class', 'weekDayLabel')
+        .text(d => d)
+        .attr('fill', '#666')
+      .merge(weekDayLabels)
+        .attr('x', -1.4*cellSize)
+        .attr("font-size", 0.8*cellSize)
+        .attr('y', (d, i) => cellSize*(i + 0.8));
+
+  }
+
+  getDateHighlighter() {
+    // collect dates for each town
+    // access elements as datesPerTown['Canton'] 
+    // yields a set of unique date strings for each town
+    this.datesPerTown = this.data[0].reduce((accumulator, currentValue) => {
+      if(!(currentValue.Town in accumulator)) {
+        accumulator[currentValue.Town] = new Set();
+      }
+      const yr = currentValue.DateString.substr(0,4);
+      const mo = currentValue.DateString.substr(5,2);
+      const dy = currentValue.DateString.substr(8);
+      const d = new Date(yr, mo - 1, dy);
+      // use getTime to have set equality avoid duplicate dates
+      accumulator[currentValue.Town].add(d.getTime());
+      return accumulator;
+    }, {});
+    // create highlighter based on list of dates
+    // return highlighter after binding to data
+
+    return townName => { this.highlightDatesForTown(townName); };
+  }
+  
+  highlightDatesForTown(townName) {
+    // if town is empty, remove highlighting
+    const highlightRectClass = 'highlightTownRect';
+    let data = [];
+    if(townName in this.datesPerTown) {
+      data = Array.from(this.datesPerTown[townName], d => new Date(d));
+    }
+    let highlightRect = this.calendarG
+      .selectAll('.' + highlightRectClass)
+      .data(data);
+
+    highlightRect
+      .enter().append('rect')
+        .attr('class', highlightRectClass)
+        .attr('fill', '#d73027')
+        .attr("stroke-width", 2)
+      .merge(highlightRect)
+        .attr('stroke', '#000')
+        .attr("width", this.cellSize)
+        .attr("height", this.cellSize)
+        .attr("x", d => this.getDateX(d))
+        .attr("y", d => this.getDateY(d));
+
+    highlightRect.exit().remove();
+  }
+
+  setOptions(options) {
+    this.options = options;
+  }
+  
+  setContainer(container) {
+    this.container = container;
+  }
+
+  setBox(box) {
+    this.box = box;
+  }
+
+  setElusiveHighlight(trueFalse) {
+    this.options.highlightElusive = trueFalse;
   }
 }
 
