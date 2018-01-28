@@ -32,6 +32,8 @@ townNames <- columns[4:172]
 members$Town <- stri_trans_general(members$Town, 'latin-ascii')
 # remove asterisks and + (used to mark ambassadors)
 members <- members %>% mutate(Town = gsub('[*+]', '', Town))
+# trim whitespace
+members <- members %>% mutate(Town = trimws(Town))
 # fix a few town names
 members <- members %>% mutate(Town = gsub('South windsor', 'South Windsor', Town))
 members <- members %>% mutate(Town = gsub('Naugatauck', 'Naugatuck', Town))
@@ -45,26 +47,16 @@ members <- members %>% mutate(Town = gsub('Cromwell†', 'Cromwell', Town))
 members <- members %>% mutate(Town = gsub('Waterbury†', 'Waterbury', Town))
 members <- members %>% mutate(Town = gsub('Southimgton', 'Southington', Town))
 
+
 # note that there are people from out of state
 levels(as.factor(members$Town))
 # see all people who are not from known towns - hand check that there are no CT towns
 outTowns <- members %>% filter(!(Town %in% townNames)) %>% select(Town)
-known_out_of_state_towns <- c(
-  "Agawam, MA"        , "Strurbridge, MA"     , "Sturbridge, MA"  ,     "Longmeadow, MA"    ,   "Sturbridge, MA"    ,   "Springfield, MA"     ,
-  "Sturbridge, MA"    , "Saratoga Springs, NY", "Valhalla, NY"    ,     "Southbridge, MA"   ,   "Philadelphia, PA"  ,   "Valhalla, NY"        ,
-  "So. Salem, NY"     , "Southwick, MA"       , "Scarsdale, NY"   ,     "Southwick, MA"     ,   "Wakefield, RI"     ,   "Sandisfield, MA"     ,
-  "Leicester, MA"     , "East Greenwich, RI"  , "Rye, NY"         ,     "Westfield, MA"     ,   "Webster, MA"       ,   "Barrington, VT"      ,
-  "Dover, NH"         , "Pound Ridge, NY"     , "So. Hadley, MA"  ,     "Webster, MA"       ,   "Westerly, RI"      ,   "Saskatchewan"        ,
-  "Hampden, MA"       , "Alexandria, VA"      , "Westfield, MA"   ,     "Twin Lake, MI"     ,   "Webster, MA"       ,   "Nashua, NH"          ,
-  "Greenville, SC"    , "Hornell, NY"         , "Space"           ,     "Cummings, GA"      ,   "Hampden, MA"       ,   "Westfield, MA"       ,
-  "Springfield, MA"   , "Brooklyn, NY"        , "Stowe, VT "      ,     "E. Longmeadow, MA" ,   "Sutton, MA"        ,   "Chicopee, Mass "     ,
-  "Bradenton, FL"     , "Southbridge,MA"      , "Carmel, NY"
-)
-out_towns_not_in_known_list <- outTowns %>% filter(!(Town %in% known_out_of_state_towns))
+known_out_of_state_towns <- read_csv('data/known_out_of_state_towns.csv')
+out_towns_not_in_known_list <- outTowns %>% filter(!(Town %in% known_out_of_state_towns$townName))
 if(nrow(out_towns_not_in_known_list) > 0) {
   write_csv(out_towns_not_in_known_list, 'data/out_of_state_towns_not_in_known_list.csv') # overwrites the file
 }
-
 
 # change out of state towns to 'Out of State'
 members <- members %>% mutate(Town = ifelse(Town %in% townNames, Town, 'Out of State'))
