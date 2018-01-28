@@ -66,6 +66,8 @@ members <- members %>% mutate(Town = ifelse(Town %in% townNames, Town, 'Out of S
 repeatedNames <- members %>% count(Name) %>% filter(n>1)
 repeatedMembers <- members %>% filter(Name %in% repeatedNames$Name)
 
+members <- members %>% arrange(Name, desc(TotalTowns))
+
 write_csv(members, 'data/members_towns_clean.csv')
 
 # Update the timestamp ----
