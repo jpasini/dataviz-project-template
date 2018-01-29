@@ -30,7 +30,14 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   // roll up data for all races
   const calendarData = d3.nest()
       .key(d => d.DateString)
-      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
+      .rollup(d => {
+        return { 
+          length: d.length,
+          races: '<table>' + d.map(
+            x => '<tr><td>' + x.Town + '</td><td><span class="racedistance">' + x.Distance + '</span></td><td><span class="racename">' +  x.Name + '</span></td></tr>'
+          ).sort().join("\n") + '</table>'
+        }; 
+      })
     .object(racesData);
 
   // roll up data, but only for races in elusive towns
@@ -51,6 +58,15 @@ class Calendar {
     this.data = opts.data;
     this.margin = opts.margin;
     this.shownYear = 2018;
+    this.tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0]);
+
+    d3.selectAll('svg').call(this.tip);
+  }
+
+  setTownHighlighter(townHighlighter) {
+    this.townHighlighter = townHighlighter;
   }
 
   drawYearLabel(container) {
@@ -118,12 +134,17 @@ class Calendar {
         .attr("x", d => this.getDateX(d))
         .attr("y", d => this.getDateY(d));
 
+    this.tip
+      .html(d => '<span class="racedate">' + fmt2(d) + '</span>'
+        + calendarData.all[fmt2(d)].races
+      );
+
     // fill the rects for each day
     rect.filter(d => fmt2(d) in calendarData.all)
         .attr("fill", d => this.color(calendarData.all[fmt2(d)].length))
         .attr("class", calendarRectClass + ' day_with_race')
-      .append("title")
-        .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
+        .on('mouseover', d => { this.tip.show(d); this.townHighlighter(d); } )
+        .on('mouseout', d => { this.tip.hide(d); this.townHighlighter(); } );
   }
 
   setColors() {
@@ -387,5 +408,5 @@ class Calendar {
   }
 }
 
-export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar, getDateHighlighter };
+export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar };
 
