@@ -101,8 +101,8 @@ body {
   font-size: 1em;
   line-height: 1.2;
   padding: 0.5em;
-  background: rgba(0, 0, 0, 0.85);
-  color:  #fff;
+  background: rgba(150, 150, 150, 0.7);
+  color:  #000; /*#fff;*/
   border-radius: 0.5em;
 }
 /* Creates a small triangle extender for the tooltip */
@@ -128,15 +128,15 @@ body {
   font-size: 1.1em;
 }
 .racedate {
-  color: skyblue;
+  color: darkblue;
   font-weight: bold;
 }
 .racedistance {
-  color: orange;
+  color: darkred;
   font-weight: bold;
 }
 .racename {
-  color: #fff;
+  color: #000; /*#fff;*/
 }
 
 /************ calendar CSS *********/
