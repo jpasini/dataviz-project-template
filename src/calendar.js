@@ -358,10 +358,10 @@ class Calendar {
     highlightRect
       .enter().append('rect')
         .attr('class', highlightRectClass)
-        .attr('fill', 'green')
-        .attr("stroke-width", 3)
+        .attr('fill', '#d73027')
+        .attr("stroke-width", 2)
       .merge(highlightRect)
-        .attr('stroke', 'none')
+        .attr('stroke', '#000')
         .attr("width", this.cellSize)
         .attr("height", this.cellSize)
         .attr("x", d => this.getDateX(d))
