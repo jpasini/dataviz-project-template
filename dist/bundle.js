@@ -178,6 +178,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     ],
     margin: margin
   });
+
+  myCalendar.setTownHighlighter(myMap.getTownHighlighter());
+
   const charts = {
     calendar: myCalendar,
     map: myMap
@@ -501,6 +504,71 @@ class ChoroplethMap {
     this.margin = opts.margin;
   }
 
+  getTownHighlighter() {
+    // collect towns for each date
+    // access elements as townsPerDate[<dateString>] 
+    // yields a set of unique town names
+    this.townsPerDate = this.data[3].reduce((accumulator, currentValue) => {
+      const ds = currentValue.DateString;
+      if(!(ds in accumulator)) {
+        accumulator[ds] = new Set();
+      }
+      accumulator[ds].add(currentValue.Town);
+      return accumulator;
+    }, {});
+
+    return d => { this.highlightTownsPerDate(d); };
+  }
+
+  highlightTownsPerDate(date) {
+
+    const width = this.box.width;
+    const height = this.box.height;
+    const centerX = width/2;
+    const centerY = height/2;
+
+    const mapScale = getMapScale(width, height);
+    const CT_coords = [-72.7,41.6032];
+    const projection = d3.geoMercator()
+      .center(CT_coords)
+      .scale(mapScale)
+      .translate([centerX, centerY]);
+    const path = d3.geoPath().projection(projection);
+
+    function getDateString(d) {
+      const fmt = d3.format("02");
+      const mo = d.getMonth() + 1;
+      const day = d.getDate();
+      return fmt(mo) + "/" + fmt(day);
+    }
+
+    const mapFeatures = this.data[0];
+    let data = []; // default is nothing --> will remove highlighting
+
+    if(date != undefined) {
+      // set up data to highlight
+      const ds = getDateString(date);
+      data = mapFeatures.all.filter(mf => this.townsPerDate[ds].has(mf.properties.NAME10));
+    }
+
+    const highlightTownClassName = 'highlightedTownArea';
+
+    let highlightAreas = this.container
+      .selectAll('.' + highlightTownClassName)
+      .data(data);
+
+    highlightAreas
+      .enter().append('path')
+        .attr('class', highlightTownClassName)
+        .attr('fill', 'darkgreen')
+        .attr('stroke-width', 3)
+      .merge(highlightAreas)
+        .attr('stroke', 'none')
+        .attr('d', path);
+
+    highlightAreas.exit().remove();
+  }
+
   draw() {
     const [
       mapFeatures,
@@ -771,7 +839,6 @@ class ChoroplethMap {
     function dragended(d) {
       d3.select(this).classed('active', false);
     }
-  //}
   }
 
   setOptions(options) {
@@ -804,7 +871,6 @@ class ChoroplethMap {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseRace; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCalendarHeight; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return rollUpDataForCalendar; });
-/* unused harmony export getDateHighlighter */
 const fmt = d3.format("02");
 const parseRace = d => {
   d.Month = +d.Month;
@@ -837,7 +903,14 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   // roll up data for all races
   const calendarData = d3.nest()
       .key(d => d.DateString)
-      .rollup(d => { return {"length": d.length, "races": d.map(x => x.Town + " (" + x.Distance + "): " +  x.Name).sort().join("\n")}; })
+      .rollup(d => {
+        return { 
+          length: d.length,
+          races: '<table>' + d.map(
+            x => '<tr><td>' + x.Town + '</td><td><span class="racedistance">' + x.Distance + '</span></td><td><span class="racename">' +  x.Name + '</span></td></tr>'
+          ).sort().join("\n") + '</table>'
+        }; 
+      })
     .object(racesData);
 
   // roll up data, but only for races in elusive towns
@@ -858,6 +931,15 @@ class Calendar {
     this.data = opts.data;
     this.margin = opts.margin;
     this.shownYear = 2018;
+    this.tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0]);
+
+    d3.selectAll('svg').call(this.tip);
+  }
+
+  setTownHighlighter(townHighlighter) {
+    this.townHighlighter = townHighlighter;
   }
 
   drawYearLabel(container) {
@@ -925,12 +1007,17 @@ class Calendar {
         .attr("x", d => this.getDateX(d))
         .attr("y", d => this.getDateY(d));
 
+    this.tip
+      .html(d => '<span class="racedate">' + fmt2(d) + '</span>'
+        + calendarData.all[fmt2(d)].races
+      );
+
     // fill the rects for each day
     rect.filter(d => fmt2(d) in calendarData.all)
         .attr("fill", d => this.color(calendarData.all[fmt2(d)].length))
         .attr("class", calendarRectClass + ' day_with_race')
-      .append("title")
-        .text(d => fmt2(d) + ": " + formatCell(calendarData.all[fmt2(d)].length) + " races\n" +  calendarData.all[fmt2(d)].races);
+        .on('mouseover', d => { this.tip.show(d); this.townHighlighter(d); } )
+        .on('mouseout', d => { this.tip.hide(d); this.townHighlighter(); } );
   }
 
   setColors() {
