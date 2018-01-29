@@ -65,6 +65,10 @@ class Calendar {
     d3.selectAll('svg').call(this.tip);
   }
 
+  setTownHighlighter(townHighlighter) {
+    this.townHighlighter = townHighlighter;
+  }
+
   drawYearLabel(container) {
     // year label
     const yearLabel = container.selectAll('.yearLabel').data([null]);
@@ -139,8 +143,8 @@ class Calendar {
     rect.filter(d => fmt2(d) in calendarData.all)
         .attr("fill", d => this.color(calendarData.all[fmt2(d)].length))
         .attr("class", calendarRectClass + ' day_with_race')
-        .on('mouseover', d => { this.tip.show(d); townHighlighter(d); } )
-        .on('mouseout', d => { this.tip.hide(d); townHighlighter(); } );
+        .on('mouseover', d => { this.tip.show(d); this.townHighlighter(d); } )
+        .on('mouseout', d => { this.tip.hide(d); this.townHighlighter(); } );
   }
 
   setColors() {
@@ -404,5 +408,5 @@ class Calendar {
   }
 }
 
-export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar, getDateHighlighter };
+export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar };
 

@@ -16,8 +16,7 @@ import {
   Calendar,
   parseRace as parseRacesForCalendar,
   getCalendarHeight,
-  rollUpDataForCalendar,
-  getDateHighlighter 
+  rollUpDataForCalendar
 } from './calendar.js'
 
 const margin = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -123,6 +122,9 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     ],
     margin: margin
   });
+
+  myCalendar.setTownHighlighter(myMap.getTownHighlighter());
+
   const charts = {
     calendar: myCalendar,
     map: myMap

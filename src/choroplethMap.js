@@ -205,6 +205,10 @@ class ChoroplethMap {
     this.margin = opts.margin;
   }
 
+  getTownHighlighter() {
+    return (d) => { console.log(d); };
+  }
+
   draw() {
     const [
       mapFeatures,
