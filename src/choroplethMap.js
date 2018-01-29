@@ -223,6 +223,19 @@ class ChoroplethMap {
 
   highlightTownsPerDate(date) {
 
+    const width = this.box.width;
+    const height = this.box.height;
+    const centerX = width/2;
+    const centerY = height/2;
+
+    const mapScale = getMapScale(width, height);
+    const CT_coords = [-72.7,41.6032];
+    const projection = d3.geoMercator()
+      .center(CT_coords)
+      .scale(mapScale)
+      .translate([centerX, centerY]);
+    const path = d3.geoPath().projection(projection);
+
     function getDateString(d) {
       const fmt = d3.format("02");
       const mo = d.getMonth() + 1;
@@ -230,10 +243,31 @@ class ChoroplethMap {
       return fmt(mo) + "/" + fmt(day);
     }
 
+    const mapFeatures = this.data[0];
+    let data = []; // default is nothing --> will remove highlighting
+
     if(date != undefined) {
+      // set up data to highlight
       const ds = getDateString(date);
-      console.log(this.townsPerDate[ds]);
+      data = mapFeatures.all.filter(mf => this.townsPerDate[ds].has(mf.properties.NAME10));
     }
+
+    const highlightTownClassName = 'highlightedTownArea';
+
+    let highlightAreas = this.container
+      .selectAll('.' + highlightTownClassName)
+      .data(data);
+
+    highlightAreas
+      .enter().append('path')
+        .attr('class', highlightTownClassName)
+        .attr('fill', 'darkgreen')
+        .attr('stroke-width', 3)
+      .merge(highlightAreas)
+        .attr('stroke', 'none')
+        .attr('d', path);
+
+    highlightAreas.exit().remove();
   }
 
   draw() {
@@ -506,7 +540,6 @@ class ChoroplethMap {
     function dragended(d) {
       d3.select(this).classed('active', false);
     }
-  //}
   }
 
   setOptions(options) {
