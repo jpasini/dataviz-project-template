@@ -206,7 +206,34 @@ class ChoroplethMap {
   }
 
   getTownHighlighter() {
-    return (d) => { console.log(d); };
+    // collect towns for each date
+    // access elements as townsPerDate[<dateString>] 
+    // yields a set of unique town names
+    this.townsPerDate = this.data[3].reduce((accumulator, currentValue) => {
+      const ds = currentValue.DateString;
+      if(!(ds in accumulator)) {
+        accumulator[ds] = new Set();
+      }
+      accumulator[ds].add(currentValue.Town);
+      return accumulator;
+    }, {});
+
+    return d => { this.highlightTownsPerDate(d); };
+  }
+
+  highlightTownsPerDate(date) {
+
+    function getDateString(d) {
+      const fmt = d3.format("02");
+      const mo = d.getMonth() + 1;
+      const day = d.getDate();
+      return fmt(mo) + "/" + fmt(day);
+    }
+
+    if(date != undefined) {
+      const ds = getDateString(date);
+      console.log(this.townsPerDate[ds]);
+    }
   }
 
   draw() {
