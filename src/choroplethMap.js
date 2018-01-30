@@ -261,10 +261,10 @@ class ChoroplethMap {
     highlightAreas
       .enter().append('path')
         .attr('class', highlightTownClassName)
-        .attr('fill', 'darkgreen')
-        .attr('stroke-width', 3)
+        .attr('fill', '#33a02c')
+        .attr('stroke-width', 1)
       .merge(highlightAreas)
-        .attr('stroke', 'none')
+        .attr('stroke', '#888')
         .attr('d', path);
 
     highlightAreas.exit().remove();
