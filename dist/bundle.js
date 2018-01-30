@@ -891,7 +891,7 @@ function getNumRows(width) {
 }
 
 function getCellSize(width) {
-  return width/(nWeeks+13)*Math.sqrt(getNumRows(width));
+  return width/(nWeeks+13*getNumRows(width))*getNumRows(width);
 }
 
 function getCalendarHeight(width) {
