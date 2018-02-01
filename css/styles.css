@@ -106,17 +106,14 @@ body {
   border-radius: 0.5em;
 }
 
-.d3-tip-calendar {
-  font-size: 1em;
-  line-height: 1.2;
-  padding: 0.5em;
-  background: rgba(150, 150, 150, 0.5);
-  color:  #000; /*#fff;*/
-  border-radius: 0.5em;
-}
-
 /* style northward tooltips differently */
 .d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.d3-tip-calendar.n:after {
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;
@@ -150,5 +147,34 @@ body {
 .monthLabel {
   text-anchor: middle;
   fill: #666;
+}
+
+/* calendar tooltip options*/
+.d3-tip-calendar {
+  font-size: 0.9rem;
+  line-height: 1.0;
+  padding: 0.5em;
+  background: rgba(0, 0, 0, 0.7);
+  color:  #fff;
+  border-radius: 0.5em;
+}
+
+/* style northward tooltips differently */
+.d3-tip-calendar.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.racedate-calendar {
+  color: skyblue;
+  font-weight: bold;
+}
+.racedistance-calendar {
+  color: orange;
+  font-weight: bold;
+}
+.racename-calendar {
+  color: #fff;
 }
 
