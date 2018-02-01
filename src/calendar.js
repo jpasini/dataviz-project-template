@@ -36,7 +36,7 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
         const summary = d3.nest()
           .key(x => x.Town + x.Name)
           .rollup(
-            x => { return {Town: x[0].Town, Name: x[0].Name, Distances: x.map(u => u.Distance).sort().join('/')}; }
+            x => { return {Town: x[0].Town, Name: x[0].Name, Distances: x.map(u => u.Distance).join('/')}; }
           ).entries(d);
         console.log(summary);
         return { 
