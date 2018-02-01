@@ -28,14 +28,23 @@ function getCalendarHeight(width) {
 function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
   // Compute data needed for the calendar
   // roll up data for all races
+
   const calendarData = d3.nest()
       .key(d => d.DateString)
       .rollup(d => {
+        // collect together different distances for same race
+        const summary = d3.nest()
+          .key(x => x.Town + x.Name)
+          .rollup(
+            x => { return {Town: x[0].Town, Name: x[0].Name, Distances: x.map(u => u.Distance).sort().join('/')}; }
+          ).entries(d);
+        console.log(summary);
         return { 
           length: d.length,
-          races: '<table>' + d.map(
-            x => '<tr><td>' + x.Town + '</td><td><span class="racedistance-calendar">' + x.Distance + '</span></td><td><span class="racename-calendar">' +  x.Name + '</span></td></tr>'
-          ).sort().join("\n") + '</table>'
+          races: '<table>' + 
+          summary.map(
+            x => '<tr><td>' + x.value.Town + '</td><td><span class="racedistance-calendar">' + x.value.Distances + '</span></td><td><span class="racename-calendar">' +  x.value.Name + '</span></td></tr>'
+          ).sort().join('\n') + '</table>'
         }; 
       })
     .object(racesData);
