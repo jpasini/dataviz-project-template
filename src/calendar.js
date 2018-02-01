@@ -38,7 +38,6 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
           .rollup(
             x => { return {Town: x[0].Town, Name: x[0].Name, Distances: x.map(u => u.Distance).join('/')}; }
           ).entries(d);
-        console.log(summary);
         return { 
           length: d.length,
           races: '<table>' + 
