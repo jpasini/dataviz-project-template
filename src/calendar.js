@@ -34,7 +34,7 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
         return { 
           length: d.length,
           races: '<table>' + d.map(
-            x => '<tr><td>' + x.Town + '</td><td><span class="racedistance">' + x.Distance + '</span></td><td><span class="racename">' +  x.Name + '</span></td></tr>'
+            x => '<tr><td>' + x.Town + '</td><td><span class="racedistance-calendar">' + x.Distance + '</span></td><td><span class="racename-calendar">' +  x.Name + '</span></td></tr>'
           ).sort().join("\n") + '</table>'
         }; 
       })
@@ -59,7 +59,7 @@ class Calendar {
     this.margin = opts.margin;
     this.shownYear = 2018;
     this.tip = d3.tip()
-        .attr('class', 'd3-tip')
+        .attr('class', 'd3-tip-calendar')
         .offset([-10, 0]);
 
     d3.selectAll('svg').call(this.tip);
@@ -135,7 +135,7 @@ class Calendar {
         .attr("y", d => this.getDateY(d));
 
     this.tip
-      .html(d => '<span class="racedate">' + fmt2(d) + '</span>'
+      .html(d => '<span class="racedate-calendar">' + fmt2(d) + '</span>'
         + calendarData.all[fmt2(d)].races
       );
 
