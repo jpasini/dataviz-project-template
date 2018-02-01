@@ -152,9 +152,9 @@ body {
 /* calendar tooltip options*/
 .d3-tip-calendar {
   font-size: 0.9rem;
-  line-height: 1.2;
+  line-height: 1.0;
   padding: 0.5em;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6);
   color:  #fff;
   border-radius: 0.5em;
 }
