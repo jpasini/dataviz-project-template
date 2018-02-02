@@ -58,11 +58,11 @@ NH,Milford,"Sat, 03/24 10:00",5K,James Mattioli 5K,$26 through 3/21,Results,Seco
 F,Fairfield,"Sun, 03/25 07:30",10K,Boston Blowout,"$16, $20 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
 F,Fairfield,"Sun, 03/25 07:30",20K,Boston Blowout,"$18, $23 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
 F,Fairfield,"Sun, 03/25 07:30",30K,Boston Blowout,"$20, $25 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
-L,Goshen,"Sun, 03/25 08:15",2.1M,Housatonic Hustle,".$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T08:15:00Z,3,25,7
-L,Warren,"Sun, 03/25 10:30",2.6M,Housatonic Hustle,".$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T10:30:00Z,3,25,7
-F,Sherman,"Sun, 03/25 13:00",3K,Housatonic Hustle,".$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T13:00:00Z,3,25,7
+L,Goshen,"Sun, 03/25 08:15",2.1M,Housatonic Hustle - Goshen,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T08:15:00Z,3,25,7
 NH,Waterbury,"Sun, 03/25 10:00",5K/1.8M,NVCC Food Pantry Fund Raiser Run,$25 (rescheduled from 12/17),Results,NA,2018-03-25T10:00:00Z,3,25,7
+L,Warren,"Sun, 03/25 10:30",2.6M,Housatonic Hustle - Warren,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T10:30:00Z,3,25,7
 H,West Hartford,"Sun, 03/25 10:30",5K,Johnny's Jog for Charity,"$35,  free for 13 and under",Results,Fast Track,2018-03-25T10:30:00Z,3,25,7
+F,Sherman,"Sun, 03/25 13:00",3K,Housatonic Hustle - Sherman,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T13:00:00Z,3,25,7
 NL,Sprague,"Sat, 03/31 08:30",1M,Lickety Split Mile,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,2018-03-31T08:30:00Z,3,31,6
 NL,Sprague,"Sat, 03/31 09:30",3M,St. Joseph School 3-Mile Road Race,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,2018-03-31T09:30:00Z,3,31,6
 NH,Waterbury,"Sat, 03/31 08:30",5K,Chris Corbett 5k,.$25,Results,Greystone,2018-03-31T08:30:00Z,3,31,6
@@ -80,7 +80,6 @@ H,West Hartford,"Sat, 04/07 10:00",6.55M,Greater Hartford 1/4 Marathon,.$30,Resu
 T,Mansfield,"Sat, 04/07 11:00",4K,James Malaney Pharmacy Run,"$15, $20 day of",Results,Platt,2018-04-07T11:00:00Z,4,7,6
 NL,Voluntown,"Sat, 04/07 13:30",5K,Grin & Bear It,$20 SOLD OUT,Results,Coolrunnings,2018-04-07T13:30:00Z,4,7,6
 NH,Guilford,"Sun, 04/08 09:00",10K,Bimblers Bash,"$25 thru 4/5, $30 after and day of",Results,Rat Race,2018-04-08T09:00:00Z,4,8,7
-NH,North Haven,"Sun, 04/08 00:00",5K,QU PA Run For Your Life 5K,"$20, $25 raceday",Results,Platt,2018-04-08T00:00:00Z,4,8,7
 T,Vernon,"Sun, 04/08 09:00",5K,Strong Family Farm Chicken Run,"$20 through 3/31,  $25 after",Results,Last Mile,2018-04-08T09:00:00Z,4,8,7
 F,Danbury,"Sun, 04/08 09:15",13.1M,Faxon Law Greater Danbury Road Races,"$47 through 1/1, $50 through 2/1, $52 through 4/7, $55 raceday",Results,JB Sports,2018-04-08T09:15:00Z,4,8,7
 F,Danbury,"Sun, 04/08 09:25",5K,Faxon Law Greater Danbury Road Races,"$26 through 1/1, $27 through 2/1, $28 through 4/7, $30 raceday",Results,JB Sports,2018-04-08T09:25:00Z,4,8,7
@@ -283,11 +282,10 @@ F,Trumbull,"Sun, 06/10 11:30",5K,Team Caroline and Mia Tutu Trot,.$25,Results,NA
 L,Litchfield,"Sun, 06/10 13:00",7.1M,Litchfield Hills Road Race,TBD,Results,Fast Track,2018-06-10T13:00:00Z,6,10,7
 H,Farmington,"Tue, 06/12 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-06-12T18:10:00Z,6,12,2
 H,Farmington,"Tue, 06/12 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-06-12T18:15:00Z,6,12,2
-NL,Preston,"Thu, 06/14 19:00",5K,St. Catherines,TBD,Results,SNERRO,2018-06-14T19:00:00Z,6,14,4
 M,Chester,"Thu, 06/14 18:15",Triathlon,Cedar Lake Tri Series,$45 (NO RACE DAY REGISTRATION),Results,Its Your Race,2018-06-14T18:15:00Z,6,14,4
 F,Greenwich,"Fri, 06/15 18:30",5K,Cook Your Buns,TBD,Results,Clubct,2018-06-15T18:30:00Z,6,15,5
 L,Colebrook,"Sat, 06/16 00:00",5K,Camp Jewell Trail Race,TBD,Results,Greystone,2018-06-16T00:00:00Z,6,16,6
-NH,Meriden,"Sat, 06/16 00:00",5K,Purple Stride Connecticut,.$30,Results,Granite State,2018-06-16T00:00:00Z,6,16,6
+NH,Meriden,"Sat, 06/16 10:00",5K,Purple Stride Connecticut,.$30,Results,Granite State,2018-06-16T10:00:00Z,6,16,6
 NH,Middlebury,"Sat, 06/16 07:00",Olympic Tri,Pat Griskus Triathlon Series,"$80 through 1/1, then $95",Results,Fast Track,2018-06-16T07:00:00Z,6,16,6
 NH,Middlebury,"Sat, 06/16 07:00",Sprint Tri,Pat Griskus Triathlon Series,"$70 through 1/1, then $85",Results,Fast Track,2018-06-16T07:00:00Z,6,16,6
 NH,Middlebury,"Sat, 06/16 07:00",Duathlon,Pat Griskus Triathlon Series,"$80 through 1/1, then $95",Results,Fast Track,2018-06-16T07:00:00Z,6,16,6
