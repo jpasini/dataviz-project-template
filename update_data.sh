@@ -1,1 +1,1 @@
-R < src/update_data.R --no-save
+R -q < src/update_data.R --no-save

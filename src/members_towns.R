@@ -1,15 +1,15 @@
 # Run this script first, then clean_races.R
 
 # Load libraries ----
-library(tidyverse)
-library(stringi)
-library(curl)
-library(readxl)
-library(lubridate)
+suppressMessages(library(tidyverse, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
+suppressMessages(library(stringi, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
+suppressMessages(library(curl, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
+suppressMessages(library(readxl, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
+suppressMessages(library(lubridate, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 
 # Get data ----
 curl_download('https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!365&app=Excel&authkey=!ADVujkY8Qh3SXfc', destfile='data/members_towns.xlsx')
-members <- read_excel('data/members_towns.xlsx')
+members <- suppressMessages(read_excel('data/members_towns.xlsx'))
 #members <- read_csv('data/members_towns.csv')
 
 # Data wrangling ----

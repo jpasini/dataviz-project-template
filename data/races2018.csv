@@ -58,11 +58,11 @@ NH,Milford,"Sat, 03/24 10:00",5K,James Mattioli 5K,$26 through 3/21,Results,Seco
 F,Fairfield,"Sun, 03/25 07:30",10K,Boston Blowout,"$16, $20 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
 F,Fairfield,"Sun, 03/25 07:30",20K,Boston Blowout,"$18, $23 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
 F,Fairfield,"Sun, 03/25 07:30",30K,Boston Blowout,"$20, $25 day of",Results,Club CT,2018-03-25T07:30:00Z,3,25,7
-L,Goshen,"Sun, 03/25 08:15",2.1M,Housatonic Hustle - Goshen,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T08:15:00Z,3,25,7
+L,Goshen,"Sun, 03/25 08:15",2.1M,Housatonic Hustle - Goshen,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,Last Mile,2018-03-25T08:15:00Z,3,25,7
 NH,Waterbury,"Sun, 03/25 10:00",5K/1.8M,NVCC Food Pantry Fund Raiser Run,$25 (rescheduled from 12/17),Results,NA,2018-03-25T10:00:00Z,3,25,7
-L,Warren,"Sun, 03/25 10:30",2.6M,Housatonic Hustle - Warren,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T10:30:00Z,3,25,7
+L,Warren,"Sun, 03/25 10:30",2.6M,Housatonic Hustle - Warren,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,Last Mile,2018-03-25T10:30:00Z,3,25,7
 H,West Hartford,"Sun, 03/25 10:30",5K,Johnny's Jog for Charity,"$35,  free for 13 and under",Results,Fast Track,2018-03-25T10:30:00Z,3,25,7
-F,Sherman,"Sun, 03/25 13:00",3K,Housatonic Hustle - Sherman,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,NA,2018-03-25T13:00:00Z,3,25,7
+F,Sherman,"Sun, 03/25 13:00",3K,Housatonic Hustle - Sherman,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,Last Mile,2018-03-25T13:00:00Z,3,25,7
 NL,Sprague,"Sat, 03/31 08:30",1M,Lickety Split Mile,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,2018-03-31T08:30:00Z,3,31,6
 NL,Sprague,"Sat, 03/31 09:30",3M,St. Joseph School 3-Mile Road Race,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,2018-03-31T09:30:00Z,3,31,6
 NH,Waterbury,"Sat, 03/31 08:30",5K,Chris Corbett 5k,.$25,Results,Greystone,2018-03-31T08:30:00Z,3,31,6
@@ -388,7 +388,7 @@ T,Andover,"Sat, 08/04 09:00",10K,Hop River 5K & 10K,.$25,Results,First Mile,2018
 T,Andover,"Sat, 08/04 09:05",5K,Hop River 5K & 10K,.$25,Results,First Mile,2018-08-04T09:05:00Z,8,4,6
 NH,New Haven,"Sat, 08/04 12:00",5K,Craft Brew Races,"$50 through 5/4, $55 through 6/4, $60 through 8/3, $70 raceday ($10 discount for Designated driver)",Results,Racewire,2018-08-04T12:00:00Z,8,4,6
 NL,East Lyme,"Sun, 08/05 07:30",Triathlon,Niantic Bay Triathlon,"$75, $70 16 - 22 through 1/1, $90, $85 16-22 through 7/26, $100, $95 16-22 after",Results,HMF,2018-08-05T07:30:00Z,8,5,7
-NL,Griswold,"Sun, 08/05 09:00",6K,Griswold Sunflower Race,TBD,Results,Last Mile,2018-08-05T09:00:00Z,8,5,7
+NL,Griswold,"Sun, 08/05 09:00",6K,Griswold Sunflower Race,"$30, $25 for 17 and under",Results,Last Mile,2018-08-05T09:00:00Z,8,5,7
 NH,North Branford,"Sun, 08/05 09:30",5K,North Branford Potatoe & Corn Festival XC,TBD,Results,Last Mile,2018-08-05T09:30:00Z,8,5,7
 H,Farmington,"Tue, 08/07 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-08-07T18:10:00Z,8,7,2
 H,Farmington,"Tue, 08/07 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-08-07T18:15:00Z,8,7,2

@@ -1,10 +1,10 @@
 # Run this script after members_towns.R:  it assumes members_towns_clean.csv exists
 
 # Load libraries ----
-library(tidyverse)
-library(lubridate)
-library(curl)
-library(readxl)
+suppressMessages(library(tidyverse, warn.conflicts = FALSE, quietly = TRUE))
+suppressMessages(library(lubridate, warn.conflicts = FALSE, quietly = TRUE))
+suppressMessages(library(curl, warn.conflicts = FALSE, quietly = TRUE))
+suppressMessages(library(readxl, warn.conflicts = FALSE, quietly = TRUE))
 
 
 # Get data ----
@@ -13,7 +13,7 @@ year_of_interest <- 2018
 races_basefilename <- 'data/DEBTiConnSchedule'
 races_xlsx_name <- paste0(races_basefilename, '.xlsx')
 curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
-races <- read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races'))
+races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races')))
 
 # Data wrangling ----
 
