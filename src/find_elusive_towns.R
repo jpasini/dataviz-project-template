@@ -1,9 +1,9 @@
 # Given a year, use the cleaned races data to compute a list of "elusive" towns
 
 # Load libraries ----
-library(tidyverse)
-library(lubridate)
-library(RecordLinkage)
+suppressMessages(library(tidyverse, quietly = TRUE, warn.conflicts = FALSE))
+suppressMessages(library(lubridate, quietly = TRUE, warn.conflicts = FALSE))
+suppressMessages(library(RecordLinkage, quietly = TRUE, warn.conflicts = FALSE))
 
 year_of_interest <- 2017
 
