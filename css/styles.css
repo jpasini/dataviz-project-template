@@ -65,12 +65,12 @@ body {
   stroke: #888;
   stroke-width: 1px;
   opacity: 1;
-  fill: #eaeaea;
+  fill: #f1f1f1;
   transition: opacity 0.2s;
 }
 
 .area:hover {
-  fill: #33a02c;
+  fill: #4575b4;
 }
 
 .reachable {
@@ -82,7 +82,7 @@ body {
 }
 
 .alreadyRun {
-  fill: #2c7bb6;
+    fill: #abd9e9;
 }
 
 .hasRaceTodayOrTomorrow {
