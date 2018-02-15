@@ -560,7 +560,7 @@ class ChoroplethMap {
     highlightAreas
       .enter().append('path')
         .attr('class', highlightTownClassName)
-        .attr('fill', '#33a02c')
+        .attr('fill', '#4575b4')
         .attr('stroke-width', 1)
       .merge(highlightAreas)
         .attr('stroke', '#888')
@@ -597,7 +597,7 @@ class ChoroplethMap {
 
     // note: these colors must match the css above
     // TODO: DRY principle: perhaps do colors programmatically
-    const legendColors = ['#d73027', '#fc8d59', '#fee090', '#2c7bb6'];
+    const legendColors = ['#d73027', '#fc8d59', '#fee090', '#abd9e9'];
     const legendLabels = ['Race today or tomorrow', 'Race within 1 week', 'Race within 2 weeks', 'Town already run'];
 
     // Extract the width and height that was computed by CSS.
