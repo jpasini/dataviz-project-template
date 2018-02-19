@@ -129,6 +129,7 @@ F,Westport,"Sun, 04/22 08:30",5K,Minute Man Race,.$30,Results,Active.com,2018-04
 F,Westport,"Sun, 04/22 08:40",10K,Minute Man Race,.$40,Results,Active.com,2018-04-22T08:40:00Z,4,22,7
 L,Bethlehem,"Sun, 04/22 09:00",5K,Bring on the Heat,"$25,  $30 raceday",Results,Empire,2018-04-22T09:00:00Z,4,22,7
 F,Bridgeport,"Sun, 04/22 09:00",5K,Healthy Families 5K,.$25,Results,Hi-Tek,2018-04-22T09:00:00Z,4,22,7
+H,New Britain,"Sun, 04/22 09:00",5K,Team Johnson 5K,TBD,Results,Platt,2018-04-22T09:00:00Z,4,22,7
 NL,East Lyme,"Sun, 04/22 10:00",5K,Niantic Bay Boardwalk 5K,"$25, $20 for 18 and under.  After 4/18, $30 and $25",Results,SNERRO,2018-04-22T10:00:00Z,4,22,7
 NH,Guilford,"Sun, 04/22 10:00",10K,Run for Veterans,"$25, $30 day of",Results,Rat Race,2018-04-22T10:00:00Z,4,22,7
 NH,Guilford,"Sun, 04/22 10:10",5K,Run for Veterans,"$25, $30 day of",Results,Rat Race,2018-04-22T10:10:00Z,4,22,7
@@ -169,14 +170,14 @@ NH,Derby,"Sat, 05/05 00:00",5K,Derby's B.E.S.T.,TBD,Results,Rat Race,2018-05-05T
 H,Granby,"Sat, 05/05 08:30",10K,Granby Road Race,"$30 through 2/28, then $35",Results,Platt,2018-05-05T08:30:00Z,5,5,6
 H,Granby,"Sat, 05/05 08:30",5K,Granby Road Race,"$25 through 2/28, then $30",Results,Platt,2018-05-05T08:30:00Z,5,5,6
 F,Newtown,"Sat, 05/05 08:30",5K,Run 4 Hunger,"$30, $20 under 18",Results,Last Mile,2018-05-05T08:30:00Z,5,5,6
-F,Norwalk,"Sat, 05/05 08:30",5K,Sally's Run,"$30,  $15 ages 6-18,  Free 5 and under",Results,NA,2018-05-05T08:30:00Z,5,5,6
+F,Norwalk,"Sat, 05/05 08:30",5K,Sally's Run,"$30,  $15 ages 6-18,  Free 5 and under",Results,Last Mile,2018-05-05T08:30:00Z,5,5,6
 L,Roxbury,"Sat, 05/05 08:30",4.3M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-05-05T08:30:00Z,5,5,6
 H,Enfield,"Sat, 05/05 09:00",5K,Cinco K Mayo,"$25,  $30 raceday",Results,Its Your Race,2018-05-05T09:00:00Z,5,5,6
-F,Westport,"Sat, 05/05 09:00",5K,Susan Koman Race for the Cure,"$20, then it increases??",Results,NA,2018-05-05T09:00:00Z,5,5,6
+F,Westport,"Sat, 05/05 09:00",5K,Susan Koman Race for the Cure,"$20, then it increases??",Results,Racewire,2018-05-05T09:00:00Z,5,5,6
 L,Barkhamsted,"Sat, 05/05 09:30",5K,Barkhamsted PTO Road Race,.$25,Results,Empire TC,2018-05-05T09:30:00Z,5,5,6
 L,Barkhamsted,"Sat, 05/05 09:30",5K,River Run,TBD,Results,Greystone,2018-05-05T09:30:00Z,5,5,6
 NH,Beacon Falls,"Sat, 05/05 10:00",5K,Jills Race for MS,TBD,Results,Fast Track,2018-05-05T10:00:00Z,5,5,6
-NH,New Haven,"Sat, 05/05 10:00",5K,Clean Air Run,"$22 (with parking),  $20 without parking",Results,NA,2018-05-05T10:00:00Z,5,5,6
+NH,New Haven,"Sat, 05/05 10:00",5K,Clean Air Run,"$22 (with parking),  $20 without parking",Results,Run Sign Up,2018-05-05T10:00:00Z,5,5,6
 W,Woodstock,"Sat, 05/05 10:00",5K,Jog with Judy,$25/adult $15/kid,Results,SNERRO,2018-05-05T10:00:00Z,5,5,6
 L,Sharon,"Sat, 05/05 10:15",5M,Sharon Classic Road Race,.$20,Results,Fast Track,2018-05-05T10:15:00Z,5,5,6
 NL,Franklin,"Sat, 05/05 10:30",5K,Franklin 5K Family Run,.$30,Results,Time to Tri,2018-05-05T10:30:00Z,5,5,6
@@ -190,10 +191,10 @@ H,Southington,"Sun, 05/06 08:00",600 minutes,Trail Mixers Spring Fling 600,"$40,
 H,Burlington,"Sun, 05/06 08:30",10K,Burlington to Collinsville Classic,"$40, $35 for 9-22 through 1/1, $45, $40 9-22 through 4/5, $50, $45 9-22 through 4/25, $55, $50 9-22 after",Results,HMF,2018-05-06T08:30:00Z,5,6,7
 NL,Montville,"Sun, 05/06 09:00",5K,Montville Lions 5K,TBD,Results,SNERRO,2018-05-06T09:00:00Z,5,6,7
 NH,New Haven,"Sun, 05/06 09:00",5K Obstacle,Denali Run the Gauntlet,.$50,Results,JB Sports,2018-05-06T09:00:00Z,5,6,7
-M,Old Saybrook,"Sun, 05/06 09:00",5K,Seaside Shuffle,"$20, $25 raceday",Results,NA,2018-05-06T09:00:00Z,5,6,7
+M,Old Saybrook,"Sun, 05/06 09:00",5K,Seaside Shuffle,"$20, $25 raceday",Results,Rat Race,2018-05-06T09:00:00Z,5,6,7
 M,East Hampton,"Sun, 05/06 10:00",5K,Belltown Spring Sprint,"$20,  $10 for over 65 and under 17",Results,Its Your Race,2018-05-06T10:00:00Z,5,6,7
 NH,Orange,"Sun, 05/06 10:00",5K,Cohen and Wolf Cinco de Mayo,TBD,Results,Platt,2018-05-06T10:00:00Z,5,6,7
-L,Winchester,"Sun, 05/06 10:00",5K,Blue and Gold Run,".$25 until 4/30, $30 after and race day.  18 and under $15 and then $20.  Gilbert students $10.",Results,NA,2018-05-06T10:00:00Z,5,6,7
+L,Winchester,"Sun, 05/06 10:00",5K,Blue and Gold Run,".$25 until 4/30, $30 after and race day.  18 and under $15 and then $20.  Gilbert students $10.",Results,School SIte,2018-05-06T10:00:00Z,5,6,7
 NH,Wolcott,"Sun, 05/06 10:00",5K,Wolcott Circle of Sports 5K,TBD,Results,Hi-Tek,2018-05-06T10:00:00Z,5,6,7
 L,Litchfield,"Sun, 05/06 12:00",5K,Girls Just Wanna Run,".$30 13 and over ($35 after 4/15), $18 under 13",Results,Empire TC,2018-05-06T12:00:00Z,5,6,7
 W,Killingly,"Sun, 05/06 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,2018-05-06T17:30:00Z,5,6,7
@@ -209,6 +210,7 @@ L,Harwinton,"Sat, 05/12 09:30",3.4M,Catch Me if You Can,.$20,Results,Fast Track,
 NL,Colchester,"Sat, 05/12 10:00",5.5M,Salmon River Run,.$30,Results,Last Mile,2018-05-12T10:00:00Z,5,12,6
 NL,New London,"Sat, 05/12 11:00",5K,River Run for the Fund,"$20 through 5/1, then $25",Results,Fast Track,2018-05-12T11:00:00Z,5,12,6
 F,Brookfield,"Sun, 05/13 00:00",5K,Brookfield Mothers Day 5K,TBD,Results,USAXC,2018-05-13T00:00:00Z,5,13,7
+F,Norwalk,"Sun, 05/13 08:00",10K,Mother's Day 10K,"$22 through 5/12, then $25",Results,Club CT,2018-05-13T08:00:00Z,5,13,7
 F,Ridgefield,"Sun, 05/13 08:30",5K,Run Like A Mother,.$30,Results,Fast Track,2018-05-13T08:30:00Z,5,13,7
 NH,Milford,"Sun, 05/13 09:00",5K,Milford Hospital Live Well 5K,.$27,Results,Second Wind,2018-05-13T09:00:00Z,5,13,7
 T,Vernon,"Sun, 05/13 09:30",5K,Vernon Mothers' Day Dash,.$20,Results,Platt,2018-05-13T09:30:00Z,5,13,7
@@ -219,7 +221,7 @@ W,Thompson,"Sat, 05/19 08:15",5K Obstacle,Terrain Racing - New England,"$30 thro
 L,Roxbury,"Sat, 05/19 08:30",3.52M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-05-19T08:30:00Z,5,19,6
 H,Bloomfield,"Sat, 05/19 09:00",5K,Girls on the Run Greater Hartford 5K,TBD,Results,NA,2018-05-19T09:00:00Z,5,19,6
 NL,New London,"Sat, 05/19 09:00",5K,Winthrop STEM Green and Gold 5K,"$25, $10 under 18",Results,Platt,2018-05-19T09:00:00Z,5,19,6
-H,Simsbury,"Sat, 05/19 09:00",5K,My Best Friends 5K,"$25,  $20 under 18",Results,NA,2018-05-19T09:00:00Z,5,19,6
+H,Simsbury,"Sat, 05/19 09:00",5K,My Best Friends 5K,"$25,  $20 under 18",Results,Run SignUp,2018-05-19T09:00:00Z,5,19,6
 NH,Southbury,"Sat, 05/19 09:00",50K,Kettletown State Park Challeng T2T Series,"$60, $65 after 1/31",Results,Ultra Signup,2018-05-19T09:00:00Z,5,19,6
 NH,Southbury,"Sat, 05/19 09:00",30K,Kettletown State Park Challeng T2T Series,"$50, $55 after 1/31",Results,Ultra Signup,2018-05-19T09:00:00Z,5,19,6
 NH,Southbury,"Sat, 05/19 09:00",20K,Kettletown State Park Challeng T2T Series,"$45, $50 after 1/31",Results,Ultra Signup,2018-05-19T09:00:00Z,5,19,6
@@ -228,6 +230,7 @@ NH,Southbury,"Sat, 05/19 09:00",5K,Kettletown State Park Challeng T2T Series,"$3
 NH,Wallingford,"Sat, 05/19 09:00",5K,Carver Challenge,"$25,  $30 raceday",Results,Empire TC,2018-05-19T09:00:00Z,5,19,6
 NL,Waterford,"Sat, 05/19 09:00",5K,Quaker Hill 5K,TBD,Results,SNERRO,2018-05-19T09:00:00Z,5,19,6
 W,Killingly,"Sat, 05/19 09:30",5K,Aspire Springtime Classic 5K,"$20, $25 raceday",Results,Last Mile,2018-05-19T09:30:00Z,5,19,6
+NH,Waterbury,"Sat, 05/19 09:30",5K,Great Dash & Bash,.$20,Results,Greystone,2018-05-19T09:30:00Z,5,19,6
 L,Bethlehem,"Sat, 05/19 10:00",5K,AFSP Run For Hope,.$30,Results,Its Your Race,2018-05-19T10:00:00Z,5,19,6
 H,East Granby,"Sat, 05/19 10:00",5K,East Granby Ridge Run,"$25, $15 ages 5 - 17, under 5 free",Results,Last Mile,2018-05-19T10:00:00Z,5,19,6
 H,East Hartford,"Sat, 05/19 10:00",5K,CHR 1 in 5,TBD,Results,Fast Track,2018-05-19T10:00:00Z,5,19,6
@@ -263,6 +266,7 @@ M,Durham,"Sat, 05/26 10:45",2M - Kids,Go Far Go Fast,"$12, $15 after 5/15 - Grad
 L,Roxbury,"Sat, 05/26 08:30",1M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-05-26T08:30:00Z,5,26,6
 NH,Southbury,"Sat, 05/26 08:30",5K,David Wood Memorial 5K,"$25 Thru 5/13, then $30 thru 5/24.",Results,IYR,2018-05-26T08:30:00Z,5,26,6
 F,Weston,"Sat, 05/26 08:30",5K,Weston Memorial Day 5K,TBD,Results,ChronoTrack,2018-05-26T08:30:00Z,5,26,6
+W,Thompson,"Sat, 05/26 09:00",5K,St. Joseph School Falcon 5K,TBD,Results,NA,2018-05-26T09:00:00Z,5,26,6
 M,Old Saybrook,"Sat, 05/26 09:00",4M,Delaney Dash,.$18,Results,NA,2018-05-26T09:00:00Z,5,26,6
 NL,North Stonington,"Sat, 05/26 10:00",5K,North Stonington Education Foundation,TBD,Results,Platt,2018-05-26T10:00:00Z,5,26,6
 F,Bridgeport,"Sun, 05/27 08:30",10K,Great Aquarion Barnum Festival Road Race,$30 Until 1/31,Results,Last Mile,2018-05-27T08:30:00Z,5,27,7
@@ -302,6 +306,7 @@ F,Stamford,"Sun, 06/03 08:00",10K,Hope In Motion,.$65,Results,Active,2018-06-03T
 F,Stamford,"Sun, 06/03 08:00",5K,Hope In Motion,"$50, $25 for under 12",Results,Active,2018-06-03T08:00:00Z,6,3,7
 NH,West Haven,"Sun, 06/03 08:45",5K,Dominate the Day,.$25,Results,NA,2018-06-03T08:45:00Z,6,3,7
 F,Monroe,"Sun, 06/03 09:00",5K,Sprint for Monroe,.$25 through 5/26,Results,Last Mile,2018-06-03T09:00:00Z,6,3,7
+NH,Naugatuck,"Sun, 06/03 09:00",5K,Rubber Duck 5K,"$20 through 3/25, then ??",Results,Greystone,2018-06-03T09:00:00Z,6,3,7
 H,Enfield,"Sun, 06/03 09:30",5K,Enfield Eagles,.$20,Results,iRun CT,2018-06-03T09:30:00Z,6,3,7
 NL,Waterford,"Sun, 06/03 09:30",5K,Oswegatchie 5K,TBD,Results,SNERRO,2018-06-03T09:30:00Z,6,3,7
 H,Wethersfield,"Sun, 06/03 11:00",5K,Keane Foundation 5K,"$15, $5 for kids 10 and under",Results,Its Your Race,2018-06-03T11:00:00Z,6,3,7
@@ -336,6 +341,7 @@ NL,Norwich,"Sat, 06/16 09:00",Kids Du,Norwich Splash and Dash,"Ages 5-17 ONLY $2
 T,Hebron,"Sun, 06/17 07:30",5.5M,Sumer Solstice Trail Run,"$25, $20 10-22 thorugh 1/1, $30, $25 10-22 through 6/6, $35, $30 10-22 after",Results,HMF,2018-06-17T07:30:00Z,6,17,7
 T,Hebron,"Sun, 06/17 07:30",3.3M,Sumer Solstice Trail Run,"$25, $20 18-22, $15 10-17 thorugh 1/1, $30, $25 18-22, $15 10-17 through 6/6, $35, $30 18-22, $20 10-22 after",Results,HMF,2018-06-17T07:30:00Z,6,17,7
 F,Ridgefield,"Sun, 06/17 08:30",5K,Father's Day 5K,"$30, $35 day of",Results,Clubct,2018-06-17T08:30:00Z,6,17,7
+NH,Ansonia,"Sun, 06/17 09:00",5K,Emmett OBrien Hilltopper 5K,TBD,Results,Platt,2018-06-17T09:00:00Z,6,17,7
 NH,Milford,"Sun, 06/17 09:00",5K,Milford Moves for Veterans,TBD,Results,Last Mile,2018-06-17T09:00:00Z,6,17,7
 NH,Branford,"Sun, 06/17 09:30",Kids 1M,Branford Road Race,"$12 through 2/24, $13 through 5/3, $14 through 6/12, $15 through 6/16, $17 race day",Results,JB Sports,2018-06-17T09:30:00Z,6,17,7
 NH,Branford,"Sun, 06/17 10:15",5M,Branford Road Race,"$27 through 2/24, $29 through 5/3, $31 through 6/12, $33 through 6/16, $37 race day",Results,JB Sports,2018-06-17T10:15:00Z,6,17,7
@@ -348,17 +354,19 @@ NL,Preston,"Thu, 06/21 19:00",5K,St. Catherine Road Race,TBD,Results,SNERRO,2018
 NH,Wallingford,"Sat, 06/23 00:00",5K Obstacle,Gaylor Gauntlet,"$55 through 4/30,  $65 through 6/17,  $70 after",Results,Race Wire,2018-06-23T00:00:00Z,6,23,6
 F,Newtown,"Sat, 06/23 08:00",5K,Newtown Rooster 5K,TBD,Results,Platt,2018-06-23T08:00:00Z,6,23,6
 F,Stamford,"Sat, 06/23 08:00",Youth Tri,Stamford KIC IT Kids Tri,".$35 thru 3/15, then $30 thru 5/23, then $35 thru 6/12, then $40 race day",Results,HMF,2018-06-23T08:00:00Z,6,23,6
+NH,Meriden,"Sat, 06/23 08:30",5K,CT Pet Fair,TBD,Results,Rat Race,2018-06-23T08:30:00Z,6,23,6
 L,Roxbury,"Sat, 06/23 08:30",6.5M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-06-23T08:30:00Z,6,23,6
 L,Roxbury,"Sat, 06/23 08:30",3.8M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-06-23T08:30:00Z,6,23,6
 M,Essex,"Sat, 06/23 08:45",5K,Run for Chris,.$25,Results,Rat Race,2018-06-23T08:45:00Z,6,23,6
+H,New Britain,"Sat, 06/23 09:00",5K,CMHA Run for Recovery,.$25,Results,Race Wire,2018-06-23T09:00:00Z,6,23,6
 NH,North Haven,"Sat, 06/23 09:00",5K,Kid U Not - Irish Festival,"$27, $32 raceday; Ages 12 & under - $13.50, $16 raceday",Results,Hi-Tek,2018-06-23T09:00:00Z,6,23,6
 F,Stamford,"Sat, 06/23 10:15",5K,Stamford KIC IT 5K,".$25 thru 3/15, then $28 thru 5/23, then $30 thru 6/12, then $32 race day",Results,HMF,2018-06-23T10:15:00Z,6,23,6
-W,Pomfret,"Sun, 06/24 00:00",4M,Wolf Den Dash,TBD,Results,Rat Race,2018-06-24T00:00:00Z,6,24,7
-W,Pomfret,"Sun, 06/24 00:00",8M,Wolf Den Dash,TBD,Results,Rat Race,2018-06-24T00:00:00Z,6,24,7
 F,Stamford,"Sun, 06/24 07:00",Sprint Tri,Stamford KIC IT Triathlon,".$70 thru 3/15, then $85 thru 5/23, then $95 thru 6/12, then $105 race day",Results,HMF,2018-06-24T07:00:00Z,6,24,7
 F,Stamford,"Sun, 06/24 07:00",Olympic Tri,Stamford KIC IT Triathlon,".$140 thru 3/15, then $165 thru 5/23, then $175 thru 6/12, then $185 race day",Results,HMF,2018-06-24T07:00:00Z,6,24,7
 H,Glastonbury,"Sun, 06/24 08:00",2M,Glastonbury River Runners 2M/5K,TBD,Results,Its Your Race,2018-06-24T08:00:00Z,6,24,7
 H,Glastonbury,"Sun, 06/24 08:00",5K,Glastonbury River Runners 2M/5K,TBD,Results,Its Your Race,2018-06-24T08:00:00Z,6,24,7
+W,Pomfret,"Sun, 06/24 09:00",4M,Wolf Den Dash,.$25,Results,Rat Race,2018-06-24T09:00:00Z,6,24,7
+W,Pomfret,"Sun, 06/24 09:00",8M,Wolf Den Dash,.$20,Results,Rat Race,2018-06-24T09:00:00Z,6,24,7
 H,Farmington,"Tue, 06/26 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-06-26T18:10:00Z,6,26,2
 H,Farmington,"Tue, 06/26 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-06-26T18:15:00Z,6,26,2
 M,Chester,"Thu, 06/28 18:15",Triathlon,Cedar Lake Tri Series,$45 (NO RACE DAY REGISTRATION),Results,Its Your Race,2018-06-28T18:15:00Z,6,28,4
@@ -387,6 +395,7 @@ L,Roxbury,"Sat, 07/07 08:30",3.52M,Roxbury Race Series,"$2,  $25 for the entire 
 H,Enfield,"Sat, 07/07 18:00",5K,Twilight Road Race,TBD,Results,Cool Running,2018-07-07T18:00:00Z,7,7,6
 H,Farmington,"Tue, 07/10 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-07-10T18:10:00Z,7,10,2
 H,Farmington,"Tue, 07/10 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-07-10T18:15:00Z,7,10,2
+H,Granby,"Wed, 07/11 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-07-11T18:00:00Z,7,11,3
 NH,Middlebury,"Wed, 07/11 18:00",Sprint Tri,Pat Gruskus Triathlon Series,"$70 through 1/1, then $85",Results,Fast Track,2018-07-11T18:00:00Z,7,11,3
 T,Somers,"Wed, 07/11 18:15",5K,Somers Summer Series,$5 free for children under 10,Results,SNEEA,2018-07-11T18:15:00Z,7,11,3
 H,Manchester,"Thu, 07/12 18:00","1M, 5K, SteepleChase",MRC Track & Field Series,"$10,  Free for under 17 ($5 suggested donation)",Results,MRC,2018-07-12T18:00:00Z,7,12,4
@@ -398,12 +407,15 @@ L,Roxbury,"Sat, 07/14 08:30",4.4M,Roxbury Race Series,"$2,  $25 for the entire s
 H,Avon,"Sat, 07/14 09:00",5K,Rolling Hills,.$25,Results,Racewire,2018-07-14T09:00:00Z,7,14,6
 NH,Meriden,"Sat, 07/14 09:00",5K,Summer Blaze 5K,"$25 thru 4/30, then ?",Results,Fast Track,2018-07-14T09:00:00Z,7,14,6
 W,Killingly,"Sat, 07/14 09:30",5K,Run For Ryan Memorial Trail Race,.$20,Results,NA,2018-07-14T09:30:00Z,7,14,6
+H,New Britain,"Sat, 07/14 10:30",2M,Nutmeg State Games,.$33,Results,Nutmeg State Games,2018-07-14T10:30:00Z,7,14,6
+H,New Britain,"Sat, 07/14 10:30",1M,Nutmeg State Games,.$33,Results,Nutmeg State Games,2018-07-14T10:30:00Z,7,14,6
 NH,Milford,"Sat, 07/14 20:00",3M,Neon Night Run,.$35,Results,Its Your Race,2018-07-14T20:00:00Z,7,14,6
 L,New Hartford,"Sun, 07/15 07:30",Tri/Du,Litchfield Hills Triathlon & Duathlon,"Tri - $85, $80 for 16-22 through 1/1, $100, $95 16-22 through 7/4, $110, $105 16-22 after; Du - $60, $55 for 14 - 22 through 1/1, $75, $70 14-22 through 7/4, $90, $85 14-22 after",Results,HMF,2018-07-15T07:30:00Z,7,15,7
 NH,West Haven,"Sun, 07/15 08:00",5K,Savin Rock 5K,.$25,Results,Second Wind,2018-07-15T08:00:00Z,7,15,7
 NL,New London,"Sun, 07/15 09:15",5K,Charter Oak Sailfest,TBD,Results,SNERRO,2018-07-15T09:15:00Z,7,15,7
 H,Farmington,"Tue, 07/17 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-07-17T18:10:00Z,7,17,2
 H,Farmington,"Tue, 07/17 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-07-17T18:15:00Z,7,17,2
+H,Granby,"Wed, 07/18 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-07-18T18:00:00Z,7,18,3
 T,Somers,"Wed, 07/18 18:15",5K,Somers Summer Series,$5 free for children under 10,Results,SNEEA,2018-07-18T18:15:00Z,7,18,3
 M,Middletown,"Wed, 07/18 18:45",5K,Citizens Bank 5K Summer Fun Run,"$26 through 6/1, $28 through 7/17, $30 raceday;
 Students - $10 off",Results,JB Sports,2018-07-18T18:45:00Z,7,18,3
@@ -424,6 +436,7 @@ H,Plainville,"Sun, 07/22 09:00",5K,Petit Race,.$30,Results,Last Mile,2018-07-22T
 NL,North Stonington,"Mon, 07/23 16:00",5K,Robbie's Run,TBD,Results,SNERRO,2018-07-23T16:00:00Z,7,23,1
 H,Farmington,"Tue, 07/24 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-07-24T18:10:00Z,7,24,2
 H,Farmington,"Tue, 07/24 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-07-24T18:15:00Z,7,24,2
+H,Granby,"Wed, 07/25 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-07-25T18:00:00Z,7,25,3
 T,Somers,"Wed, 07/25 18:15",5K,Somers Summer Series,.$5 free for children under 10,Results,SNEEA,2018-07-25T18:15:00Z,7,25,3
 F,Fairfield,"Wed, 07/25 18:30",5K,Fairfield Police Run,TBD,Results,NA,2018-07-25T18:30:00Z,7,25,3
 H,Manchester,"Thu, 07/26 18:00","1M, 2M, SteepleChase",MRC Track & Field Series,"$10,  Free for under 17 ($5 suggested donation)",Results,MRC,2018-07-26T18:00:00Z,7,26,4
@@ -437,6 +450,7 @@ NH,Guilford,"Sun, 07/29 08:15",5K,Sea Legs Shuffle,TBD,Results,JB Sports,2018-07
 T,Somers,"Sun, 07/29 09:00",5.5M,Soapstone Assault,"$10,  $5 Shenipsit Striders Members",Results,Shenipsit Striders,2018-07-29T09:00:00Z,7,29,7
 H,Farmington,"Tue, 07/31 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-07-31T18:10:00Z,7,31,2
 H,Farmington,"Tue, 07/31 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-07-31T18:15:00Z,7,31,2
+H,Granby,"Wed, 08/01 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-08-01T18:00:00Z,8,1,3
 T,Somers,"Wed, 08/01 18:15",5K,Somers Summer Series,.$5 free for children under 10,Results,SNEEA,2018-08-01T18:15:00Z,8,1,3
 H,Marlborough,"Thu, 08/02 18:15",Triathlon,Lake Terramuggus Tri Series,"$25, $30 for sprint, $30, $40 raceday for sprint",Results,Its Your Race,2018-08-02T18:15:00Z,8,2,4
 H,Hartford,"Thu, 08/02 18:20",5K,CFA Society Hartford Corporate 5K,"$28 through 7/1, $32 through 8/1, $35 raceday",Results,JBSports,2018-08-02T18:20:00Z,8,2,4
@@ -461,6 +475,7 @@ NL,Griswold,"Sun, 08/05 09:00",6K,Griswold Sunflower Race,"$30, $25 for 17 and u
 NH,North Branford,"Sun, 08/05 09:30",5K,North Branford Potatoe & Corn Festival XC,TBD,Results,Last Mile,2018-08-05T09:30:00Z,8,5,7
 H,Farmington,"Tue, 08/07 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-08-07T18:10:00Z,8,7,2
 H,Farmington,"Tue, 08/07 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-08-07T18:15:00Z,8,7,2
+H,Granby,"Wed, 08/08 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-08-08T18:00:00Z,8,8,3
 T,Somers,"Wed, 08/08 18:15",5K,Somers Summer Series,$5 free for children under 10,Results,SNEEA,2018-08-08T18:15:00Z,8,8,3
 M,Chester,"Thu, 08/09 18:15",Triathlon,Cedar Lake Tri Series,$45 (NO RACE DAY REGISTRATION),Results,Its Your Race,2018-08-09T18:15:00Z,8,9,4
 L,Sharon,"Sat, 08/11 08:00",Triathlon,Sharon Sprint Triathlon,"$65 indiv, $75 team, $75 and $90 day of",Results,Greystone,2018-08-11T08:00:00Z,8,11,6
@@ -640,6 +655,6 @@ L,Roxbury,"Sat, 12/08 08:30",26.2M,Roxbury Marathon,TBD,Results,Roxbury Site,201
 L,Bethlehem,"Sat, 12/08 10:00",5K,Santa Made Me Do It,"$25, $30 raceday",Results,Empire TC,2018-12-08T10:00:00Z,12,8,6
 NH,New Haven,"Sun, 12/09 00:00",5K,Christopher Martin's Run for Children,TBD,Results,JB Sports,2018-12-09T00:00:00Z,12,9,7
 F,Greenwich,"Sun, 12/09 09:00",3M,Jingle Bell Jog,TBD,Results,Clubct,2018-12-09T09:00:00Z,12,9,7
-F,Stratford,"Sat, 12/15 00:00",5K,Frosty Forest Trail 5K,TBD,Results,3C Race Productions,2018-12-15T00:00:00Z,12,15,6
+F,Stratford,"Sat, 12/15 10:00",5K,Frosty Forest Trail 5K,"$39, after 11/30, $49",Results,3C Race Productions,2018-12-15T10:00:00Z,12,15,6
 F,Fairfield,"Sun, 12/16 09:00",5K,William Meyer Holiday Run for Toys,TBD,Results,Clubct,2018-12-16T09:00:00Z,12,16,7
 T,Vernon,"Tue, 12/25 10:30",5K,Scrooge Scramble,Donations Accepted,Results,Platt,2018-12-25T10:30:00Z,12,25,2
