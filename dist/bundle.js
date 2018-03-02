@@ -909,14 +909,22 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
         const summary = d3.nest()
           .key(x => x.Town + x.Name)
           .rollup(
-            x => { return {Town: x[0].Town, Name: x[0].Name, Distances: x.map(u => u.Distance).join('/')}; }
+            x => {
+              return {
+                Town: x[0].Town,
+                Name: x[0].Name,
+                Distances: x.map(u => u.Distance).join('/')
+              };
+            }
           ).entries(d);
         return { 
-          length: d.length,
+          length: summary.length,
           races: '<table>' + 
-          summary.map(
-            x => '<tr><td>' + x.value.Town + '</td><td><span class="racedistance-calendar">' + x.value.Distances + '</span></td><td><span class="racename-calendar">' +  x.value.Name + '</span></td></tr>'
-          ).sort().join('\n') + '</table>'
+            summary.map(
+              x => '<tr><td>' + x.value.Town + '</td>' +
+                '<td><span class="racedistance-calendar">' + x.value.Distances + '</span></td>' +
+                '<td><span class="racename-calendar">' +  x.value.Name + '</span></td></tr>'
+            ).sort().join('\n') + '</table>'
         }; 
       })
     .object(racesData);
