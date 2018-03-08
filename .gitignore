@@ -1,3 +1,4 @@
+*.xlsx
 *.swp
 node_modules
 dist
