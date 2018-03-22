@@ -67,6 +67,7 @@ M,Middletown,"Sun, 03/25 09:00",5K,GoToFitness St Patrick's Day 5K,.$5,Results,F
 NH,Waterbury,"Sun, 03/25 10:00",5K/1.8M,NVCC Food Pantry Fund Raiser Run,$25 Rescheduled from 12/17/17,Results,Greystone,2018-03-25T10:00:00Z,3,25,7
 L,Warren,"Sun, 03/25 10:30",2.6M,Housatonic Hustle - Warren,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,Last Mile,2018-03-25T10:30:00Z,3,25,7
 H,West Hartford,"Sun, 03/25 10:30",5K,Johnny's Jog for Charity,"$35,  free for 13 and under",Results,Fast Track,2018-03-25T10:30:00Z,3,25,7
+T,Mansfield,"Sun, 03/25 11:00",5K,Canine 5k,"$10, $15 day of",Results,FB Page - Pack Leaders Rescue?,2018-03-25T11:00:00Z,3,25,7
 F,Sherman,"Sun, 03/25 13:00",3K,Housatonic Hustle - Sherman,"$18 thru 2/4, then $20  Series price = $45 through 2/4, then $50",Results,Last Mile,2018-03-25T13:00:00Z,3,25,7
 L,Roxbury,"Sat, 03/31 08:30",4.3M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-03-31T08:30:00Z,3,31,6
 NL,Sprague,"Sat, 03/31 08:30",1M,Lickety Split Mile,"$25, $30 Race day.  One fee for one or both races",Results,SNERRO,2018-03-31T08:30:00Z,3,31,6
@@ -173,8 +174,8 @@ H,Hartland,"Sun, 04/29 09:00",5M,Water Protectors 5 Mile,.$22,Results,Cool Runni
 NL,New London,"Sun, 04/29 09:00",Youth Du,Proud to DU It,"Ages 11-17 only,  $15 through 4/12,  $20 after",Results,Run Sign Up,2018-04-29T09:00:00Z,4,29,7
 NH,Orange,"Sun, 04/29 09:00",5K,Cohen and Wolf Cinco de Mayo,.$27,Results,Platt,2018-04-29T09:00:00Z,4,29,7
 H,Farmington,"Sun, 04/29 10:00",5K,Amy's Angels,.$20,Results,Its Your Race,2018-04-29T10:00:00Z,4,29,7
-H,Simsbury,"Sun, 04/29 12:00",10K,Simsbury River Run,.$30,Results,Granite State,2018-04-29T12:00:00Z,4,29,7
-H,Simsbury,"Sun, 04/29 12:00",5K,Simsbury River Run,".$25, $15 for youth",Results,Granite State,2018-04-29T12:00:00Z,4,29,7
+H,Simsbury,"Sun, 04/29 12:00",10K,Simsbury River Run,".$30, $35 after 4/11",Results,Granite State,2018-04-29T12:00:00Z,4,29,7
+H,Simsbury,"Sun, 04/29 12:00",5K,Simsbury River Run,".$25, $15 for youth, $30 after 4/11",Results,Granite State,2018-04-29T12:00:00Z,4,29,7
 W,Killingly,"Sun, 04/29 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,2018-04-29T17:30:00Z,4,29,7
 H,Farmington,"Fri, 05/04 19:00",5K,May the Fourth Be With You 5K,"$27 through 4/1,  $30 after,  $15 students",Results,JB Sports,2018-05-04T19:00:00Z,5,4,5
 H,Granby,"Sat, 05/05 08:30",10K,Granby Road Race,"$30 through 2/28, then $35",Results,Platt,2018-05-05T08:30:00Z,5,5,6
@@ -195,7 +196,6 @@ NL,Franklin,"Sat, 05/05 10:30",5K,Franklin 5K Family Run,.$30,Results,Time to Tr
 F,Trumbull,"Sat, 05/05 18:00",5K,St. Theresa School Tiger Tail,.$26,Results,Start line,2018-05-05T18:00:00Z,5,5,6
 T,Mansfield,"Sun, 05/06 00:00",5K,Friends of EO Smith Crew 5K,TBD,Results,BC timing,2018-05-06T00:00:00Z,5,6,7
 L,Litchfield,"Sun, 05/06 08:00",Duathlon,Thrill in the Hills,"$50,  $40 for 17 and under",Results,Greystone,2018-05-06T08:00:00Z,5,6,7
-L,Plymouth,"Sun, 05/06 08:00",5K,Terryville Rotary 5K,TBD,Results,Greystone,2018-05-06T08:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:00",13.1M,Redding Road Race,.$60SOLD OUT,Results,RunSignUp,2018-05-06T08:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:15",7M,Redding Road Race,.$45 SOLD OUT,Results,RunSignUp,2018-05-06T08:15:00Z,5,6,7
 H,Southington,"Sun, 05/06 08:00",600 minutes,Trail Mixers Spring Fling 600,"$40, $20 for members,  $50, $25 for members on raceday",Results,Ultra Signup,2018-05-06T08:00:00Z,5,6,7
@@ -203,11 +203,12 @@ H,Burlington,"Sun, 05/06 08:30",10K,Burlington to Collinsville Classic,"$40, $35
 NL,Montville,"Sun, 05/06 09:00",5K,Montville Lions 5K,TBD,Results,SNERRO,2018-05-06T09:00:00Z,5,6,7
 NH,New Haven,"Sun, 05/06 09:00",5K Obstacle,Denali Run the Gauntlet,.$50,Results,JB Sports,2018-05-06T09:00:00Z,5,6,7
 M,Old Saybrook,"Sun, 05/06 09:00",5K,Seaside Shuffle,"$20, $25 raceday",Results,Rat Race,2018-05-06T09:00:00Z,5,6,7
+L,Plymouth,"Sun, 05/06 09:00",5K,Terryville Rotary 5K,"$15 until 4/22, $20 race day",Results,Greystone,2018-05-06T09:00:00Z,5,6,7
 M,East Hampton,"Sun, 05/06 10:00",5K,Belltown Spring Sprint,"$20,  $10 for over 65 and under 17",Results,Its Your Race,2018-05-06T10:00:00Z,5,6,7
-L,Winchester,"Sun, 05/06 10:00",5K,Blue and Gold Run,".$25 until 4/30, $30 after and race day.  18 and under $15 and then $20.  Gilbert students $10.",Results,School SIte,2018-05-06T10:00:00Z,5,6,7
+L,Winchester,"Sun, 05/06 10:00",5K,Blue and Gold Run,"$25 until 4/30, $30 after and race day.  18 and under $15 and then $20.  Gilbert students $10.",Results,School SIte,2018-05-06T10:00:00Z,5,6,7
 F,Westport,"Sun, 05/06 10:00",5K,STAR Inc. 5k Run,.$25,Results,Club CT,2018-05-06T10:00:00Z,5,6,7
 NH,Wolcott,"Sun, 05/06 10:00",5K,Wolcott Circle of Sports 5K,"$20, $12 student",Results,Hi-Tek,2018-05-06T10:00:00Z,5,6,7
-L,Litchfield,"Sun, 05/06 12:00",5K,Girls Just Wanna Run,".$30 13 and over ($35 after 4/15), $18 under 13",Results,Empire TC,2018-05-06T12:00:00Z,5,6,7
+L,Litchfield,"Sun, 05/06 12:00",5K,Girls Just Wanna Run,"$30 13 and over ($35 after 4/15), $18 under 13",Results,Empire TC,2018-05-06T12:00:00Z,5,6,7
 NL,Lebanon,"Sun, 05/06 13:30",5K,Bailey's Garden Run,TBD,Results,Last Mile,2018-05-06T13:30:00Z,5,6,7
 W,Killingly,"Sun, 05/06 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,2018-05-06T17:30:00Z,5,6,7
 M,Middletown,"Fri, 05/11 18:00",5K,Cap and Gown 5K,".$20, $25 after 5/6",Results,Empire TC,2018-05-11T18:00:00Z,5,11,5
@@ -661,6 +662,7 @@ H,Southington,"Sun, 09/30 08:30",5M,Apple Harvest Festival Road Races,TBD,Result
 F,Monroe,"Sun, 09/30 09:00",5K,Monroe 5K Trail Run,.$20,Results,Fast Track,2018-09-30T09:00:00Z,9,30,7
 NL,Salem,"Sun, 09/30 09:00",5K,Run in the Woods,"$20, $25 raceday",Results,Empire TC,2018-09-30T09:00:00Z,9,30,7
 F,Fairfield,"Sun, 09/30 10:00",5K,Bigelow Tea Community Challenge,.$25,Results,Last Mile,2018-09-30T10:00:00Z,9,30,7
+T,Andover,"Sat, 10/06 00:00",5M,Andover Lake Race,TBD,Results,Run Sign Up,2018-10-06T00:00:00Z,10,6,6
 F,Bridgeport,"Sat, 10/06 00:00",5K,CES Fall Classic,TBD,Results,Platt,2018-10-06T00:00:00Z,10,6,6
 NH,Seymour,"Sat, 10/06 00:00",5K,Pounding the Pavement for Pink,TBD,Results,Run Sign Up,2018-10-06T00:00:00Z,10,6,6
 NH,Hamden,"Sat, 10/06 08:00",10K,Rail Trail 10K,"$35 through 4/5,  $50 through 10/6,  $45 Raceday",Results,Second WInd,2018-10-06T08:00:00Z,10,6,6
