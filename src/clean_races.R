@@ -18,8 +18,9 @@ races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_inter
 # Data wrangling ----
 
 # Remove postponed races
-races <- races %>% filter(!grepl('postponed to', Cost, ignore.case = T))
-races <- races %>% filter(!grepl('postponed due', Cost, ignore.case = T))
+removed_races <- races %>% filter(grepl('postponed', Cost, ignore.case = T))
+# keep track of what was removed
+write_csv(removed_races, 'data/removed_races.csv') # overwrites the file
 races <- races %>% filter(!grepl('postponed', Cost, ignore.case = T))
 
 # Remove non-races (e.g., headers for months)
