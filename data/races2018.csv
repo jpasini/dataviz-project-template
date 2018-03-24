@@ -146,7 +146,7 @@ F,Danbury,"Sun, 04/22 10:30",5K,DAWS Run Your Tail Off,"$30,  $35 with a dog,  $
 T,Ellington,"Sun, 04/22 13:00",3M Obs,Farmers Obstacle 3M,"$30 (competitve wave) - Ages 12 and over, 9 min/mile or faster pace",Results,Platt,2018-04-22T13:00:00Z,4,22,7
 T,Ellington,"Sun, 04/22 14:00",3M Obs,Farmers Obstacle 3M,$30 (intermediate wave) 12 min/mile or faster pace,Results,Platt,2018-04-22T14:00:00Z,4,22,7
 H,Farmington,"Sun, 04/22 13:00",5K,East Farms Spring Ahead,"$20 through 4/6, $25 after",Results,Its Your Race,2018-04-22T13:00:00Z,4,22,7
-NL,Stonington,"Sun, 04/22 15:00",5K,Donahue Memorial 5K,TBD,Results,SNERRO,2018-04-22T15:00:00Z,4,22,7
+NL,Stonington,"Sun, 04/22 15:00",5K,Donahue Memorial 5K,".$20, $25 day of",Results,SNERRO,2018-04-22T15:00:00Z,4,22,7
 W,Killingly,"Sun, 04/22 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,2018-04-22T17:30:00Z,4,22,7
 H,Windsor,"Sat, 04/28 08:00",5K,Blue & Green 5K,"$25, $15 for 17 and under",Results,Empire TC,2018-04-28T08:00:00Z,4,28,6
 L,Roxbury,"Sat, 04/28 08:30",3.7M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-04-28T08:30:00Z,4,28,6
@@ -189,11 +189,13 @@ L,Barkhamsted,"Sat, 05/05 09:30",5K,Barkhamsted River Run,"$20, $15 for under 16
 L,Barkhamsted,"Sat, 05/05 09:30",5K,Barkhamsted Road Race,TBD,Results,Empire TC,2018-05-05T09:30:00Z,5,5,6
 NH,Beacon Falls,"Sat, 05/05 10:00",5K,Jills Race for MS,"$25,  $30 raceday",Results,Fast Track,2018-05-05T10:00:00Z,5,5,6
 NH,New Haven,"Sat, 05/05 10:00",5K,Clean Air Run,"$22 (with parking),  $20 without parking",Results,Run Sign Up,2018-05-05T10:00:00Z,5,5,6
+F,Newtown,"Sat, 05/05 10:00",5K,Holcomb Hill 5K Trail Run,.$25,Results,NA,2018-05-05T10:00:00Z,5,5,6
 W,Woodstock,"Sat, 05/05 10:00",5K,Jog with Judy,$25/adult $15/kid,Results,SNERRO,2018-05-05T10:00:00Z,5,5,6
 L,Sharon,"Sat, 05/05 10:15",5M,Sharon Classic Road Race,.$20,Results,Fast Track,2018-05-05T10:15:00Z,5,5,6
 NL,Franklin,"Sat, 05/05 10:30",5K,Franklin 5K Family Run,.$30,Results,Time to Tri,2018-05-05T10:30:00Z,5,5,6
 F,Trumbull,"Sat, 05/05 18:00",5K,St. Theresa School Tiger Tail,.$26,Results,Start line,2018-05-05T18:00:00Z,5,5,6
 T,Mansfield,"Sun, 05/06 00:00",5K,Friends of EO Smith Crew 5K,TBD,Results,BC timing,2018-05-06T00:00:00Z,5,6,7
+F,Greenwich,"Sun, 05/06 08:00",5K,Breast Cancer Alliance 5k,.$40,Results,NA,2018-05-06T08:00:00Z,5,6,7
 L,Litchfield,"Sun, 05/06 08:00",Duathlon,Thrill in the Hills,"$50,  $40 for 17 and under",Results,Greystone,2018-05-06T08:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:00",13.1M,Redding Road Race,.$60SOLD OUT,Results,RunSignUp,2018-05-06T08:00:00Z,5,6,7
 F,Redding,"Sun, 05/06 08:15",7M,Redding Road Race,.$45 SOLD OUT,Results,RunSignUp,2018-05-06T08:15:00Z,5,6,7
@@ -221,6 +223,7 @@ NL,Voluntown,"Sat, 05/12 09:00",5K,YSB Super 5K,.$25,Results,Platt,2018-05-12T09
 H,Farmington,"Sat, 05/12 09:00",5K,Reid's Run,"$25, $30 raceday",Results,Its Your Race,2018-05-12T09:00:00Z,5,12,6
 H,New Britain,"Sat, 05/12 09:15",5K,Race in the Park,"$30 through 5/4,  $35 after,  Youth 17 and under $15",Results,HMF,2018-05-12T09:15:00Z,5,12,6
 L,Harwinton,"Sat, 05/12 09:30",3.4M,Catch Me if You Can,.$20,Results,Fast Track,2018-05-12T09:30:00Z,5,12,6
+M,Portland,"Sat, 05/12 09:30",5K,Rushford's Race for Recovery,.$20,Results,Empire TC,2018-05-12T09:30:00Z,5,12,6
 NL,Colchester,"Sat, 05/12 10:00",5.5M,Salmon River Run,.$30,Results,Last Mile,2018-05-12T10:00:00Z,5,12,6
 NL,New London,"Sat, 05/12 11:00",5K,River Run for the Fund,"$20 through 5/1, then $25",Results,Fast Track,2018-05-12T11:00:00Z,5,12,6
 F,Brookfield,"Sun, 05/13 00:00",5K,Brookfield Mothers Day 5K,TBD,Results,USAXC,2018-05-13T00:00:00Z,5,13,7
@@ -427,7 +430,8 @@ NH,Cheshire,"Sat, 06/30 09:00",Youth Du,Nutmeg Splash and Dash,"$20 through 6/15
 H,Hartford,"Sat, 06/30 09:00",5K,Zero Prostate 5K,.$30,Results,HMF,2018-06-30T09:00:00Z,6,30,6
 H,Farmington,"Tue, 07/03 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,Its Your Race,2018-07-03T18:10:00Z,7,3,2
 H,Farmington,"Tue, 07/03 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,Its Your Race,2018-07-03T18:15:00Z,7,3,2
-F,Bethel,"Wed, 07/04 00:00",8K,Firecracker 8K,TBD,Results,Fast Track,2018-07-04T00:00:00Z,7,4,3
+F,New Canaan,"Wed, 07/04 00:00",4M,Four on the Fourth,TBD,Results,ClubCT,2018-07-04T00:00:00Z,7,4,3
+F,Bethel,"Wed, 07/04 09:00",8K,Firecracker 8K,"$25,  $20 for over 60",Results,Fast Track,2018-07-04T09:00:00Z,7,4,3
 M,Chester,"Wed, 07/04 09:00",4M,Chester Rotary's Four on the Fourth,"$20 through 6/20, $25 after",Results,Active.com,2018-07-04T09:00:00Z,7,4,3
 NH,Milford,"Wed, 07/04 09:00",5K,Milford Road Runners Independence Day 5000,".$20, $25 day of",Results,Last Mile,2018-07-04T09:00:00Z,7,4,3
 H,Manchester,"Thu, 07/05 18:00","1M, 2M, SteepleChase",MRC Track & Field Series,"$10,  Free for under 17 ($5 suggested donation)",Results,MRC,2018-07-05T18:00:00Z,7,5,4
@@ -504,6 +508,7 @@ L,Litchfield,"Thu, 07/26 18:30","2K,3K,4K,5K",White Woods Cross Country Summer S
 F,Norwalk,"Thu, 07/26 18:30",5K,Fairfield County Corporate 5K,.$40,Results,NOVA Timing Systems,2018-07-26T18:30:00Z,7,26,4
 NL,Old Lyme,"Sat, 07/28 08:00",5K,LYSB Midsummer Run,.$30,Results,Timing Plus NE,2018-07-28T08:00:00Z,7,28,6
 F,Westport,"Sat, 07/28 08:00",4.7M,Westport Road Runners Summer Series,"$10,  $60 for whole series, $5 for Westport residents or $30 for series",Results,WRR,2018-07-28T08:00:00Z,7,28,6
+NH,Milford,"Sat, 07/28 08:30",5K,Woodmont 5K,.$22,Results,Start line,2018-07-28T08:30:00Z,7,28,6
 L,New Milford,"Sat, 07/28 08:30",5K,5K Run/Walk,".$25, $30 after 7/21",Results,Fast Track,2018-07-28T08:30:00Z,7,28,6
 L,New Milford,"Sat, 07/28 08:30",8M,8 Mile Road Race,".$25, $30 after 7/21",Results,Fast Track,2018-07-28T08:30:00Z,7,28,6
 H,Newington,"Sat, 07/28 09:00",5K,Scottish Rite/Freemasons 5k,.$25,Results,Platt,2018-07-28T09:00:00Z,7,28,6
