@@ -147,8 +147,7 @@ T,Ellington,"Sun, 04/22 14:00",3M Obs,Farmers Obstacle 3M,$30 (intermediate wave
 H,Farmington,"Sun, 04/22 13:00",5K,East Farms Spring Ahead,"$20 through 4/6, $25 after",Results,Its Your Race,2018-04-22T13:00:00Z,4,22,7
 NL,Stonington,"Sun, 04/22 15:00",5K,Donahue Memorial 5K,"$20, $25 day of",Results,SNERRO,2018-04-22T15:00:00Z,4,22,7
 W,Killingly,"Sun, 04/22 17:30",5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration],Results,Facebook Event,2018-04-22T17:30:00Z,4,22,7
-NH,Bethany,"Fri, 04/27 18:00",5K,Bethany Community School 5K,".$22, $11 for ages 12-17, $5.50 for ages 5-11",Results,Coolrunnings,2018-04-27T18:00:00Z,4,27,5
-H,Windsor,"Sat, 04/28 08:00",5K,Blue & Green 5K,"$25, $15 for 17 and under",Results,Empire TC,2018-04-28T08:00:00Z,4,28,6
+NH,Bethany,"Fri, 04/27 18:00",5K,Bethany Community School 5K,"$22, $11 for ages 12-17, $5.50 for ages 5-11",Results,Coolrunnings,2018-04-27T18:00:00Z,4,27,5
 L,Roxbury,"Sat, 04/28 08:30",3.7M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-04-28T08:30:00Z,4,28,6
 NH,Southbury,"Sat, 04/28 08:30",5K,5K Run for Haiti,.$25,Results,Fast Track,2018-04-28T08:30:00Z,4,28,6
 W,Windham,"Sat, 04/28 08:30",13.1M,Willimantic Classic Half Marathon,.$45,Results,Last Mile,2018-04-28T08:30:00Z,4,28,6
@@ -158,6 +157,7 @@ H,Farmington,"Sat, 04/28 09:00",5K,HAE in Motion,.$25,Results,Its Your Race,2018
 F,Easton,"Sat, 04/28 09:30",5K,Race for Dare,"$25, $20 for 12 and under, $30 raceday",Results,Hi-Tek,2018-04-28T09:30:00Z,4,28,6
 NL,Lisbon,"Sat, 04/28 10:00",5K,Joe Kelly Memorial 5K,.$25,Results,Its Your Race,2018-04-28T10:00:00Z,4,28,6
 F,Newtown,"Sat, 04/28 10:00",5K,Troop 70 Super Scout 5K Run/Walk Challenge,".$35, $25 for under 18",Results,Fast Track,2018-04-28T10:00:00Z,4,28,6
+H,Windsor,"Sat, 04/28 10:00",5K,Blue & Green 5K,"$25, $15 for 17 and under",Results,Empire TC,2018-04-28T10:00:00Z,4,28,6
 M,Cromwell,"Sat, 04/28 11:00",5K,MahoneySabol 5K,"$27, $22 18-22, $17 5-17 through 1/1, $32, $27 18-22, $17 5-17 through 4/17, $37, $32 18-22, $22 5-17 raceday",Results,HMF,2018-04-28T11:00:00Z,4,28,6
 L,Goshen,"Sat, 04/28 11:00",5M,Shane Kinsella Memorial 5M,"$20 before 4/22, $25 after and day of",Results,Rat Race,2018-04-28T11:00:00Z,4,28,6
 L,New Milford,"Sat, 04/28 12:00",5K,Dirt Dash,.$20,Results,Fast Track,2018-04-28T12:00:00Z,4,28,6
@@ -225,7 +225,7 @@ M,Portland,"Sat, 05/12 09:30",5K,Rushford's Race for Recovery,.$20,Results,Empir
 NH,Prospect,"Sat, 05/12 10:00",5K,Jan's Run,".$22 until 5/5, then $27 - This is the last year for this race",Results,Fast Track,2018-05-12T10:00:00Z,5,12,6
 NL,Colchester,"Sat, 05/12 10:00",5.5M,Salmon River Run,.$30,Results,Last Mile,2018-05-12T10:00:00Z,5,12,6
 F,Norwalk,"Sun, 05/13 08:00",10K,Mother's Day 10K,"$22 through 5/12, then $25",Results,Club CT,2018-05-13T08:00:00Z,5,13,7
-F,Ridgefield,"Sun, 05/13 08:30",5K,Run Like A Mother,.$30,Results,Fast Track,2018-05-13T08:30:00Z,5,13,7
+F,Ridgefield,"Sun, 05/13 08:30",5K,Run Like A Mother,".$40, $45 raceday",Results,Fast Track,2018-05-13T08:30:00Z,5,13,7
 F,Brookfield,"Sun, 05/13 09:00",5K,Brookfield Mothers Day 5K,"$27.25,  $30 raceday",Results,USAXC,2018-05-13T09:00:00Z,5,13,7
 NH,Milford,"Sun, 05/13 09:00",5K,Milford Hospital Live Well 5K,.$27,Results,Last MIle,2018-05-13T09:00:00Z,5,13,7
 NL,Groton,"Sun, 05/13 09:30",5K,Trails to Recovery,".$20, $25 day of (credit or check only-they say NO cash)",Results,SNERRO,2018-05-13T09:30:00Z,5,13,7
@@ -261,7 +261,7 @@ NL,Montville,"Sat, 05/19 10:00",5K,Murphy's Mad Dash for a Cure,"$20, $15 for 14
 H,Windsor,"Sat, 05/19 10:00",5K,Shad Derby 5K,"$20, $25 day of, $15 for 12 and under",Results,SNEAA,2018-05-19T10:00:00Z,5,19,6
 H,Hartford,"Sat, 05/19 16:00",1M,Stubbs Open Mile,"$15, no race day registration",Results,Platt,2018-05-19T16:00:00Z,5,19,6
 NL,Stonington,"Sun, 05/20 07:00",13.1M,Mystic Half Marathon & 10K,"$70, $65 12-22 through 1/1, $80, $75 12-22 through 4/19, $85, $80 12-22 through 5/9, $90, $85 12-22 after",Results,HMF,2018-05-20T07:00:00Z,5,20,7
-NL,Stonington,"Sun, 05/20 07:00",10K,Mystic Half Marathon & 10K,"$40, $35 for 9-22 through 1/1, $45, $40 9-22 through 4/19, $50, $45 9-22 through 5/9, $55, $50 9-22 after",Results,HMF,2018-05-20T07:00:00Z,5,20,7
+NL,Stonington,"Sun, 05/20 07:00",10K,Mystic Half Marathon & 10K,"$40, $35 for 9-22 through 1/1, $45, $40 9-22 through 4/19, $50, $45 9-22 through 5/9, $55, $50 9-22 after SOLD OUT",Results,HMF,2018-05-20T07:00:00Z,5,20,7
 H,Avon,"Sun, 05/20 08:00",5K,Avon Road Race,TBD - this race might be cancelled,Results,Last Mile,2018-05-20T08:00:00Z,5,20,7
 F,Ridgefield,"Sun, 05/20 08:30",5K,Ridgefield Academy 5K,".$40, $45 raceday",Results,Fast track,2018-05-20T08:30:00Z,5,20,7
 H,Hartford,"Sun, 05/20 09:00",5K,Wag Walk/Run for Kenway's Cause,.$25,Results,Empire TC,2018-05-20T09:00:00Z,5,20,7
