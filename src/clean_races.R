@@ -17,6 +17,11 @@ races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_inter
 
 # Data wrangling ----
 
+# select relevant columns - to make robust to added material in other columns
+
+races <- races %>% select(County, Town, `Date/Time`, Distance, Name, Cost, Results,
+                          `Timing Co./Results Site`)
+
 # Remove postponed races
 removed_races <- races %>% filter(grepl('postponed', Cost, ignore.case = T))
 # keep track of what was removed
