@@ -27,6 +27,7 @@ removed_races <- races %>% filter(grepl('postponed', Cost, ignore.case = T))
 # keep track of what was removed
 write_csv(removed_races, 'data/removed_races.csv') # overwrites the file
 races <- races %>% filter(!grepl('postponed', Cost, ignore.case = T))
+races <- races %>% filter(!grepl('moved to', Cost, ignore.case = T))
 
 # Remove non-races (e.g., headers for months)
 races <- races %>% filter(!is.na(Name))
