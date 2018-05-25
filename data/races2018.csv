@@ -283,7 +283,7 @@ L,Salisbury,"Sun, 05/20 12:00",5K,Falcon Fun Run,.$28,Results,NA,2018-05-20T12:0
 L,Salisbury,"Sun, 05/20 12:00",10K,Falcon Fun Run,.$28,Results,NA,2018-05-20T12:00:00Z,5,20,7
 NL,Griswold,"Sun, 05/20 13:00",Youth Du,"You Can ""Du"" It","$15 through 5/3, then $20",Results,Run Sign Up,2018-05-20T13:00:00Z,5,20,7
 F,Stratford,"Wed, 05/23 18:00",5K,Stratford Spring Series,".$10 per race, $30 for the 4 race series",Results,FB Page?,2018-05-23T18:00:00Z,5,23,3
-F,Stamford,"Wed, 05/23 19:00",5K,Boys & Girls Club Corporate 5K,.$32,Results,Chronotrack,2018-05-23T19:00:00Z,5,23,3
+F,Stamford,"Wed, 05/23 19:00",5K,Boys & Girls Club Corporate 5K,.$32,Results,JB Sports,2018-05-23T19:00:00Z,5,23,3
 M,Durham,"Sat, 05/26 08:00",5K,Go Far Go Fast,"$12, $15 after 5/15 - Grades 7 and up",Results,IYR,2018-05-26T08:00:00Z,5,26,6
 NH,Hamden,"Sat, 05/26 08:00",13.1M,Hamden Hills Half Marathon,".$60 thru 2/25, $65 thru 5/22, $70 after",Results,Trimom Timing,2018-05-26T08:00:00Z,5,26,6
 NH,Hamden,"Sat, 05/26 08:00",5K,Hamden Hills Half Marathon,".$25 thru 2/25, $30 thru 5/22, $35 after",Results,Trimom Timing,2018-05-26T08:00:00Z,5,26,6
@@ -393,7 +393,6 @@ NH,Middlebury,"Sat, 06/16 07:00",Duathlon,Pat Griskus Triathlon Series,"$80 thro
 L,Roxbury,"Sat, 06/16 08:30",3.9M,Roxbury Race Series,"$2,  $25 for the entire series",Results,Roxbury Site,2018-06-16T08:30:00Z,6,16,6
 L,Colebrook,"Sat, 06/16 09:00",5K,Camp Jewell Trail Race,"$20 by 6/1,  $25 after",Results,Greystone,2018-06-16T09:00:00Z,6,16,6
 NH,Hamden,"Sat, 06/16 09:00",5K,Show Me the Way 5K,".$25, $30 day of",Results,Empire TC,2018-06-16T09:00:00Z,6,16,6
-F,Newtown,"Sat, 06/16 09:00",5K,2GHG Iron Horse Trail Race,.$30,Results,IYR,2018-06-16T09:00:00Z,6,16,6
 NL,Norwich,"Sat, 06/16 09:00",Kids Du,Norwich Splash and Dash,"Ages 5-17 ONLY $20 through 5/31, $25 (+2.50) through 6/14; NO REGISTRATION AFTER 6/14",Results,Run Sign Up,2018-06-16T09:00:00Z,6,16,6
 F,Trumbull,"Sat, 06/16 09:00",5K,Run for Hope,".$25, $15 for students and military",Results,Fast Track,2018-06-16T09:00:00Z,6,16,6
 NH,Meriden,"Sat, 06/16 10:00",5K,Purple Stride Connecticut,.$30,Results,Granite State,2018-06-16T10:00:00Z,6,16,6
@@ -621,7 +620,7 @@ F,Fairfield,"Sat, 08/11 09:00",5K,Shamrock Sprint,".$32, $22 children (undefined
 M,Old Saybrook,"Sat, 08/11 09:00",4M,The Clarks Trail Run,".$25, $35 Race day",Results,NA,2018-08-11T09:00:00Z,8,11,6
 M,Old Saybrook,"Sat, 08/11 09:00",15K,The Clarks Trail Run,".$25, $35 Race day",Results,NA,2018-08-11T09:00:00Z,8,11,6
 W,Putnam,"Sat, 08/11 09:05",5M,DKH Cancer Fund Race,"$30, $35 after 6/1",Results,SNERRO,2018-08-11T09:05:00Z,8,11,6
-T,Ellington,"Sun, 08/12 08:00",Triathlon,Ellington Sprint Triathlon,.$70 until 8/1,Results,Platt,2018-08-12T08:00:00Z,8,12,7
+T,Ellington,"Sun, 08/12 08:00",Triathlon,Ellington Sprint Triathlon,$70 until 8/1,Results,Platt,2018-08-12T08:00:00Z,8,12,7
 L,Torrington,"Sun, 08/12 10:00",5M,Torrington Road Race,"$15,  $5 for 18 and under",Results,Start Line,2018-08-12T10:00:00Z,8,12,7
 H,Manchester,"Mon, 08/13 18:00",Kids 1M,Summer XC Series,"$4,  $15 for series (ages 13 and under)",Results,Cool Runnings,2018-08-13T18:00:00Z,8,13,1
 H,Manchester,"Mon, 08/13 18:30",2.6M,Summer XC Series,"$10, $20 for series (ages 14 and up)",Results,Cool Runnings,2018-08-13T18:30:00Z,8,13,1
