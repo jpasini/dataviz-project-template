@@ -48,6 +48,7 @@ members <- members %>% mutate(Town = gsub('Waterbury†', 'Waterbury', Town))
 members <- members %>% mutate(Town = gsub('Southimgton', 'Southington', Town))
 members <- members %>% mutate(Town = gsub('Mil;ford', 'Milford', Town))
 members <- members %>% mutate(Town = gsub('Glatonbury', 'Glastonbury', Town))
+members <- members %>% mutate(Town = gsub('E Haddam', 'East Haddam', Town))
 
 
 # note that there are people from out of state
