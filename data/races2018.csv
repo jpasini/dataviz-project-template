@@ -494,9 +494,6 @@ L,New Hartford,"Sun, 07/15 07:30",Triathlon,Litchfield Hills Triathlon & Duathlo
 L,New Hartford,"Sun, 07/15 07:30",Duathlon,Litchfield Hills Triathlon & Duathlon,"Du - $60, $55 for 14 - 22 through 1/1, $75, $70 14-22 through 7/4, $90, $85 14-22 after",Results,HMF,2018-07-15T07:30:00Z,7,15,7
 NH,West Haven,"Sun, 07/15 08:00",5K,Savin Rock 5K,.$25,Results,Trimom Timing,2018-07-15T08:00:00Z,7,15,7
 NL,New London,"Sun, 07/15 09:15",5K,Charter Oak Sailfest,".$20 until 6/22, then $25",Results,SNERRO,2018-07-15T09:15:00Z,7,15,7
-H,Farmington,"Tue, 07/17 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,IYR,2018-07-17T18:10:00Z,7,17,2
-H,Farmington,"Tue, 07/17 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,IYR,2018-07-17T18:15:00Z,7,17,2
-F,New Canaan,"Tue, 07/17 19:00",5K,Summer Cross Country Series,".$3, students and kids - $2 (no preregistration) - age graded race",Results,Club CT,2018-07-17T19:00:00Z,7,17,2
 H,Granby,"Wed, 07/18 18:00",5K,Summer Sunset Series,.$5,Results,Granby Summer Series,2018-07-18T18:00:00Z,7,18,3
 T,Somers,"Wed, 07/18 18:15",5K,Somers Summer Series,$5 free for children under 10,Results,SNEEA,2018-07-18T18:15:00Z,7,18,3
 NH,Meriden,"Wed, 07/18 18:30",3M,Summer Fun Run,Free,Results,NA,2018-07-18T18:30:00Z,7,18,3
@@ -509,6 +506,9 @@ H,Manchester,"Thu, 07/19 18:00","1M, 5K, SteepleChase",MRC Track & Field Series,
 H,Marlborough,"Thu, 07/19 18:15",Triathlon,Lake Terramuggus Tri Series,"$25, $30 for sprint, $30, $40 raceday for sprint",Results,IYR,2018-07-19T18:15:00Z,7,19,4
 L,Litchfield,"Thu, 07/19 18:30","2K,3K,4K,5K",White Woods Cross Country Summer Series,.$2,Results,Litchfield.biz,2018-07-19T18:30:00Z,7,19,4
 L,Sharon,"Thu, 07/19 18:30",4.1M,Sharon Summer Sunset Trot,.$25,Results,NA,2018-07-19T18:30:00Z,7,19,4
+F,New Canaan,"Thu, 07/19 19:00",5K,Summer Cross Country Series,".$3, students and kids - $2 (no preregistration) - age graded race",Results,Club CT,2018-07-19T19:00:00Z,7,19,4
+H,Farmington,"Fri, 07/20 18:10",Tiny Triathlon,Winding Trails Triathlon,"$25, $20 for members",Results,IYR,2018-07-20T18:10:00Z,7,20,5
+H,Farmington,"Fri, 07/20 18:15",Triathlon,Winding Trails Triathlon,"$30, $20 for members",Results,IYR,2018-07-20T18:15:00Z,7,20,5
 F,Trumbull,"Fri, 07/20 18:30",5K,Trumbull Rotary Sunset Run,.$30,Results,Start line,2018-07-20T18:30:00Z,7,20,5
 F,Norwalk,"Sat, 07/21 08:00",7M,Lightfoot Norwalk Summer Series,".$12, $55 for 5 race series",Results,Lightfoot Runners,2018-07-21T08:00:00Z,7,21,6
 L,Warren,"Sat, 07/21 08:00",Triathlon,Hopkins Vineyard Triathlon,"$80 USAT member, $95 non member.  Prices increase to $90 and $105 in mid March",Results,Fast Track,2018-07-21T08:00:00Z,7,21,6
@@ -517,7 +517,7 @@ L,Roxbury,"Sat, 07/21 08:30","7.25M, 3.7M",Roxbury Race Series,"$2,  $25 for the
 M,Old Saybrook,"Sat, 07/21 08:45",5K,Vin Baker Addiction Ends Here,".$30, $40 day of",Results,NA,2018-07-21T08:45:00Z,7,21,6
 F,Newtown,"Sat, 07/21 09:00",5K,Sandy Hook 5K,.$30 - Last year for this race...,Results,Fast Track,2018-07-21T09:00:00Z,7,21,6
 NL,Norwich,"Sat, 07/21 10:00",1M,Greenville Mile,"$15, $20 raceday",Results,SNERRO,2018-07-21T10:00:00Z,7,21,6
-F,Greenwich,"Sun, 07/22 07:00",Triathlon,Greenwich Cup Triathon,"$75 individual, $110 Relay",Results,ClubCT,2018-07-22T07:00:00Z,7,22,7
+F,Greenwich,"Sun, 07/22 07:00",Triathlon,Greenwich Cup Triathon,.$75,Results,ClubCT,2018-07-22T07:00:00Z,7,22,7
 H,Bloomfield,"Sun, 07/22 08:00",10K,Achilles CT Hope & Possibility,"$35, $30 9-22 through 1/1, $45, $40 9-22 through 7/11, $50, $45 9-22 after",Results,HMF,2018-07-22T08:00:00Z,7,22,7
 H,Bloomfield,"Sun, 07/22 08:00",5K,Achilles CT Hope & Possibility,"$25, $20 18-22, $15 5-17 through 1/1, $30, $25 18-22, $15 5-17 through 7/11, $35, $30 18-22, $20 5-17 after",Results,HMF,2018-07-22T08:00:00Z,7,22,7
 W,Plainfield,"Sun, 07/22 08:30",5K,iWarriors 5K Freedon Run,.$25,Results,Facebook page,2018-07-22T08:30:00Z,7,22,7
@@ -642,7 +642,7 @@ NL,Stonington,"Wed, 08/22 18:00",5K,Stonington Cross Country 5K,"Pre registratio
 NH,Meriden,"Wed, 08/22 18:30",3M,Summer Fun Run,Free,Results,NA,2018-08-22T18:30:00Z,8,22,3
 H,Hartford,"Thu, 08/23 18:30",5K,Riverfront Scramble 3,"$25, $20 18-22, $15 5-17 through 1/1, $30, $25 18-22, $15 5-17 through 8/12, $35, $30 18-22, $20 5-17 after",Results,HMF,2018-08-23T18:30:00Z,8,23,4
 L,Litchfield,"Thu, 08/23 18:30","2K,3K,4K,5K",White Woods Cross Country Summer Series,.$2,Results,Litchfield.biz,2018-08-23T18:30:00Z,8,23,4
-T,Mansfield,"Sat, 08/25 00:00",Kids Tri,Kids Who Tri Succeed,TBD (ages 12 - 14 count - 1.5M run),Results,Rat Race,2018-08-25T00:00:00Z,8,25,6
+T,Mansfield,"Sat, 08/25 00:00",Kids Tri,Kids Who Tri Succeed,TBD ages 12-14 count,Results,Rat Race,2018-08-25T00:00:00Z,8,25,6
 H,Burlington,"Sat, 08/25 06:00",60K,Tunxis Trail Ultra,".$60, $70 after 6/30",Results,Ultra Sign Up,2018-08-25T06:00:00Z,8,25,6
 H,Burlington,"Sat, 08/25 06:00",30K,Tunxis Trail Ultra,".$50, $60 after 6/30",Results,Ultra Sign Up,2018-08-25T06:00:00Z,8,25,6
 F,Norwalk,"Sat, 08/25 08:00",11M,Lightfoot Norwalk Summer Series,".$12, $55 for 5 race series",Results,Lightfoot Runners,2018-08-25T08:00:00Z,8,25,6
