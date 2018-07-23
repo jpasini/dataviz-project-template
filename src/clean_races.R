@@ -23,7 +23,7 @@ races <- races %>% select(County, Town, `Date/Time`, Distance, Name, Cost, Resul
                           `Timing Co./Results Site`)
 
 # Remove postponed races
-regexp_for_erasing <- 'postponed|moved to|cancelled|canceled'
+regexp_for_erasing <- 'postponed|moved to|cancelled|canceled|cancalled'
 removed_races <- races %>% filter(grepl(regexp_for_erasing, Cost, ignore.case = T))
 # keep track of what was removed
 write_csv(removed_races, 'data/removed_races.csv') # overwrites the file
