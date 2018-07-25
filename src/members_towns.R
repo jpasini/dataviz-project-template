@@ -8,7 +8,9 @@ suppressMessages(library(readxl, warn.conflicts = FALSE, verbose= FALSE, quietly
 suppressMessages(library(lubridate, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 
 # Get data ----
-curl_download('https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!365&app=Excel&authkey=!ADVujkY8Qh3SXfc', destfile='data/members_towns.xlsx')
+# old_url: 'https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!365&app=Excel&authkey=!ADVujkY8Qh3SXfc'
+members_url <- 'https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!762&ithint=file%2cxlsx&app=Excel&authkey=!AKdCOm5eewQMvgs'
+curl_download(members_url, destfile='data/members_towns.xlsx')
 members <- suppressMessages(read_excel('data/members_towns.xlsx'))
 #members <- read_csv('data/members_towns.csv')
 
