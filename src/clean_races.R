@@ -13,14 +13,15 @@ year_of_interest <- 2018
 races_basefilename <- 'data/DEBTiConnSchedule'
 races_xlsx_name <- paste0(races_basefilename, '.xlsx')
 curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
-races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races')))
+# races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races')))
+races <- suppressMessages(read_excel(races_xlsx_name, sheet = 'Future Races'))
 
 # Data wrangling ----
 
 # select relevant columns - to make robust to added material in other columns
 
-races <- races %>% select(County, Town, `Date/Time`, Distance, Name, Cost, Results,
-                          `Timing Co./Results Site`)
+races <- races %>% select(County, Town, `Date/Time`, Distance, `Race Name`, Cost, Results)
+races <- races %>% rename(Name = `Race Name`)
 
 # Remove postponed races
 regexp_for_erasing <- 'postponed|moved to|cancelled|canceled|cancalled'
@@ -59,6 +60,7 @@ races <- races %>% mutate(Town=gsub(' \\(.*\\)', '', Town))
 races <- races %>% mutate(Town = gsub('MIddlebury', 'Middlebury', Town))
 races <- races %>% mutate(Town = gsub('CHaplin', 'Chaplin', Town))
 races <- races %>% mutate(Town = gsub('South WIndsor', 'South Windsor', Town))
+races <- races %>% mutate(Town = gsub('WIndsor Locks', 'Windsor Locks', Town))
 
 # find races with towns not in the list - if so, write file to alert
 towns_not_in_list <- races %>% filter(!(Town %in% townNames)) %>% select(Town)
