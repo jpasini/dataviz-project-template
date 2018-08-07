@@ -46,6 +46,8 @@ races <- races %>% mutate(Month=month(DateTime))
 races <- races %>% mutate(Day=day(DateTime))
 # Extract the weekday
 races <- races %>% mutate(Weekday=format(DateTime, '%u'))
+# Extract the year
+races <- races %>% mutate(Year=year(DateTime))
 
 # Check town names against a known good list:
 members <- read_csv('data/members_towns_clean.csv')
