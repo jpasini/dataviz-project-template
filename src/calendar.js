@@ -3,7 +3,8 @@ const parseRace = d => {
   d.Month = +d.Month;
   d.Day = +d.Day;
   d.Weekday = +d.Weekday;
-  d.DateString = "2018-" + fmt(d.Month) + "-" + fmt(d.Day);
+  d.Year = +d.Year;
+  d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
   return d;
 };
 
