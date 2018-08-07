@@ -66,6 +66,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   let highlightElusive = $('.ui.toggle.button').state('is active');
 
   const pageParameters = getPageParameters();
+
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
   const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
@@ -145,7 +146,16 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const render = (params) => {
    
-    townName.update(params);
+    if('personName' in pageParameters) {
+      $('#personSearch').hide();
+      $('#townSearch').hide();
+    }
+
+    if('personName' in pageParameters) {
+      townName.update(pageParameters);
+    } else {
+      townName.update(params);
+    }
 
     const options = {
       myTown:  townName.getTown(),
