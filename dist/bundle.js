@@ -102,12 +102,26 @@ function drawBox(name, box, chart) {
   chart.draw();
 };
 
+function getPageParameters() {
+  const paramsArray = location.search.substring(1).split("&");
+  // make it a dictionary
+  const paramsDict = {};
+  for(const p of paramsArray) {
+    const x = p.split("=");
+    // replace %20 with spaces, etc.
+    paramsDict[x[0]] = decodeURI(x[1]);
+  }
+  return paramsDict;
+};
+
 
 function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
   let highlightElusive = $('.ui.toggle.button').state('is active');
+
+  const pageParameters = getPageParameters();
 
   const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* getTownNames */])(drivingTimes);
   const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["e" /* buildTownIndex */])(townNames);
@@ -188,7 +202,16 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const render = (params) => {
    
-    townName.update(params);
+    if('personName' in pageParameters) {
+      $('#personSearch').hide();
+      $('#townSearch').hide();
+    }
+
+    if('personName' in pageParameters) {
+      townName.update(pageParameters);
+    } else {
+      townName.update(params);
+    }
 
     const options = {
       myTown:  townName.getTown(),
