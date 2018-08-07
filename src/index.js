@@ -46,6 +46,18 @@ function drawBox(name, box, chart) {
   chart.draw();
 };
 
+function getPageParameters() {
+  const paramsArray = location.search.substring(1).split("&");
+  // make it a dictionary
+  const paramsDict = {};
+  for(const p of paramsArray) {
+    const x = p.split("=");
+    // replace %20 with spaces, etc.
+    paramsDict[x[0]] = decodeURI(x[1]);
+  }
+  return paramsDict;
+};
+
 
 function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
 
@@ -53,6 +65,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   const noPersonName = 'noPersonName';
   let highlightElusive = $('.ui.toggle.button').state('is active');
 
+  const pageParameters = getPageParameters();
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
   const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
