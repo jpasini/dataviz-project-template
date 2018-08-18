@@ -28,12 +28,14 @@ regexp_for_erasing <- 'postponed|moved to|cancelled|canceled|cancalled'
 regexp_for_keeping <- 'postponed from'
 removed_races <- races %>% 
   filter(
-         grepl(regexp_for_erasing, Cost, ignore.case = T) & 
-           !grepl(regexp_for_keeping, Cost, ignore.case = T)
+         grepl(regexp_for_erasing, Cost, ignore.case = T) & !grepl(regexp_for_keeping, Cost, ignore.case = T)
          )
 # keep track of what was removed
 write_csv(removed_races, 'data/removed_races.csv') # overwrites the file
-races <- races %>% filter(!grepl(regexp_for_erasing, Cost, ignore.case = T))
+races <- races %>% 
+  filter(
+         !grepl(regexp_for_erasing, Cost, ignore.case = T) | grepl(regexp_for_keeping, Cost, ignore.case = T)
+         )
 
 # Remove non-races (e.g., headers for months)
 races <- races %>% filter(!is.na(Name))
