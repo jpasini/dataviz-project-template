@@ -213,6 +213,11 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       townName.update(params);
     }
 
+    if('sparseLayout' in pageParameters) {
+      // Remove lots of elements
+      $('.hideable').hide();
+    }
+
     const options = {
       myTown:  townName.getTown(),
       myName:  townName.getName(),
