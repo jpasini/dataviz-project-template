@@ -691,10 +691,10 @@ F,Stratford,"Sat, 09/08 09:00",5K,Lordship Runabout,.$20,Results,2018-09-08T09:0
 H,West Hartford,"Sat, 09/08 09:00",5K,Steps for Birth to Three 5K,.$30,Results,2018-09-08T09:00:00Z,9,8,6,2018
 NL,Groton,"Sat, 09/08 10:00",3.6M,Royal Run,.$25,Results,2018-09-08T10:00:00Z,9,8,6,2018
 F,Westport,"Sun, 09/09 07:30",Triathlon,Westport Kiwanis Minuteman Tri,.$58,Results,2018-09-09T07:30:00Z,9,9,7,2018
-NL,Montville,"Sun, 09/09 09:15",10K,Montville Race Day (Montville Masters),.$20,Results,2018-09-09T09:15:00Z,9,9,7,2018
-L,Kent,"Sun, 09/09 09:00",5K,Sprint for Recovery,.$20,Results,2018-09-09T09:00:00Z,9,9,7,2018
 NL,Montville,"Sun, 09/09 08:30",5K,Montville Race Day,.$20,Results,2018-09-09T08:30:00Z,9,9,7,2018
+L,Kent,"Sun, 09/09 09:00",5K,Sprint for Recovery,.$20,Results,2018-09-09T09:00:00Z,9,9,7,2018
 H,Farmington,"Sun, 09/09 09:00",5K,Amped Fitness 5K,.$30,Results,2018-09-09T09:00:00Z,9,9,7,2018
+NL,Montville,"Sun, 09/09 09:15",10K,Montville Race Day (Montville Masters),.$20 Masters Only,Results,2018-09-09T09:15:00Z,9,9,7,2018
 H,Avon,"Sun, 09/09 10:00",5K,Scholarship 5k Trail Run,".$20, $15 for 18 and under, $25 day of",Results,2018-09-09T10:00:00Z,9,9,7,2018
 H,South Windsor,"Sun, 09/09 10:00",5M,the South Windsor 5 Mile Road Race,.$20,Results,2018-09-09T10:00:00Z,9,9,7,2018
 H,Berlin,"Sun, 09/09 13:00",5K,Journey to the Center of CT,.$30,Results,2018-09-09T13:00:00Z,9,9,7,2018
@@ -977,8 +977,8 @@ F,Greenwich,"Sun, 12/09 09:00",3M,Jingle Bell Jog,NA,Results,2018-12-09T09:00:00
 NH,New Haven,"Sun, 12/09 10:30",5K,Christopher Martin's Run for Children,"$20 through 10/1,  $25 afterwards,  add $20 if you want shirt,  $5 discount if you bring unwrapped toy",Results,2018-12-09T10:30:00Z,12,9,7,2018
 F,Stratford,"Sat, 12/15 10:00",5K,Frosty Forest Trail 5K,"$39, after 11/30, $49",Results,2018-12-15T10:00:00Z,12,15,6,2018
 F,Fairfield,"Sun, 12/16 09:00",5K,William Meyer Holiday Run for Toys,NA,Results,2018-12-16T09:00:00Z,12,16,7,2018
-W,Canterbury,"Sun, 12/16 12:00",1M,GIngerbread Run,.$10,Results,2018-12-16T12:00:00Z,12,16,7,2018
-W,Canterbury,"Sun, 12/16 12:30",2M,GIngerbread Run,".$15, $12 for under 14",Results,2018-12-16T12:30:00Z,12,16,7,2018
+W,Canterbury,"Sun, 12/16 12:00",1M,Gingerbread Run,.$10,Results,2018-12-16T12:00:00Z,12,16,7,2018
+W,Canterbury,"Sun, 12/16 12:30",2M,Gingerbread Run,".$15, $12 for under 14",Results,2018-12-16T12:30:00Z,12,16,7,2018
 M,Middlefield,"Sun, 12/16 12:00",5K,"Go Far, Jingle All the Way",".$20 until 12/7, then $25",Results,2018-12-16T12:00:00Z,12,16,7,2018
 T,Vernon,"Tue, 12/25 10:30",5K,Scrooge Scramble,Donations Accepted,Results,2018-12-25T10:30:00Z,12,25,2,2018
 L,Litchfield,"Tue, 01/01 11:00",5M,Milton Resolution Road Race,".$15, $20 day of",Results,2019-01-01T11:00:00Z,1,1,2,2019
