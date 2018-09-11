@@ -236,7 +236,15 @@ function dataLoaded(mapData, drivingTimes, membersTowns, racesForMap, racesForCa
   });
 }
 
-//d3.json('https://omnisuite.net/run169data/api/data/Towns/', d => { console.log(d); } );
+//const run169apiurl = 'https://omnisuite.net/run169data/api/data/Towns/';
+const run169apiurl = 'https://www.omnisuite.net/run169data/api/data/member/Jose/Pasini/TownsComp';
+//const run169apiurl = 'https://www.omnisuite.net/Run169Data/api/Data/Races/Future';
+const initParams = {'mode': 'cors'};
+d3.json(run169apiurl, initParams).then(
+  d => { console.log(d); } 
+).catch(
+  e => { console.log(e); }
+);
 
 /*
 d3.queue()
