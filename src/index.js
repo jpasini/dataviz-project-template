@@ -59,7 +59,20 @@ function getPageParameters() {
 };
 
 
-function dataLoaded(mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
+function dataLoaded(values) {
+
+  // unpack parameters
+  const [
+    mapData,
+    drivingTimes, 
+    membersTowns, 
+    racesForMap, 
+    racesForCalendar, 
+    num_races_by_town_2017,
+    listOfTowns
+  ] = values;
+
+  console.log(listOfTowns);
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -236,26 +249,9 @@ function dataLoaded(mapData, drivingTimes, membersTowns, racesForMap, racesForCa
   });
 }
 
-//const run169apiurl = 'https://omnisuite.net/run169data/api/data/Towns/';
-const run169apiurl = 'https://www.omnisuite.net/run169data/api/data/member/Jose/Pasini/TownsComp';
+const run169apiurl = 'https://omnisuite.net/run169data/api/data/Towns/';
+//const run169apiurl = 'https://www.omnisuite.net/run169data/api/data/member/Jose/Pasini/TownsComp';
 //const run169apiurl = 'https://www.omnisuite.net/Run169Data/api/Data/Races/Future';
-const initParams = {'mode': 'cors'};
-d3.json(run169apiurl, initParams).then(
-  d => { console.log(d); } 
-).catch(
-  e => { console.log(e); }
-);
-
-/*
-d3.queue()
-  .defer(d3.json, 'data/ct_towns_simplified.topojson')
-  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', parseDrivingMap)
-  .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2018.csv', parseRacesForMap)
-  .defer(d3.csv, 'data/races2018.csv', parseRacesForCalendar)
-  .defer(d3.csv, 'data/num_races_by_town_2017.csv')
-  .await(dataLoaded);
-*/
 
 const promises = [];
 
@@ -265,8 +261,9 @@ promises.push(d3.csv('data/members_towns_clean.csv'));
 promises.push(d3.csv('data/races2018.csv', parseRacesForMap));
 promises.push(d3.csv('data/races2018.csv', parseRacesForCalendar));
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
+promises.push(d3.json(run169apiurl));
 
 Promise.all(promises).then(function(values) {
-  dataLoaded(values[0], values[1], values[2], values[3], values[4], values[5]);
+  dataLoaded(values);
 });
 
