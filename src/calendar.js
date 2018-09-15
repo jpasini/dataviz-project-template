@@ -1,9 +1,10 @@
-const fmt = d3.format("02");
 const parseRace = d => {
-  d.Month = +d.Month;
-  d.Day = +d.Day;
-  d.Weekday = +d.Weekday;
-  d.Year = +d.Year;
+  const fmt = d3.format("02");
+  d.DateTime = new Date(d.Date_Time);
+  d.Month = d.DateTime.getMonth() + 1; // correct for zero-based
+  d.Day = d.DateTime.getDate();
+  d.Weekday = d.DateTime.getDay() + 1; // correct for zero-based
+  d.Year = d.DateTime.getFullYear();
   d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
   return d;
 };
