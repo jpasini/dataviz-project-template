@@ -124,7 +124,7 @@ function buildRacesSoonTables(races) {
     const daysToRace = d3.timeDay.count(today, row.raceDay);
     if(daysToRace >= 0 && daysToRace <= 14) {
       const raceString = "<tr><td><span class='racedate'>" + 
-          row["Date/Time"].slice(5) + 
+          row.DateString +  " " + row.DateTime.toTimeString().slice(0, 5) + 
           "</span></td><td><span class='racedistance'>" + 
           row.Distance + "</span></td><td><span class='racename'>" + 
           row.Name + "</span></td></tr>";          
@@ -140,11 +140,11 @@ function buildRacesSoonTables(races) {
 
 function parseRaces(row) {
   const fmt = d3.format("02");
-  row.Month = +row.Month;
-  row.Day = +row.Day;
-  row.Weekday = +row.Weekday;
+  row.DateTime = new Date(row.Date_Time);
+  row.Month = row.DateTime.getMonth() + 1; // correct for zero-based
+  row.Day = row.DateTime.getDate();
   row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2018, row.Month-1, row.Day));
+  row.raceDay = d3.timeDay(row.DateTime);
   return row;
 }
 

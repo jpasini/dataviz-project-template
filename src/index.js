@@ -72,7 +72,9 @@ function dataLoaded(values) {
     listOfTowns
   ] = values;
 
-  console.log(listOfTowns);
+  // need to do the parsing here because d3.json doesn't accept
+  // the "row" parameter
+  racesForMap.forEach(row => parseRacesForMap(row));
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -249,19 +251,21 @@ function dataLoaded(values) {
   });
 }
 
-const run169apiurl = 'https://omnisuite.net/run169data/api/data/Towns/';
-//const run169apiurl = 'https://www.omnisuite.net/run169data/api/data/member/Jose/Pasini/TownsComp';
-//const run169apiurl = 'https://www.omnisuite.net/Run169Data/api/Data/Races/Future';
+const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
+const townsUrl = run169urlPrefix + 'Towns/';
+const racesUrl = run169urlPrefix + 'Races/All/';
+//const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
+//const run169apiurl = run169urlPrefix + 'Races/Future';
 
 const promises = [];
 
 promises.push(d3.json('data/ct_towns_simplified.topojson'));
 promises.push(d3.csv('data/driving_times_full_symmetric.csv', parseDrivingMap));
 promises.push(d3.csv('data/members_towns_clean.csv'));
-promises.push(d3.csv('data/races2018.csv', parseRacesForMap));
+promises.push(d3.json(racesUrl));
 promises.push(d3.csv('data/races2018.csv', parseRacesForCalendar));
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
-promises.push(d3.json(run169apiurl));
+promises.push(d3.json(townsUrl));
 
 Promise.all(promises).then(function(values) {
   dataLoaded(values);
