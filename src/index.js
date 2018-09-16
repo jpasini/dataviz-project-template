@@ -69,7 +69,8 @@ function dataLoaded(values) {
     racesForMap, 
     racesForCalendar, 
     num_races_by_town_2017,
-    listOfTowns
+    listOfTowns,
+    listOfMembers
   ] = values;
 
   // need to do the parsing here because d3.json doesn't accept
@@ -92,11 +93,17 @@ function dataLoaded(values) {
 
   const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
   const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
+
+  // prepare list of members for use in search box
+  listOfMembers.forEach( row => {
+    row['Name'] = row.LastName + ', ' + row.FirstName;
+    row['Town'] = row.State == 'CT' ? row.City : outOfState;
+  });
   const memberNames = [];
-  membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
+  listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
       title: row.Name,
-      description: row.Town + ' - ' + row.TotalTowns + ' towns'
+      description: row.Town
     });
   });
 
@@ -260,6 +267,7 @@ function dataLoaded(values) {
 const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
 const townsUrl = run169urlPrefix + 'Towns/';
 const racesUrl = run169urlPrefix + 'Races/All/';
+const membersUrl = run169urlPrefix + 'Members';
 //const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
 //const run169apiurl = run169urlPrefix + 'Races/Future';
 
@@ -272,6 +280,7 @@ promises.push(d3.json(racesUrl)); // for map
 promises.push(d3.json(racesUrl)); // for calendar
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
 promises.push(d3.json(townsUrl));
+promises.push(d3.json(membersUrl));
 
 Promise.all(promises).then(function(values) {
   dataLoaded(values);
