@@ -57,24 +57,6 @@ function buildRacesRunMap(memberTownsRun, townNames) {
 }
 
 function computeNumberOfRacesByTown(num_races_by_town_2017) {
-  /*
-  // compute distinct races by town
-  // distinct means: if it's on the same date and has the same name
-  // then it's the same race (even if it's the same distance)
-  const distinctRacesByTown = d3.nest()
-      .key(d => d.Town)
-      .rollup(
-        d => {
-          const distinctRacesInTown = d3.nest()
-              .key(d => d.DateString + ':' + d.Name)
-              .rollup(item => ({length: item.length}))
-            .object(d);
-          return Object.keys(distinctRacesInTown).length;
-        }
-      )
-    .object(races);
-  return distinctRacesByTown;
-  */
   const dictionary = {};
   num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
   return dictionary;
