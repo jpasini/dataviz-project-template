@@ -34,6 +34,7 @@ function createNewNameIfNeeded(name, namesAlreadySeen) {
   let suffixIndex = 2;
   while(currentName in namesAlreadySeen) {
     currentName = name + ' (' + suffixIndex + ')';
+    suffixIndex++;
   }
   return currentName;
 }
