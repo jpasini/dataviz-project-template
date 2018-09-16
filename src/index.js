@@ -173,6 +173,11 @@ function dataLoaded(values) {
       townName.update(params);
     }
 
+    if('sparseLayout' in pageParameters) {
+      // Remove lots of elements
+      $('.hideable').hide();
+    }
+
     const options = {
       myTown:  townName.getTown(),
       myName:  townName.getName(),
