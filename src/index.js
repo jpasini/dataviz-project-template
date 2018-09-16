@@ -69,7 +69,6 @@ function dataLoaded(values) {
     racesForMap, 
     racesForCalendar, 
     num_races_by_town_2017,
-    listOfTowns,
     listOfMembers
   ] = values;
 
@@ -265,7 +264,7 @@ function dataLoaded(values) {
 }
 
 const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
-const townsUrl = run169urlPrefix + 'Towns/';
+// const townsUrl = run169urlPrefix + 'Towns/';
 const racesUrl = run169urlPrefix + 'Races/All/';
 const membersUrl = run169urlPrefix + 'Members';
 //const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
@@ -279,7 +278,6 @@ promises.push(d3.csv('data/members_towns_clean.csv'));
 promises.push(d3.json(racesUrl)); // for map
 promises.push(d3.json(racesUrl)); // for calendar
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
-promises.push(d3.json(townsUrl));
 promises.push(d3.json(membersUrl));
 
 Promise.all(promises).then(function(values) {
