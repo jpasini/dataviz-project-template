@@ -55,11 +55,6 @@ function buildRacesRunMap(memberTownsRun, townNames) {
   return { racesRunMap, memberTownsMap };
 }
 
-function parseTownsRunByMembers(row) {
-  row.TotalTowns = +row.TotalTowns;
-  return row;
-}
-
 function computeNumberOfRacesByTown(num_races_by_town_2017) {
   /*
   // compute distinct races by town
