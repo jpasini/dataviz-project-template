@@ -12,7 +12,6 @@ import {
 
 import {
   Calendar,
-  parseRace as parseRacesForCalendar,
   getCalendarHeight,
   rollUpDataForCalendar
 } from './calendar.js'
@@ -57,12 +56,8 @@ function getPageParameters() {
 };
 
 const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
-// const townsUrl = run169urlPrefix + 'Towns/';
 const racesUrl = run169urlPrefix + 'Races/All/';
 const membersUrl = run169urlPrefix + 'Members';
-//const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
-//const run169apiurl = run169urlPrefix + 'Races/Future';
-
 
 function dataLoaded(values) {
 
@@ -71,17 +66,14 @@ function dataLoaded(values) {
     mapData,
     drivingTimes, 
     membersTowns, 
-    racesForMap, 
+    races, 
     num_races_by_town_2017,
     listOfMembers
   ] = values;
 
   // need to do the parsing here because d3.json doesn't accept
   // the "row" parameter
-  // copy the races
-  const racesForCalendar = JSON.parse(JSON.stringify(racesForMap));
-  racesForMap.forEach(row => parseRacesForMap(row));
-  racesForCalendar.forEach(row => parseRacesForCalendar(row));
+  races.forEach(row => parseRacesForMap(row));
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -91,14 +83,14 @@ function dataLoaded(values) {
 
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
-  const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
-  const racesSoonByTown = buildRacesSoonTables(racesForMap);
+  const raceHorizonByTown = buildRaceHorizon(races, townNames);
+  const racesSoonByTown = buildRacesSoonTables(races);
 
   const elusiveTowns = {};
   num_races_by_town_2017.forEach(row => { elusiveTowns[row.Town] = row.isElusive == '1'; });
 
   const mapFeatures = computeMapFeatures(mapData, elusiveTowns);
-  const calendarData = rollUpDataForCalendar(racesForCalendar, elusiveTowns);
+  const calendarData = rollUpDataForCalendar(races, elusiveTowns);
 
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {
@@ -207,7 +199,7 @@ function dataLoaded(values) {
 
   const myCalendar = new Calendar({
     data: [
-      racesForCalendar,
+      races,
       calendarData
     ],
     margin: margin
@@ -216,7 +208,7 @@ function dataLoaded(values) {
     data: [
       mapFeatures,
       drivingTimes,
-      racesForMap,
+      races,
       townNames,
       townIndex,
       racesSoonByTown,

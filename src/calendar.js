@@ -1,18 +1,3 @@
-function cleanTownName(name) {
-  return name.replace(' (E)', '');
-}
-
-const parseRace = d => {
-  const fmt = d3.format("02");
-  d.Town = cleanTownName(d.Town);
-  d.DateTime = new Date(d.Date_Time);
-  d.Month = d.DateTime.getMonth() + 1; // correct for zero-based
-  d.Day = d.DateTime.getDate();
-  d.Year = d.DateTime.getFullYear();
-  d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
-  return d;
-};
-
 const formatCell = d3.format("0");
 const fmt2 = d3.timeFormat("%Y-%m-%d");
 
@@ -36,7 +21,7 @@ function rollUpDataForCalendar(racesData, elusiveTowns) {
   // roll up data for all races
 
   const calendarData = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => {
         // collect together different distances for same race
         const summary = d3.nest()
@@ -64,7 +49,7 @@ function rollUpDataForCalendar(racesData, elusiveTowns) {
 
   // roll up data, but only for races in elusive towns
   const calendarDataElusive = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => { return { length: d.length } } )
     .object(racesData.filter(d => elusiveTowns[d.Town]));
 
@@ -369,9 +354,9 @@ class Calendar {
       if(!(currentValue.Town in accumulator)) {
         accumulator[currentValue.Town] = new Set();
       }
-      const yr = currentValue.DateString.substr(0,4);
-      const mo = currentValue.DateString.substr(5,2);
-      const dy = currentValue.DateString.substr(8);
+      const yr = currentValue.DateStringForCalendar.substr(0,4);
+      const mo = currentValue.DateStringForCalendar.substr(5,2);
+      const dy = currentValue.DateStringForCalendar.substr(8);
       const d = new Date(yr, mo - 1, dy);
       // use getTime to have set equality avoid duplicate dates
       accumulator[currentValue.Town].add(d.getTime());
@@ -426,5 +411,5 @@ class Calendar {
   }
 }
 
-export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar };
+export { Calendar, getCalendarHeight, rollUpDataForCalendar };
 

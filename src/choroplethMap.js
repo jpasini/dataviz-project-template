@@ -79,7 +79,7 @@ function buildRacesSoonTables(races) {
     const daysToRace = d3.timeDay.count(today, row.raceDay);
     if(daysToRace >= 0 && daysToRace <= 14) {
       const raceString = "<tr><td><span class='racedate'>" + 
-          row.DateString +  " " + row.DateTime.toTimeString().slice(0, 5) + 
+          row.DateStringForMap +  " " + row.DateTime.toTimeString().slice(0, 5) + 
           "</span></td><td><span class='racedistance'>" + 
           row.Distance + "</span></td><td><span class='racename'>" + 
           row.Name + "</span></td></tr>";          
@@ -101,9 +101,11 @@ function parseRaces(row) {
   const fmt = d3.format("02");
   row.Town = cleanTownName(row.Town);
   row.DateTime = new Date(row.Date_Time);
+  row.Year = row.DateTime.getFullYear();
   row.Month = row.DateTime.getMonth() + 1; // correct for zero-based
   row.Day = row.DateTime.getDate();
-  row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
+  row.DateStringForMap = fmt(row.Month) + "/" + fmt(row.Day);
+  row.DateStringForCalendar = fmt(row.Year) + "-" + fmt(row.Month) + "-" + fmt(row.Day);
   row.raceDay = d3.timeDay(row.DateTime);
   return row;
 }
@@ -167,7 +169,7 @@ class ChoroplethMap {
     // yields a set of unique town names
     // TODO: do not access data by index--fragile to changes
     this.townsPerDate = this.data[2].reduce((accumulator, currentValue) => {
-      const ds = currentValue.DateString;
+      const ds = currentValue.DateStringForMap;
       if(!(ds in accumulator)) {
         accumulator[ds] = new Set();
       }
