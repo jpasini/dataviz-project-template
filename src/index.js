@@ -7,7 +7,6 @@ import {
   buildRaceHorizon,
   buildRacesSoonTables,
   getMapHeight,
-  computeNumberOfRacesByTown,
   computeMapFeatures
 } from './choroplethMap'
 
@@ -93,10 +92,12 @@ function dataLoaded(values) {
   const townIndex = buildTownIndex(townNames);
   const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
-  const numberOfRacesByTown = computeNumberOfRacesByTown(num_races_by_town_2017);
 
-  const mapFeatures = computeMapFeatures(mapData, numberOfRacesByTown);
-  const calendarData = rollUpDataForCalendar(racesForCalendar, numberOfRacesByTown);
+  const elusiveTowns = {};
+  num_races_by_town_2017.forEach(row => { elusiveTowns[row.Town] = row.isElusive == '1'; });
+
+  const mapFeatures = computeMapFeatures(mapData, elusiveTowns);
+  const calendarData = rollUpDataForCalendar(racesForCalendar, elusiveTowns);
 
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {

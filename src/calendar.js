@@ -1,9 +1,13 @@
+function cleanTownName(name) {
+  return name.replace(' (E)', '');
+}
+
 const parseRace = d => {
   const fmt = d3.format("02");
+  d.Town = cleanTownName(d.Town);
   d.DateTime = new Date(d.Date_Time);
   d.Month = d.DateTime.getMonth() + 1; // correct for zero-based
   d.Day = d.DateTime.getDate();
-  d.Weekday = d.DateTime.getDay() + 1; // correct for zero-based
   d.Year = d.DateTime.getFullYear();
   d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
   return d;
@@ -27,7 +31,7 @@ function getCalendarHeight(width) {
   return getCellSize(width)*10 * getNumRows(width);
 }
 
-function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
+function rollUpDataForCalendar(racesData, elusiveTowns) {
   // Compute data needed for the calendar
   // roll up data for all races
 
@@ -59,14 +63,10 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
     .object(racesData);
 
   // roll up data, but only for races in elusive towns
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
   const calendarDataElusive = d3.nest()
       .key(d => d.DateString)
       .rollup(d => { return { length: d.length } } )
-    .object(racesData.filter(d => isElusive(d.Town)));
+    .object(racesData.filter(d => elusiveTowns[d.Town]));
 
   return { all: calendarData, elusive: calendarDataElusive };
 }

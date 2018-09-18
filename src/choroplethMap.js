@@ -39,12 +39,6 @@ function createNewNameIfNeeded(name, namesAlreadySeen) {
   return currentName;
 }
 
-function computeNumberOfRacesByTown(num_races_by_town_2017) {
-  const dictionary = {};
-  num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
-  return dictionary;
-}
-
 function buildRaceHorizon(races, townNames) {
   const today = d3.timeDay(new Date());
   const raceHorizonByTown = {};
@@ -99,8 +93,13 @@ function buildRacesSoonTables(races) {
   return racesSoonByTown;
 }
 
+function cleanTownName(name) {
+  return name.replace(' (E)', '');
+}
+
 function parseRaces(row) {
   const fmt = d3.format("02");
+  row.Town = cleanTownName(row.Town);
   row.DateTime = new Date(row.Date_Time);
   row.Month = row.DateTime.getMonth() + 1; // correct for zero-based
   row.Day = row.DateTime.getDate();
@@ -142,16 +141,12 @@ function completeTooltipTables(racesSoonByTown) {
   );
 }
 
-function computeMapFeatures(mapData, numberOfRacesByTown) {
+function computeMapFeatures(mapData, elusiveTowns) {
   // Pre-compute map features for all & elusive towns
   const mapFeatures = {};
   mapFeatures.all = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
 
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
-  mapFeatures.elusive = mapFeatures.all.filter(d => isElusive(d.properties.NAME10));
+  mapFeatures.elusive = mapFeatures.all.filter(d => elusiveTowns[d.properties.NAME10]);
 
   return mapFeatures;
 }
@@ -528,7 +523,6 @@ export {
   buildRaceHorizon,
   buildRacesSoonTables,
   getMapHeight, 
-  computeNumberOfRacesByTown,
   computeMapFeatures
 }
 
