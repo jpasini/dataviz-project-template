@@ -72,13 +72,14 @@ function dataLoaded(values) {
     drivingTimes, 
     membersTowns, 
     racesForMap, 
-    racesForCalendar, 
     num_races_by_town_2017,
     listOfMembers
   ] = values;
 
   // need to do the parsing here because d3.json doesn't accept
   // the "row" parameter
+  // copy the races
+  const racesForCalendar = JSON.parse(JSON.stringify(racesForMap));
   racesForMap.forEach(row => parseRacesForMap(row));
   racesForCalendar.forEach(row => parseRacesForCalendar(row));
 
@@ -215,7 +216,6 @@ function dataLoaded(values) {
     data: [
       mapFeatures,
       drivingTimes,
-      //racesRunMap,
       racesForMap,
       townNames,
       townIndex,
@@ -335,8 +335,7 @@ const promises = [];
 promises.push(d3.json('data/ct_towns_simplified.topojson'));
 promises.push(d3.csv('data/driving_times_full_symmetric.csv', parseDrivingMap));
 promises.push(d3.csv('data/members_towns_clean.csv'));
-promises.push(d3.json(racesUrl)); // for map
-promises.push(d3.json(racesUrl)); // for calendar
+promises.push(d3.json(racesUrl)); // for map & calendar
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
 promises.push(d3.json(membersUrl));
 
