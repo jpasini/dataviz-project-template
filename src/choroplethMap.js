@@ -39,23 +39,6 @@ function createNewNameIfNeeded(name, namesAlreadySeen) {
   return currentName;
 }
 
-function buildRacesRunMap(memberTownsRun, townNames) {
-  // access result as racesRunMap['Pasini, Jose']['Canton']
-  // and as memberTownsMap['Pasini, Jose']
-  const racesRunMap = {};
-  const memberTownsMap = {};
-  memberTownsRun.forEach(row => {
-    const newName = createNewNameIfNeeded(row.Name, racesRunMap);
-    row.Name = newName;
-    memberTownsMap[row.Name] = row.Town;
-    racesRunMap[row.Name] = townNames.reduce((accumulator, currentValue) => {
-      accumulator[currentValue] = row[currentValue] == '1';
-      return accumulator;
-    }, {});
-  });
-  return { racesRunMap, memberTownsMap };
-}
-
 function computeNumberOfRacesByTown(num_races_by_town_2017) {
   const dictionary = {};
   num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
@@ -187,7 +170,8 @@ class ChoroplethMap {
     // collect towns for each date
     // access elements as townsPerDate[<dateString>] 
     // yields a set of unique town names
-    this.townsPerDate = this.data[3].reduce((accumulator, currentValue) => {
+    // TODO: do not access data by index--fragile to changes
+    this.townsPerDate = this.data[2].reduce((accumulator, currentValue) => {
       const ds = currentValue.DateString;
       if(!(ds in accumulator)) {
         accumulator[ds] = new Set();
@@ -221,6 +205,7 @@ class ChoroplethMap {
       return fmt(mo) + "/" + fmt(day);
     }
 
+    // TODO: do not access data by index--fragile to changes
     const mapFeatures = this.data[0];
     let data = []; // default is nothing --> will remove highlighting
 
@@ -252,7 +237,6 @@ class ChoroplethMap {
     const [
       mapFeatures,
       drivingTimes,
-      racesRunMap,
       racesForMap,
       townNames,
       townIndex,
@@ -263,6 +247,7 @@ class ChoroplethMap {
 
     const myTown = this.options.myTown;
     const myName = this.options.myName;
+    const townsRun = this.options.townsRun;
     const highlightElusive = this.options.highlightElusive;
 
     // string marker
@@ -459,7 +444,7 @@ class ChoroplethMap {
         .attr('class', d => {
           const reachableClass = isReachable(d.properties.NAME10) ?
             ' reachable' : ' unreachable';
-          return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+          return myName != noPersonName && townsRun[d.properties.NAME10] ? 
               pathClassName + ' area alreadyRun' + reachableClass : 
               pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
         });
@@ -509,7 +494,7 @@ class ChoroplethMap {
           .attr("class", d => {
               const reachableClass = isReachable(d.properties.NAME10) ?
                 ' reachable' : ' unreachable';
-              return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+              return myName != noPersonName && townsRun[d.properties.NAME10] ? 
                 pathClassName + ' area alreadyRun' + reachableClass : 
                 pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
           });
@@ -540,7 +525,6 @@ class ChoroplethMap {
 export {
   ChoroplethMap,
   parseDrivingMap, 
-  buildRacesRunMap, 
   parseRaces, 
   getTownNames,
   buildTownIndex,

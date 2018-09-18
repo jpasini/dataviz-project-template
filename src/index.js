@@ -1,7 +1,6 @@
 import {
   ChoroplethMap,
   parseDrivingMap,
-  buildRacesRunMap,
   parseRaces as parseRacesForMap,
   getTownNames,
   buildTownIndex,
@@ -58,6 +57,13 @@ function getPageParameters() {
   return paramsDict;
 };
 
+const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
+// const townsUrl = run169urlPrefix + 'Towns/';
+const racesUrl = run169urlPrefix + 'Races/All/';
+const membersUrl = run169urlPrefix + 'Members';
+//const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
+//const run169apiurl = run169urlPrefix + 'Races/Future';
+
 
 function dataLoaded(values) {
 
@@ -85,7 +91,6 @@ function dataLoaded(values) {
 
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
-  const { racesRunMap, memberTownsMap } = buildRacesRunMap(membersTowns, townNames);
   const raceHorizonByTown = buildRaceHorizon(racesForMap, townNames);
   const racesSoonByTown = buildRacesSoonTables(racesForMap);
   const numberOfRacesByTown = computeNumberOfRacesByTown(num_races_by_town_2017);
@@ -105,24 +110,62 @@ function dataLoaded(values) {
       description: row.Town
     });
   });
+  // create a map from memberName -> town in which member is registered
+  // Note: this assumes no repeated names
+  const memberTownsMap = {};
+  listOfMembers.forEach(row => {
+    memberTownsMap[row.Name] = row.Town;
+  });
 
   class PersonAndTownName {
     constructor() {
       // start with defaults
       this.name = noPersonName;
       this.town = outOfState;
+      // to avoid multiple web requests, cache towns run
+      this.townsRun = {};
+      // fill towns run for the default "noPerson"
+      this.townsRun[noPersonName] = {};
+      townNames.forEach( town => {
+        this.townsRun[noPersonName][town] = false;
+      });
     }
 
     update(params) {
-      if(params == undefined) return;
+      if(params == undefined || !('personName' in params || 'townName' in params)) return new Promise( (resolve, reject) => {
+        resolve({
+          myTown: this.town,
+          myName: this.name,
+          townsRun: this.townsRun[this.name]
+        });
+      });
       if('personName' in params) {
         // if a person is provided, override the town selection
         this.name = params.personName;
         this.town = memberTownsMap[this.name];
         // also set the town selector to the town to avoid confusion
         $('#townSearch').search('set value', this.town);
+        // get the towns run by this person if the person is new
+        if(this.name in this.townsRun) {
+          return new Promise( (resolve, reject) => {
+            resolve({
+              myTown: this.town,
+              myName: this.name,
+              townsRun: this.townsRun[this.name]
+            });
+          });
+        } else {
+          return this.getUserInfoFromApi();
+        }
       } else if('townName' in params) {
         this.town = params.townName;
+        return new Promise( (resolve, reject) => {
+          resolve({
+            myTown: this.town,
+            myName: this.name,
+            townsRun: this.townsRun[this.name]
+          });
+        });
       }
     }
 
@@ -132,6 +175,29 @@ function dataLoaded(values) {
 
     getTown() {
       return this.town;
+    }
+
+    getUserInfoFromApi() {
+      const [lastName, firstName] = this.name.split(', ');
+      const townsRunUrl = run169urlPrefix + 'member/' + firstName + '/' + lastName + '/TownsComp';
+      return new Promise( (resolve, reject) => {
+        d3.json(townsRunUrl).then( d => {
+          this.townsRun[this.name] = {};
+          // mark towns already run
+          d.forEach( row => {
+            this.townsRun[this.name][row.Town] = true;
+          });
+          // fill the other towns with "false"
+          townNames.forEach( town => {
+            this.townsRun[this.name][town] = town in this.townsRun[this.name];
+          });
+          resolve({
+            myTown: this.town,
+            myName: this.name,
+            townsRun: this.townsRun[this.name]
+          });
+        });
+      });
     }
   };
 
@@ -148,7 +214,7 @@ function dataLoaded(values) {
     data: [
       mapFeatures,
       drivingTimes,
-      racesRunMap,
+      //racesRunMap,
       racesForMap,
       townNames,
       townIndex,
@@ -173,23 +239,17 @@ function dataLoaded(values) {
       $('#townSearch').hide();
     }
 
+    let promise = NaN;
     if('personName' in pageParameters) {
-      townName.update(pageParameters);
+      promise = townName.update(pageParameters);
     } else {
-      townName.update(params);
+      promise = townName.update(params);
     }
 
     if('sparseLayout' in pageParameters) {
       // Remove lots of elements
       $('.hideable').hide();
     }
-
-    const options = {
-      myTown:  townName.getTown(),
-      myName:  townName.getName(),
-      highlightElusive: highlightElusive
-    };
-    Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
 
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
@@ -212,8 +272,14 @@ function dataLoaded(values) {
       calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
 
-    // Render the content of the boxes (choropleth map and calendar)
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
+    promise.then(options => {
+      // add another option
+      options['highlightElusive'] = highlightElusive;
+      Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
+
+      // Render the content of the boxes (choropleth map and calendar)
+      Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
+    });
 
   }
 
@@ -262,13 +328,6 @@ function dataLoaded(values) {
     render();
   });
 }
-
-const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
-// const townsUrl = run169urlPrefix + 'Towns/';
-const racesUrl = run169urlPrefix + 'Races/All/';
-const membersUrl = run169urlPrefix + 'Members';
-//const run169apiurl = run169urlPrefix + 'member/Jose/Pasini/TownsComp';
-//const run169apiurl = run169urlPrefix + 'Races/Future';
 
 const promises = [];
 
