@@ -3,12 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
     <script src="https://d3js.org/topojson.v2.min.js"></script>
     <script src="lib/d3-tip.js"></script>
-    <script src="lib/csi.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
     <title>Run 169 Planning Tool</title>
@@ -28,9 +26,9 @@
            <em>Elusive towns</em> had at most one race in 2017.</p>
         </div>
         <div class="column">
-          <a class="ui image label hideable" href="mailto:jpasini@pm.me?subject=Run 169 Visualization"><i class="mail link icon"></i>jpasini@pm.me</a><span class="ui image label hideable">updated <div data-include="data/last_downloaded.txt"></div></span>
+          <button class="ui toggle button hideable">Show elusive towns</button>
         </div>
-        <div class="nine wide column">
+        <div class="twelve wide column">
           <div class="ui search hideable" id="personSearch">
             <div class="ui icon input">
               <input class="prompt" type="text" id="searchPersonText" placeholder="Member last name" title="Find a member to show which towns have already been completed">
@@ -45,9 +43,6 @@
             </div>
             <div class="results"></div>
           </div>
-        </div>
-        <div class="column">
-          <button class="ui toggle button hideable">Show elusive towns</button>
         </div>
       </div>
     </div>
