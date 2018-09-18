@@ -450,9 +450,6 @@ class ChoroplethMap {
         });
 
     const highlightPathClassName = 'highlightareapath';
-    function isElusive(town) {
-      return numberOfRacesByTown[town] <= 1;
-    }
     let highlightAreas = this.container.selectAll('.' + highlightPathClassName)
       .data(mapFeatures.elusive);
 
