@@ -70,6 +70,7 @@ races <- races %>% mutate(Town = gsub('MIddlebury', 'Middlebury', Town))
 races <- races %>% mutate(Town = gsub('CHaplin', 'Chaplin', Town))
 races <- races %>% mutate(Town = gsub('South WIndsor', 'South Windsor', Town))
 races <- races %>% mutate(Town = gsub('WIndsor Locks', 'Windsor Locks', Town))
+races <- races %>% mutate(Town = gsub('PReston', 'Preston', Town))
 
 # find races with towns not in the list - if so, write file to alert
 towns_not_in_list <- races %>% filter(!(Town %in% townNames)) %>% select(Town)
