@@ -157,15 +157,18 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       townName.update(params);
     }
 
+    let showDrivingFilter = true;
     if('sparseLayout' in pageParameters) {
       // Remove lots of elements
       $('.hideable').hide();
+      showDrivingFilter = false;
     }
 
     const options = {
       myTown:  townName.getTown(),
       myName:  townName.getName(),
-      highlightElusive: highlightElusive
+      highlightElusive: highlightElusive,
+      showDrivingFilter: showDrivingFilter
     };
     Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
 
