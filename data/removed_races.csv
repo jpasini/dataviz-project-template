@@ -1,28 +1,29 @@
-County,Town,Date/Time,Distance,Name,Cost,Results
-F,Norwalk,2018-01-07T10:00:00Z,10K,Boston Build-Up Series,"$20 ($18 online) for first individual race (subsequent races $17/$15); $47 preregistered, $50 post ($45 online) for the four race series POSTPONED to 1/14",Results
-H,East Hartford,2018-01-07T13:30:00Z,5K,Aselton Snow Dash,"$20 thru 12/26, $25 after POSTPONED to 1/28",Results
-NL,Griswold (E),2018-02-18T10:00:00Z,2M,A Mile Or Two In My Shoes Race,"$20, $25 raceday POSTPONED to 3/17 DUE TO SNOW",Results
-F,Monroe,2018-03-11T09:00:00Z,5K,Pi Day 5K,"$25, $30 day of POSTPONED",Results
-W,Killingly,2018-04-15T17:30:00Z,5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration] CANCELLED,Results
-H,Enfield,2018-05-19T09:00:00Z,5K,Four Rivers 5K,.$25 - Moved to 6/2,Results
-W,Killingly,2018-05-19T09:30:00Z,5K,Aspire Springtime Classic 5K,"$20, $25 raceday - Moved to 6/9",Results
-NH,Waterbury,2018-05-19T09:30:00Z,5K,Great Dash & Bash,".$20, $25 day of - Moved to 6/9",Results
-NH,Southbury,2018-05-19T10:00:00Z,50K,Kettletown State Park Challeng T2T Series,CANCELED,Results
-NH,Southbury,2018-05-19T10:00:00Z,30K,Kettletown State Park Challeng T2T Series,CANCELED,Results
-NH,Southbury,2018-05-19T10:00:00Z,20K,Kettletown State Park Challeng T2T Series,CANCELED,Results
-NH,Southbury,2018-05-19T10:00:00Z,10K,Kettletown State Park Challeng T2T Series,CANCELED,Results
-NH,Southbury,2018-05-19T10:00:00Z,5K,Kettletown State Park Challeng T2T Series,CANCELED,Results
-NL,Waterford,2018-05-20T10:00:00Z,5K,Armed Forces Day 5K,CANCELED,Results
-NH,Oxford,2018-05-20T11:00:00Z,5K,Belly of the Hog 5K,.$27 - Postponed.  New date TBA.,Results
-NL,Ledyard,2018-06-02T09:30:00Z,5K,Colonel Classic,CANCELLED,Results
-H,Enfield,2018-06-03T09:30:00Z,5K,Enfield Eagles,CANCELLED,Results
-NH,Oxford,2018-06-03T11:00:00Z,5K,Belly of the Hog,"$27, $30 raceday - Moved from 5/19 - CANCELLED/POSTPONED - Date TBD",Results
-NH,Oxford,2018-06-10T10:00:00Z,5K,Ride/Run/Walk for Children,CANCELLED,Results
-H,Granby,2018-07-25T18:00:00Z,5K,Summer Sunset Series,CANCELLED,Results
-L,Watertown,2018-07-25T18:30:00Z,"5K, 3K",Summer Poker Runs,CANCELLED,Results
-M,Westbrook (E),2018-07-29T15:00:00Z,Youth Du,Shoreline Splash and Dash,cancalled,Results
-H,Southington,2018-08-04T09:00:00Z,Kids Tri,Race4Chase Program Finale,POSTPONED to 8/5,Results
-F,Danbury,2018-08-11T08:00:00Z,1M,Ace of a Race,.$10 - Cancelled - will not be rescheduled,Results
-F,Danbury,2018-08-11T08:00:00Z,5K,Ace of a Race,.$25 - Cancelled - will not be rescheduled,Results
-H,Bristol,2018-08-17T18:00:00Z,5K,Falcon 5K,"$25, $18 for students - Postponed to Monday 8/20 at 6 pm",Results
-NH,Middlebury,2018-09-06T17:00:00Z,5K,Timex Family 5K,CANCELLED,Results
+Town,Date/Time,Distance,Name,Cost,Results
+Norwalk,2018-01-07T10:00:00Z,10K,Boston Build-Up Series,"$20 ($18 online) for first individual race (subsequent races $17/$15); $47 preregistered, $50 post ($45 online) for the four race series POSTPONED to 1/14",Results
+East Hartford,2018-01-07T13:30:00Z,5K,Aselton Snow Dash,"$20 thru 12/26, $25 after POSTPONED to 1/28",Results
+Griswold (E),2018-02-18T10:00:00Z,2M,A Mile Or Two In My Shoes Race,"$20, $25 raceday POSTPONED to 3/17 DUE TO SNOW",Results
+Monroe,2018-03-11T09:00:00Z,5K,Pi Day 5K,"$25, $30 day of POSTPONED",Results
+Killingly,2018-04-15T17:30:00Z,5K,Killingly River Trail Run Series,$15 for 6 week series [No Raceday registration] CANCELLED,Results
+Enfield,2018-05-19T09:00:00Z,5K,Four Rivers 5K,.$25 - Moved to 6/2,Results
+Killingly,2018-05-19T09:30:00Z,5K,Aspire Springtime Classic 5K,"$20, $25 raceday - Moved to 6/9",Results
+Waterbury,2018-05-19T09:30:00Z,5K,Great Dash & Bash,".$20, $25 day of - Moved to 6/9",Results
+Southbury,2018-05-19T10:00:00Z,50K,Kettletown State Park Challeng T2T Series,CANCELED,Results
+Southbury,2018-05-19T10:00:00Z,30K,Kettletown State Park Challeng T2T Series,CANCELED,Results
+Southbury,2018-05-19T10:00:00Z,20K,Kettletown State Park Challeng T2T Series,CANCELED,Results
+Southbury,2018-05-19T10:00:00Z,10K,Kettletown State Park Challeng T2T Series,CANCELED,Results
+Southbury,2018-05-19T10:00:00Z,5K,Kettletown State Park Challeng T2T Series,CANCELED,Results
+Waterford,2018-05-20T10:00:00Z,5K,Armed Forces Day 5K,CANCELED,Results
+Oxford,2018-05-20T11:00:00Z,5K,Belly of the Hog 5K,.$27 - Postponed.  New date TBA.,Results
+Ledyard,2018-06-02T09:30:00Z,5K,Colonel Classic,CANCELLED,Results
+Enfield,2018-06-03T09:30:00Z,5K,Enfield Eagles,CANCELLED,Results
+Oxford,2018-06-03T11:00:00Z,5K,Belly of the Hog,"$27, $30 raceday - Moved from 5/19 - CANCELLED/POSTPONED - Date TBD",Results
+Oxford,2018-06-10T10:00:00Z,5K,Ride/Run/Walk for Children,CANCELLED,Results
+Granby,2018-07-25T18:00:00Z,5K,Summer Sunset Series,CANCELLED,Results
+Watertown,2018-07-25T18:30:00Z,"5K, 3K",Summer Poker Runs,CANCELLED,Results
+Westbrook (E),2018-07-29T15:00:00Z,Youth Du,Shoreline Splash and Dash,cancalled,Results
+Southington,2018-08-04T09:00:00Z,Kids Tri,Race4Chase Program Finale,POSTPONED to 8/5,Results
+Danbury,2018-08-11T08:00:00Z,1M,Ace of a Race,.$10 - Cancelled - will not be rescheduled,Results
+Danbury,2018-08-11T08:00:00Z,5K,Ace of a Race,.$25 - Cancelled - will not be rescheduled,Results
+Bristol,2018-08-17T18:00:00Z,5K,Falcon 5K,"$25, $18 for students - Postponed to Monday 8/20 at 6 pm",Results
+Middlebury,2018-09-06T17:00:00Z,5K,Timex Family 5K,CANCELLED,Results
+Bethel,2018-09-22T09:00:00Z,5K,St. Mary School Catch Me if You Can Color Run,Cancelled,Results
