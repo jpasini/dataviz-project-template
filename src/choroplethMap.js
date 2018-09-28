@@ -1,6 +1,7 @@
-function getMapHeight(width) {
+function getMapHeight(width, showDrivingFilter) {
   const threshold_width = 800;
-  return width >= threshold_width ? threshold_width*3/4 : width*3/4;
+  const factor = showDrivingFilter ? 3/4 : 2/3; // shorter if no filter
+  return width >= threshold_width ? threshold_width*factor : width*factor;
 }
 
 function getTownNames(drivingTimeData) {
@@ -154,8 +155,8 @@ const tip = d3.tip()
 
 d3.selectAll('svg').call(tip);
 
-function getSliderParameters(width, height) {
-  const scale = getMapScale(width, height);
+function getSliderParameters(width, height, showDrivingFilter) {
+  const scale = getMapScale(width, height, showDrivingFilter);
   return { 
     x: width/2 - scale/12000*50, 
     y: height/2 - scale/12000*160, 
@@ -164,11 +165,12 @@ function getSliderParameters(width, height) {
   };
 }
 
-function getMapScale(width, height) {
+function getMapScale(width, height, showDrivingFilter) {
   // known size of CT image for given scale
   const baseScale = 12000;
   const baseWidth = 453;
-  const baseHeight = 379;
+  const factor = showDrivingFilter ? 1 : (2/3)/(3/4);
+  const baseHeight = factor*379;
 
   const scale1 = baseScale*width/baseWidth;
   const scale2 = baseScale*height/baseHeight;
@@ -228,7 +230,7 @@ class ChoroplethMap {
     const centerX = width/2;
     const centerY = height/2;
 
-    const mapScale = getMapScale(width, height);
+    const mapScale = getMapScale(width, height, this.options.showDrivingFilter);
     const CT_coords = [-72.7,41.6032];
     const projection = d3.geoMercator()
       .center(CT_coords)
@@ -312,7 +314,7 @@ class ChoroplethMap {
     const centerY = height/2;
 
     // Slider
-    const sliderParameters = getSliderParameters(width, height);
+    const sliderParameters = getSliderParameters(width, height, showDrivingFilter);
 
     const sliderScale = d3.scaleLinear()
       .domain([0, sliderParameters.width])
@@ -413,13 +415,15 @@ class ChoroplethMap {
           + '</span>'
       );
 
+    // shift the map and other parts vertically
+    const y_shift = showDrivingFilter ? 0 : -50*sliderParameters.scale;
     // draw the color legend manually
     let colorLegendG = this.container.selectAll('.mapColorLegendG').data([sliderParameters]);
     colorLegendG = colorLegendG
       .enter().append('g')
         .attr('class', 'mapColorLegendG')
       .merge(colorLegendG)
-        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale) + ")");
+        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale + y_shift) + ")");
 
     const colorLegend = colorLegendG.selectAll('rect').data(legendColors);
     const legendLineHeight = 140*sliderParameters.scale;
@@ -467,12 +471,12 @@ class ChoroplethMap {
 
     // Start work on the choropleth map
     // idea from https://www.youtube.com/watch?v=lJgEx_yb4u0&t=23s
-    const mapScale = getMapScale(width, height);
+    const mapScale = getMapScale(width, height, showDrivingFilter);
     const CT_coords = [-72.7,41.6032];
     const projection = d3.geoMercator()
       .center(CT_coords)
       .scale(mapScale)
-      .translate([centerX, centerY]);
+      .translate([centerX, centerY + y_shift]);
     const path = d3.geoPath().projection(projection);
 
     const pathClassName = 'areapath';

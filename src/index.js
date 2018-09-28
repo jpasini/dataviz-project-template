@@ -176,7 +176,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     //const width = visualizationDiv.clientWidth;
     const containerBox = $('.ui.container').get(0).getBoundingClientRect();
     const width = containerBox.width; // + containerBox.left;
-    const height = getMapHeight(width) + getCalendarHeight(width);
+    const height = getMapHeight(width, showDrivingFilter) + getCalendarHeight(width);
     // include a left margin inside the svg, to account for elements
     // that overflow (e.g., d3-tips)
     svg
@@ -189,8 +189,8 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     const boxes = {
-      map: {x: containerBox.left, y: 0, width: containerBox.width, height: getMapHeight(containerBox.width)},
-      calendar: {x: containerBox.left, y: getMapHeight(containerBox.width), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
+      map: {x: containerBox.left, y: 0, width: containerBox.width, height: getMapHeight(containerBox.width, showDrivingFilter)},
+      calendar: {x: containerBox.left, y: getMapHeight(containerBox.width, showDrivingFilter), width: containerBox.width, height: getCalendarHeight(containerBox.width)}
     };
 
     // Render the content of the boxes (choropleth map and calendar)
