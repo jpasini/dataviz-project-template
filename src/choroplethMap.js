@@ -1,6 +1,7 @@
-function getMapHeight(width) {
+function getMapHeight(width, showDrivingFilter) {
   const threshold_width = 800;
-  return width >= threshold_width ? threshold_width*3/4 : width*3/4;
+  const factor = showDrivingFilter ? 3/4 : 2/3; // shorter if no filter
+  return width >= threshold_width ? threshold_width*factor : width*factor;
 }
 
 function getTownNames(drivingTimeData) {
@@ -154,8 +155,8 @@ const tip = d3.tip()
 
 d3.selectAll('svg').call(tip);
 
-function getSliderParameters(width, height) {
-  const scale = getMapScale(width, height);
+function getSliderParameters(width, height, showDrivingFilter) {
+  const scale = getMapScale(width, height, showDrivingFilter);
   return { 
     x: width/2 - scale/12000*50, 
     y: height/2 - scale/12000*160, 
@@ -164,11 +165,12 @@ function getSliderParameters(width, height) {
   };
 }
 
-function getMapScale(width, height) {
+function getMapScale(width, height, showDrivingFilter) {
   // known size of CT image for given scale
   const baseScale = 12000;
   const baseWidth = 453;
-  const baseHeight = 379;
+  const factor = showDrivingFilter ? 1 : (2/3)/(3/4);
+  const baseHeight = factor*379;
 
   const scale1 = baseScale*width/baseWidth;
   const scale2 = baseScale*height/baseHeight;
@@ -228,7 +230,7 @@ class ChoroplethMap {
     const centerX = width/2;
     const centerY = height/2;
 
-    const mapScale = getMapScale(width, height);
+    const mapScale = getMapScale(width, height, this.options.showDrivingFilter);
     const CT_coords = [-72.7,41.6032];
     const projection = d3.geoMercator()
       .center(CT_coords)
@@ -286,6 +288,7 @@ class ChoroplethMap {
     const myTown = this.options.myTown;
     const myName = this.options.myName;
     const highlightElusive = this.options.highlightElusive;
+    const showDrivingFilter = this.options.showDrivingFilter;
 
     // string marker
     // TODO: find a 'DRY' way of doing this -- these are also set in index.js
@@ -311,7 +314,7 @@ class ChoroplethMap {
     const centerY = height/2;
 
     // Slider
-    const sliderParameters = getSliderParameters(width, height);
+    const sliderParameters = getSliderParameters(width, height, showDrivingFilter);
 
     const sliderScale = d3.scaleLinear()
       .domain([0, sliderParameters.width])
@@ -320,80 +323,84 @@ class ChoroplethMap {
 
     carSlider.x = sliderScale.invert(carSlider.value);
 
-    let sliderG = this.container.selectAll('.sliderGroup').data([sliderParameters]);
-    sliderG = sliderG
-      .enter().append('g')
-        .attr('class', 'sliderGroup')
-      .merge(sliderG)
-        .attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
+    // define some vars
+    let sliderG, drivingTimeLabel, carLine, car, carScale, carLabel;
+    if(showDrivingFilter) {
+      sliderG = this.container.selectAll('.sliderGroup').data([sliderParameters]);
+      sliderG = sliderG
+        .enter().append('g')
+          .attr('class', 'sliderGroup')
+        .merge(sliderG)
+          .attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
 
-    const labelText = myTown;
-    let drivingTimeLabel = sliderG.selectAll('.townLabel').data([labelText]);
-    drivingTimeLabel = drivingTimeLabel
-      .enter().append('text')
-        .attr('class', 'townLabel')
-        .attr('text-anchor', 'end')
-      .merge(drivingTimeLabel)
-        .attr('x', -10*sliderParameters.scale)
-        .attr('y', 160*sliderParameters.scale)
-        .attr('font-size', (175*sliderParameters.scale) + 'px')
-        .text(d => d);
+      const labelText = myTown;
+      drivingTimeLabel = sliderG.selectAll('.townLabel').data([labelText]);
+      drivingTimeLabel = drivingTimeLabel
+        .enter().append('text')
+          .attr('class', 'townLabel')
+          .attr('text-anchor', 'end')
+        .merge(drivingTimeLabel)
+          .attr('x', -10*sliderParameters.scale)
+          .attr('y', 160*sliderParameters.scale)
+          .attr('font-size', (175*sliderParameters.scale) + 'px')
+          .text(d => d);
 
-    let carLine = sliderG.selectAll('.carLine').data([carSlider]);
-    carLine = carLine
-      .enter().append('rect')
-        .attr('class', 'carLine')
-      .merge(carLine)
-        .attr('x', 0)
-        .attr('y', 100*sliderParameters.scale)
-        .attr('width', d => d.x)
-        .attr('height', 10*sliderParameters.scale);
+      carLine = sliderG.selectAll('.carLine').data([carSlider]);
+      carLine = carLine
+        .enter().append('rect')
+          .attr('class', 'carLine')
+        .merge(carLine)
+          .attr('x', 0)
+          .attr('y', 100*sliderParameters.scale)
+          .attr('width', d => d.x)
+          .attr('height', 10*sliderParameters.scale);
 
-    let car = sliderG.selectAll('.car').data([carSlider]);
-    const pathString = "m 25,0 c -4.53004,0.0112 -12.12555,0.69055 -14.0625,6.05859 -5.07703,1.58895 -10.49326,2.14878 -10.14649,9.23437 l 6.23633,0.75782 c 0,0 0.45836,3.05148 3.51563,3.13672 3.05727,0.0852 4.03125,-2.89454 4.03125,-2.89454 l 28.49609,0.0684 c 0,0 1.50286,3.40622 5.20508,3.37696 3.70222,-0.0293 4.85742,-4.37696 4.85742,-4.37696 1.52171,0.005 3.11558,0.0922 4.37695,-0.20703 0.72421,-1.0742 0.63022,-2.1633 -0.33203,-2.23828 -0.0635,-0.005 0.70644,-2.07399 -0.16797,-3.46484 l -0.0859,-1.51563 c -0.85704,-0.4383 -1.83605,-0.7606 -2.92969,-0.74023 -1.55827,-2.22881 -10.56728,-1.44901 -16.36719,-1.96485 -1.45014,-0.83459 -2.9249,-2.47089 -4.51367,-4.27343 0,0 -2.90328,-0.91128 -4.92774,-0.89453 -0.50611,0.004 -1.67553,-0.0662 -3.18554,-0.0625 z m 1.83594,1.23437 c 1.42376,-0.0226 4.15534,0.26141 4.65625,0.51563 0.66787,0.33894 3.90428,3.44039 3.58398,3.87695 -0.3203,0.43656 -8.54696,0.58251 -9.01953,0.26758 -0.47258,-0.31493 -0.28696,-4.16971 -0.0762,-4.52344 0.0527,-0.0884 0.38088,-0.12919 0.85547,-0.13672 z m -3.3418,0.16016 c 0.19862,0.0111 0.33328,0.0434 0.38281,0.10156 0.39621,0.46517 0.29788,4.24032 -0.0234,4.38477 -0.26357,0.11849 -7.94003,0.75278 -8.31054,0.43945 -0.37051,-0.31334 0.16129,-2.35076 1.14648,-3.24024 0.86204,-0.77829 5.41436,-1.76307 6.80469,-1.68554 z"
-    const carScale = 10*sliderParameters.scale;
+      car = sliderG.selectAll('.car').data([carSlider]);
+      const pathString = "m 25,0 c -4.53004,0.0112 -12.12555,0.69055 -14.0625,6.05859 -5.07703,1.58895 -10.49326,2.14878 -10.14649,9.23437 l 6.23633,0.75782 c 0,0 0.45836,3.05148 3.51563,3.13672 3.05727,0.0852 4.03125,-2.89454 4.03125,-2.89454 l 28.49609,0.0684 c 0,0 1.50286,3.40622 5.20508,3.37696 3.70222,-0.0293 4.85742,-4.37696 4.85742,-4.37696 1.52171,0.005 3.11558,0.0922 4.37695,-0.20703 0.72421,-1.0742 0.63022,-2.1633 -0.33203,-2.23828 -0.0635,-0.005 0.70644,-2.07399 -0.16797,-3.46484 l -0.0859,-1.51563 c -0.85704,-0.4383 -1.83605,-0.7606 -2.92969,-0.74023 -1.55827,-2.22881 -10.56728,-1.44901 -16.36719,-1.96485 -1.45014,-0.83459 -2.9249,-2.47089 -4.51367,-4.27343 0,0 -2.90328,-0.91128 -4.92774,-0.89453 -0.50611,0.004 -1.67553,-0.0662 -3.18554,-0.0625 z m 1.83594,1.23437 c 1.42376,-0.0226 4.15534,0.26141 4.65625,0.51563 0.66787,0.33894 3.90428,3.44039 3.58398,3.87695 -0.3203,0.43656 -8.54696,0.58251 -9.01953,0.26758 -0.47258,-0.31493 -0.28696,-4.16971 -0.0762,-4.52344 0.0527,-0.0884 0.38088,-0.12919 0.85547,-0.13672 z m -3.3418,0.16016 c 0.19862,0.0111 0.33328,0.0434 0.38281,0.10156 0.39621,0.46517 0.29788,4.24032 -0.0234,4.38477 -0.26357,0.11849 -7.94003,0.75278 -8.31054,0.43945 -0.37051,-0.31334 0.16129,-2.35076 1.14648,-3.24024 0.86204,-0.77829 5.41436,-1.76307 6.80469,-1.68554 z"
+      carScale = 10*sliderParameters.scale;
 
-    car = car
-      .enter().append('g')
-      .merge(car)
-        .attr('class', myTown == outOfState ? 'car inactive' : 'car')
-        .attr('transform', d => 'translate(' + d.x + ') scale(' + carScale + ')')
-        .call(d3.drag()
-            .on('start', myTown == outOfState ? () => {} : dragstarted)
-            .on('drag', myTown == outOfState ? () => {} : dragged)
-            .on('end', myTown == outOfState ? () => {} : dragended));
+      car = car
+        .enter().append('g')
+        .merge(car)
+          .attr('class', myTown == outOfState ? 'car inactive' : 'car')
+          .attr('transform', d => 'translate(' + d.x + ') scale(' + carScale + ')')
+          .call(d3.drag()
+              .on('start', myTown == outOfState ? () => {} : dragstarted)
+              .on('drag', myTown == outOfState ? () => {} : dragged)
+              .on('end', myTown == outOfState ? () => {} : dragended));
 
-    // Add an invisible rectangle on top, to enlarge the sensitive area.
-    // This makes it easier to click on a cell phone.
-    const carRect = car.selectAll('rect').data([carSlider]);
-    carRect
-      .enter().append('rect')
-        .attr('stroke', 'none')
-        .attr('fill', '#fff')
-        .attr('y', -20)
-        .attr('width', 60)
-        .attr('height', 45);
+      // Add an invisible rectangle on top, to enlarge the sensitive area.
+      // This makes it easier to click on a cell phone.
+      const carRect = car.selectAll('rect').data([carSlider]);
+      carRect
+        .enter().append('rect')
+          .attr('stroke', 'none')
+          .attr('fill', '#fff')
+          .attr('y', -20)
+          .attr('width', 60)
+          .attr('height', 45);
 
-    // draw the label with the driving time
-    let carLabel = car.selectAll('.carLabel').data([carSlider]);
-    carLabel = carLabel
-      .enter().append('text')
-        .attr('class', 'carLabel')
-        .attr('text-anchor', 'middle')
-      .merge(carLabel)
-        .attr('opacity', myTown == outOfState ? 0.3 : 1)
-        .text(d => drivingTimeToString(sliderScale(d.x)))
-        .attr('x', 27)
-        .attr('y', -7)
-        .attr('font-size', '1em');
+      // draw the label with the driving time
+      carLabel = car.selectAll('.carLabel').data([carSlider]);
+      carLabel = carLabel
+        .enter().append('text')
+          .attr('class', 'carLabel')
+          .attr('text-anchor', 'middle')
+        .merge(carLabel)
+          .attr('opacity', myTown == outOfState ? 0.3 : 1)
+          .text(d => drivingTimeToString(sliderScale(d.x)))
+          .attr('x', 27)
+          .attr('y', -7)
+          .attr('font-size', '1em');
 
 
-    // draw the actual car
-    const carCar = car.selectAll('path').data([carSlider]);
-    carCar
-      .enter().append('path')
-        .attr('d', pathString)
-      .merge(carCar);
+      // draw the actual car
+      const carCar = car.selectAll('path').data([carSlider]);
+      carCar
+        .enter().append('path')
+          .attr('d', pathString)
+        .merge(carCar);
+    }
 
 
     tip
@@ -408,13 +415,15 @@ class ChoroplethMap {
           + '</span>'
       );
 
+    // shift the map and other parts vertically
+    const y_shift = showDrivingFilter ? 0 : -50*sliderParameters.scale;
     // draw the color legend manually
     let colorLegendG = this.container.selectAll('.mapColorLegendG').data([sliderParameters]);
     colorLegendG = colorLegendG
       .enter().append('g')
         .attr('class', 'mapColorLegendG')
       .merge(colorLegendG)
-        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale) + ")");
+        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale + y_shift) + ")");
 
     const colorLegend = colorLegendG.selectAll('rect').data(legendColors);
     const legendLineHeight = 140*sliderParameters.scale;
@@ -439,33 +448,35 @@ class ChoroplethMap {
         .attr('x', legendLineHeight)
         .attr('y', (d, i) => (i + 0.2)*(legendLineHeight));
 
-    // add instructions and title
-    const instructions = this.container.selectAll('.instructions').data([sliderParameters]);
-    instructions
-      .enter().append('text')
-        .attr('class', 'instructions')
-      .merge(instructions)
-        .text(
-          myTown == outOfState ?
-            'select a town to filter by driving time' :
-            'drag car to filter by driving time'
-        )
-        .attr('x', d => d.x + 3*legendLineHeight)
-        .attr('y', d => d.y + 2.2*legendLineHeight)
-        .attr('font-size', d => 0.75*legendLineHeight);
+    if(showDrivingFilter) {
+      // add instructions and title
+      const instructions = this.container.selectAll('.instructions').data([sliderParameters]);
+      instructions
+        .enter().append('text')
+          .attr('class', 'instructions')
+        .merge(instructions)
+          .text(
+            myTown == outOfState ?
+              'select a town to filter by driving time' :
+              'drag car to filter by driving time'
+          )
+          .attr('x', d => d.x + 3*legendLineHeight)
+          .attr('y', d => d.y + 2.2*legendLineHeight)
+          .attr('font-size', d => 0.75*legendLineHeight);
+    }
 
     function isReachable(town) {
-      return myTown == outOfState ? true : drivingTimes[myTownIndex][town] <= Math.round(carSlider.value);
+      return (myTown == outOfState || !showDrivingFilter) ? true : drivingTimes[myTownIndex][town] <= Math.round(carSlider.value);
     }
 
     // Start work on the choropleth map
     // idea from https://www.youtube.com/watch?v=lJgEx_yb4u0&t=23s
-    const mapScale = getMapScale(width, height);
+    const mapScale = getMapScale(width, height, showDrivingFilter);
     const CT_coords = [-72.7,41.6032];
     const projection = d3.geoMercator()
       .center(CT_coords)
       .scale(mapScale)
-      .translate([centerX, centerY]);
+      .translate([centerX, centerY + y_shift]);
     const path = d3.geoPath().projection(projection);
 
     const pathClassName = 'areapath';
