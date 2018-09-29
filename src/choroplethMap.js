@@ -406,8 +406,8 @@ class ChoroplethMap {
     tip
       .html(d => '<span class="townname">' + d.properties.NAME10 + '</span>'
           + (myTown == outOfState ? '' :
-            '<br><span>' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
-          + ' driving</span>')
+            '<span>: ' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
+          + ' drive</span>')
           + '<span>' 
           + (d.properties.NAME10 in racesSoonByTown ?
             racesSoonByTown[d.properties.NAME10]
