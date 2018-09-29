@@ -256,7 +256,7 @@ class ChoroplethMap {
 
     const highlightTownClassName = 'highlightedTownArea';
 
-    let highlightAreas = this.container
+    let highlightAreas = this.mapAndLegendG
       .selectAll('.' + highlightTownClassName)
       .data(data);
 
@@ -406,8 +406,8 @@ class ChoroplethMap {
     tip
       .html(d => '<span class="townname">' + d.properties.NAME10 + '</span>'
           + (myTown == outOfState ? '' :
-            '<br><span>' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
-          + ' driving</span>')
+            '<span>: ' + drivingTimeToString(drivingTimes[myTownIndex][d.properties.NAME10])
+          + ' drive</span>')
           + '<span>' 
           + (d.properties.NAME10 in racesSoonByTown ?
             racesSoonByTown[d.properties.NAME10]
@@ -415,15 +415,23 @@ class ChoroplethMap {
           + '</span>'
       );
 
-    // shift the map and other parts vertically
+    // for vertical shift if driving filter is missing
     const y_shift = showDrivingFilter ? 0 : -50*sliderParameters.scale;
+    // group the map and legend
+    this.mapAndLegendG = this.container.selectAll('#mapAndLegendG').data([sliderParameters]); // singleton
+    this.mapAndLegendG = this.mapAndLegendG
+      .enter().append('g')
+        .attr('id', 'mapAndLegendG')
+      .merge(this.mapAndLegendG)
+        .attr('transform', d => 'translate(0,' + y_shift + ')');
+
     // draw the color legend manually
-    let colorLegendG = this.container.selectAll('.mapColorLegendG').data([sliderParameters]);
+    let colorLegendG = this.mapAndLegendG.selectAll('.mapColorLegendG').data([sliderParameters]);
     colorLegendG = colorLegendG
       .enter().append('g')
         .attr('class', 'mapColorLegendG')
       .merge(colorLegendG)
-        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale + y_shift) + ")");
+        .attr("transform", d => "translate(" + (d.x + 1200*d.scale) + "," + (d.y + 2800*d.scale) + ")");
 
     const colorLegend = colorLegendG.selectAll('rect').data(legendColors);
     const legendLineHeight = 140*sliderParameters.scale;
@@ -476,11 +484,11 @@ class ChoroplethMap {
     const projection = d3.geoMercator()
       .center(CT_coords)
       .scale(mapScale)
-      .translate([centerX, centerY + y_shift]);
+      .translate([centerX, centerY]);
     const path = d3.geoPath().projection(projection);
 
     const pathClassName = 'areapath';
-    let areas = this.container.selectAll('.' + pathClassName)
+    let areas = this.mapAndLegendG.selectAll('.' + pathClassName)
       .data(mapFeatures.all);
 
     areas = areas
@@ -501,7 +509,7 @@ class ChoroplethMap {
     function isElusive(town) {
       return numberOfRacesByTown[town] <= 1;
     }
-    let highlightAreas = this.container.selectAll('.' + highlightPathClassName)
+    let highlightAreas = this.mapAndLegendG.selectAll('.' + highlightPathClassName)
       .data(mapFeatures.elusive);
 
     highlightAreas = highlightAreas
