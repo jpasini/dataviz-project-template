@@ -29,6 +29,8 @@ members <- members %>% filter(!is.na(Name))
 
 townNames <- columns[4:172]
 
+# Clean name of each member
+members$Name <- stri_trans_general(members$Name, 'latin-ascii')
 # Clean name of each member's town of origin
 # translate unicode (e.g., no-break spoace) to ascii
 members$Town <- stri_trans_general(members$Town, 'latin-ascii')
