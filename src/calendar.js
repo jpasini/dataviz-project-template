@@ -60,8 +60,8 @@ class Calendar {
   constructor(opts) {
     this.data = opts.data;
     this.margin = opts.margin;
-    // TODO: don't hard-code the year to show
-    this.shownYear = 2018;
+    // Show the current year
+    this.shownYear = (new Date()).getFullYear();
     this.tip = d3.tip()
         .attr('class', 'd3-tip-calendar')
         .offset([-10, 0]);
