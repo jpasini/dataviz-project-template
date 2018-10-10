@@ -65,7 +65,7 @@ function dataLoaded(values) {
   const [
     mapData,
     drivingTimes, 
-    membersTowns, 
+    villages_to_towns, 
     races, 
     num_races_by_town_2017,
     listOfMembers
@@ -80,6 +80,11 @@ function dataLoaded(values) {
   let highlightElusive = $('.ui.toggle.button').state('is active');
 
   const pageParameters = getPageParameters();
+
+  const villagesToTownsMap = {}
+  villages_to_towns.forEach(row => {
+    villagesToTownsMap[row.Village] = row.Town;
+  });
 
   const townNames = getTownNames(drivingTimes);
   const townIndex = buildTownIndex(townNames);
@@ -96,7 +101,11 @@ function dataLoaded(values) {
   listOfMembers.forEach( row => {
     row['Name'] = row._LastName + ', ' + row._FirstName;
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
-    row['Town'] = row._City;
+    if(row._City in villagesToTownsMap) {
+      row['Town'] = villagesToTownsMap[row._City];
+    } else {
+      row['Town'] = row._City;
+    }
   });
   const memberNames = [];
   listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
@@ -330,7 +339,7 @@ const promises = [];
 
 promises.push(d3.json('data/ct_towns_simplified.topojson'));
 promises.push(d3.csv('data/driving_times_full_symmetric.csv', parseDrivingMap));
-promises.push(d3.csv('data/members_towns_clean.csv'));
+promises.push(d3.csv('data/ct_villages_and_towns.csv'));
 promises.push(d3.json(racesUrl)); // for map & calendar
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
 promises.push(d3.json(membersUrl));
