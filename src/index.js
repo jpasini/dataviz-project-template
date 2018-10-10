@@ -55,9 +55,9 @@ function getPageParameters() {
   return paramsDict;
 };
 
-const run169urlPrefix = 'https://omnisuite.net/run169data/api/data/';
+const run169urlPrefix = 'https://www.omnisuite.net/run169data/api/data/';
 const racesUrl = run169urlPrefix + 'Races/All/';
-const membersUrl = run169urlPrefix + 'Members';
+const membersUrl = run169urlPrefix + 'Members_Min';
 
 function dataLoaded(values) {
 
@@ -94,8 +94,9 @@ function dataLoaded(values) {
 
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {
-    row['Name'] = row.LastName + ', ' + row.FirstName;
-    row['Town'] = row.State == 'CT' ? row.City : outOfState;
+    row['Name'] = row._LastName + ', ' + row._FirstName;
+    //row['Town'] = row.State == 'CT' ? row.City : outOfState;
+    row['Town'] = row._City;
   });
   const memberNames = [];
   listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
