@@ -60,6 +60,7 @@ class Calendar {
   constructor(opts) {
     this.data = opts.data;
     this.margin = opts.margin;
+    // TODO: don't hard-code the year to show
     this.shownYear = 2018;
     this.tip = d3.tip()
         .attr('class', 'd3-tip-calendar')
@@ -354,12 +355,14 @@ class Calendar {
       if(!(currentValue.Town in accumulator)) {
         accumulator[currentValue.Town] = new Set();
       }
-      const yr = currentValue.DateStringForCalendar.substr(0,4);
-      const mo = currentValue.DateStringForCalendar.substr(5,2);
-      const dy = currentValue.DateStringForCalendar.substr(8);
+      const yr = parseInt(currentValue.DateStringForCalendar.substr(0,4));
+      const mo = parseInt(currentValue.DateStringForCalendar.substr(5,2));
+      const dy = parseInt(currentValue.DateStringForCalendar.substr(8));
       const d = new Date(yr, mo - 1, dy);
-      // use getTime to have set equality avoid duplicate dates
-      accumulator[currentValue.Town].add(d.getTime());
+      if(yr == this.shownYear) {
+        // use getTime to have set equality avoid duplicate dates
+        accumulator[currentValue.Town].add(d.getTime());
+      }
       return accumulator;
     }, {});
     // create highlighter based on list of dates

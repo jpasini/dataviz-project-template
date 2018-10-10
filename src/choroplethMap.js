@@ -108,6 +108,7 @@ function parseRaces(row) {
   row.DateStringForMap = fmt(row.Month) + "/" + fmt(row.Day);
   row.DateStringForCalendar = fmt(row.Year) + "-" + fmt(row.Month) + "-" + fmt(row.Day);
   row.raceDay = d3.timeDay(row.DateTime);
+  row.Name = row.RaceName;
   return row;
 }
 
