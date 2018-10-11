@@ -114,8 +114,25 @@ function getPageParameters() {
   return paramsDict;
 };
 
+const run169urlPrefix = 'https://www.omnisuite.net/run169data/api/data/';
+const racesUrl = run169urlPrefix + 'Races/All/';
+const membersUrl = run169urlPrefix + 'Members_Min';
 
-function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, racesForCalendar, num_races_by_town_2017) {
+function dataLoaded(values) {
+
+  // unpack parameters
+  const [
+    mapData,
+    drivingTimes, 
+    villages_to_towns, 
+    races, 
+    num_races_by_town_2017,
+    listOfMembers
+  ] = values;
+
+  // need to do the parsing here because d3.json doesn't accept
+  // the "row" parameter
+  races.forEach(row => Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* parseRaces */])(row));
 
   const outOfState = 'Out of State';
   const noPersonName = 'noPersonName';
@@ -123,21 +140,44 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
 
   const pageParameters = getPageParameters();
 
-  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["i" /* getTownNames */])(drivingTimes);
-  const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["e" /* buildTownIndex */])(townNames);
-  const { racesRunMap, memberTownsMap } = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesRunMap */])(membersTowns, townNames);
-  const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRaceHorizon */])(racesForMap, townNames);
-  const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildRacesSoonTables */])(racesForMap);
-  const numberOfRacesByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* computeNumberOfRacesByTown */])(num_races_by_town_2017);
+  const villagesToTownsMap = {}
+  villages_to_towns.forEach(row => {
+    villagesToTownsMap[row.Village] = row.Town;
+  });
 
-  const mapFeatures = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* computeMapFeatures */])(mapData, numberOfRacesByTown);
-  const calendarData = Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["d" /* rollUpDataForCalendar */])(racesForCalendar, numberOfRacesByTown);
+  const townNames = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["g" /* getTownNames */])(drivingTimes);
+  const townIndex = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["d" /* buildTownIndex */])(townNames);
+  const raceHorizonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["b" /* buildRaceHorizon */])(races, townNames);
+  const racesSoonByTown = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["c" /* buildRacesSoonTables */])(races);
+
+  const elusiveTowns = {};
+  num_races_by_town_2017.forEach(row => { elusiveTowns[row.Town] = row.isElusive == '1'; });
+
+  const mapFeatures = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["e" /* computeMapFeatures */])(mapData, elusiveTowns);
+  const calendarData = Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* rollUpDataForCalendar */])(races, elusiveTowns);
+
+  // prepare list of members for use in search box
+  listOfMembers.forEach( row => {
+    row['Name'] = row._LastName + ', ' + row._FirstName;
+    //row['Town'] = row.State == 'CT' ? row.City : outOfState;
+    if(row._City in villagesToTownsMap) {
+      row['Town'] = villagesToTownsMap[row._City];
+    } else {
+      row['Town'] = row._City;
+    }
+  });
   const memberNames = [];
-  membersTowns.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
+  listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
       title: row.Name,
-      description: row.Town + ' - ' + row.TotalTowns + ' towns'
+      description: row.Town
     });
+  });
+  // create a map from memberName -> town in which member is registered
+  // Note: this assumes no repeated names
+  const memberTownsMap = {};
+  listOfMembers.forEach(row => {
+    memberTownsMap[row.Name] = row.Town;
   });
 
   class PersonAndTownName {
@@ -145,18 +185,50 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       // start with defaults
       this.name = noPersonName;
       this.town = outOfState;
+      // to avoid multiple web requests, cache towns run
+      this.townsRun = {};
+      // fill towns run for the default "noPerson"
+      this.townsRun[noPersonName] = {};
+      townNames.forEach( town => {
+        this.townsRun[noPersonName][town] = false;
+      });
     }
 
     update(params) {
-      if(params == undefined) return;
+      if(params == undefined || !('personName' in params || 'townName' in params)) return new Promise( (resolve, reject) => {
+        resolve({
+          myTown: this.town,
+          myName: this.name,
+          townsRun: this.townsRun[this.name]
+        });
+      });
       if('personName' in params) {
         // if a person is provided, override the town selection
         this.name = params.personName;
         this.town = memberTownsMap[this.name];
         // also set the town selector to the town to avoid confusion
         $('#townSearch').search('set value', this.town);
+        // get the towns run by this person if the person is new
+        if(this.name in this.townsRun) {
+          return new Promise( (resolve, reject) => {
+            resolve({
+              myTown: this.town,
+              myName: this.name,
+              townsRun: this.townsRun[this.name]
+            });
+          });
+        } else {
+          return this.getUserInfoFromApi();
+        }
       } else if('townName' in params) {
         this.town = params.townName;
+        return new Promise( (resolve, reject) => {
+          resolve({
+            myTown: this.town,
+            myName: this.name,
+            townsRun: this.townsRun[this.name]
+          });
+        });
       }
     }
 
@@ -167,13 +239,36 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     getTown() {
       return this.town;
     }
+
+    getUserInfoFromApi() {
+      const [lastName, firstName] = this.name.split(', ');
+      const townsRunUrl = run169urlPrefix + 'member/' + firstName + '/' + lastName + '/TownsComp';
+      return new Promise( (resolve, reject) => {
+        d3.json(townsRunUrl).then( d => {
+          this.townsRun[this.name] = {};
+          // mark towns already run
+          d.forEach( row => {
+            this.townsRun[this.name][row.Town] = true;
+          });
+          // fill the other towns with "false"
+          townNames.forEach( town => {
+            this.townsRun[this.name][town] = town in this.townsRun[this.name];
+          });
+          resolve({
+            myTown: this.town,
+            myName: this.name,
+            townsRun: this.townsRun[this.name]
+          });
+        });
+      });
+    }
   };
 
   const townName = new PersonAndTownName();
 
   const myCalendar = new __WEBPACK_IMPORTED_MODULE_1__calendar_js__["a" /* Calendar */]({
     data: [
-      racesForCalendar,
+      races,
       calendarData
     ],
     margin: margin
@@ -182,8 +277,7 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     data: [
       mapFeatures,
       drivingTimes,
-      racesRunMap,
-      racesForMap,
+      races,
       townNames,
       townIndex,
       racesSoonByTown,
@@ -207,10 +301,11 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       $('#townSearch').hide();
     }
 
+    let promise = NaN;
     if('personName' in pageParameters) {
-      townName.update(pageParameters);
+      promise = townName.update(pageParameters);
     } else {
-      townName.update(params);
+      promise = townName.update(params);
     }
 
     let showDrivingFilter = true;
@@ -220,19 +315,11 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
       showDrivingFilter = false;
     }
 
-    const options = {
-      myTown:  townName.getTown(),
-      myName:  townName.getName(),
-      highlightElusive: highlightElusive,
-      showDrivingFilter: showDrivingFilter
-    };
-    Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
-
     // Extract the width and height that was computed by CSS.
     //const width = visualizationDiv.clientWidth;
     const containerBox = $('.ui.container').get(0).getBoundingClientRect();
     const width = containerBox.width; // + containerBox.left;
-    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(width, showDrivingFilter) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
+    const height = Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(width, showDrivingFilter) + Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(width);
     // include a left margin inside the svg, to account for elements
     // that overflow (e.g., d3-tips)
     svg
@@ -245,12 +332,19 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
     };
 
     const boxes = {
-      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(containerBox.width, showDrivingFilter)},
-      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* getMapHeight */])(containerBox.width, showDrivingFilter), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
+      map: {x: containerBox.left, y: 0, width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width, showDrivingFilter)},
+      calendar: {x: containerBox.left, y: Object(__WEBPACK_IMPORTED_MODULE_0__choroplethMap__["f" /* getMapHeight */])(containerBox.width, showDrivingFilter), width: containerBox.width, height: Object(__WEBPACK_IMPORTED_MODULE_1__calendar_js__["b" /* getCalendarHeight */])(containerBox.width)}
     };
 
-    // Render the content of the boxes (choropleth map and calendar)
-    Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
+    promise.then(options => {
+      // add another option
+      options['highlightElusive'] = highlightElusive;
+      options['showDrivingFilter'] = showDrivingFilter;
+      Object.keys(charts).forEach( name => { charts[name].setOptions(options); } );
+
+      // Render the content of the boxes (choropleth map and calendar)
+      Object.keys(boxes).forEach( name => { drawBox(name, boxes[name], charts[name]); } );
+    });
 
   }
 
@@ -300,15 +394,18 @@ function dataLoaded(error, mapData, drivingTimes, membersTowns, racesForMap, rac
   });
 }
 
-d3.queue()
-  .defer(d3.json, 'data/ct_towns_simplified.topojson')
-  .defer(d3.csv, 'data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["j" /* parseDrivingMap */])
-  .defer(d3.csv, 'data/members_towns_clean.csv')
-  .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["k" /* parseRaces */])
-  .defer(d3.csv, 'data/races2018.csv', __WEBPACK_IMPORTED_MODULE_1__calendar_js__["c" /* parseRace */])
-  .defer(d3.csv, 'data/num_races_by_town_2017.csv')
-  .await(dataLoaded);
+const promises = [];
 
+promises.push(d3.json('data/ct_towns_simplified.topojson'));
+promises.push(d3.csv('data/driving_times_full_symmetric.csv', __WEBPACK_IMPORTED_MODULE_0__choroplethMap__["h" /* parseDrivingMap */]));
+promises.push(d3.csv('data/ct_villages_and_towns.csv'));
+promises.push(d3.json(racesUrl)); // for map & calendar
+promises.push(d3.csv('data/num_races_by_town_2017.csv'));
+promises.push(d3.json(membersUrl));
+
+Promise.all(promises).then(function(values) {
+  dataLoaded(values);
+});
 
 
 
@@ -318,16 +415,14 @@ d3.queue()
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChoroplethMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return parseDrivingMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesRunMap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return parseRaces; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return getTownNames; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return buildTownIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return parseDrivingMap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return parseRaces; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getTownNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildTownIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return buildRaceHorizon; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return buildRacesSoonTables; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getMapHeight; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return computeNumberOfRacesByTown; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return computeMapFeatures; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return buildRacesSoonTables; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getMapHeight; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return computeMapFeatures; });
 function getMapHeight(width, showDrivingFilter) {
   const threshold_width = 800;
   const factor = showDrivingFilter ? 3/4 : 2/3; // shorter if no filter
@@ -365,54 +460,9 @@ function createNewNameIfNeeded(name, namesAlreadySeen) {
   let suffixIndex = 2;
   while(currentName in namesAlreadySeen) {
     currentName = name + ' (' + suffixIndex + ')';
+    suffixIndex++;
   }
   return currentName;
-}
-
-function buildRacesRunMap(memberTownsRun, townNames) {
-  // access result as racesRunMap['Pasini, Jose']['Canton']
-  // and as memberTownsMap['Pasini, Jose']
-  const racesRunMap = {};
-  const memberTownsMap = {};
-  memberTownsRun.forEach(row => {
-    const newName = createNewNameIfNeeded(row.Name, racesRunMap);
-    row.Name = newName;
-    memberTownsMap[row.Name] = row.Town;
-    racesRunMap[row.Name] = townNames.reduce((accumulator, currentValue) => {
-      accumulator[currentValue] = row[currentValue] == '1';
-      return accumulator;
-    }, {});
-  });
-  return { racesRunMap, memberTownsMap };
-}
-
-function parseTownsRunByMembers(row) {
-  row.TotalTowns = +row.TotalTowns;
-  return row;
-}
-
-function computeNumberOfRacesByTown(num_races_by_town_2017) {
-  /*
-  // compute distinct races by town
-  // distinct means: if it's on the same date and has the same name
-  // then it's the same race (even if it's the same distance)
-  const distinctRacesByTown = d3.nest()
-      .key(d => d.Town)
-      .rollup(
-        d => {
-          const distinctRacesInTown = d3.nest()
-              .key(d => d.DateString + ':' + d.Name)
-              .rollup(item => ({length: item.length}))
-            .object(d);
-          return Object.keys(distinctRacesInTown).length;
-        }
-      )
-    .object(races);
-  return distinctRacesByTown;
-  */
-  const dictionary = {};
-  num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
-  return dictionary;
 }
 
 function buildRaceHorizon(races, townNames) {
@@ -455,7 +505,7 @@ function buildRacesSoonTables(races) {
     const daysToRace = d3.timeDay.count(today, row.raceDay);
     if(daysToRace >= 0 && daysToRace <= 14) {
       const raceString = "<tr><td><span class='racedate'>" + 
-          row["Date/Time"].slice(5) + 
+          row.DateStringForMap +  " " + row.DateTime.toTimeString().slice(0, 5) + 
           "</span></td><td><span class='racedistance'>" + 
           row.Distance + "</span></td><td><span class='racename'>" + 
           row.Name + "</span></td></tr>";          
@@ -469,13 +519,21 @@ function buildRacesSoonTables(races) {
   return racesSoonByTown;
 }
 
+function cleanTownName(name) {
+  return name.replace(' (E)', '');
+}
+
 function parseRaces(row) {
   const fmt = d3.format("02");
-  row.Month = +row.Month;
-  row.Day = +row.Day;
-  row.Weekday = +row.Weekday;
-  row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2018, row.Month-1, row.Day));
+  row.Town = cleanTownName(row.Town);
+  row.DateTime = new Date(row.Date_Time);
+  row.Year = row.DateTime.getFullYear();
+  row.Month = row.DateTime.getMonth() + 1; // correct for zero-based
+  row.Day = row.DateTime.getDate();
+  row.DateStringForMap = fmt(row.Month) + "/" + fmt(row.Day);
+  row.DateStringForCalendar = fmt(row.Year) + "-" + fmt(row.Month) + "-" + fmt(row.Day);
+  row.raceDay = d3.timeDay(row.DateTime);
+  row.Name = row.RaceName;
   return row;
 }
 
@@ -513,16 +571,12 @@ function completeTooltipTables(racesSoonByTown) {
   );
 }
 
-function computeMapFeatures(mapData, numberOfRacesByTown) {
+function computeMapFeatures(mapData, elusiveTowns) {
   // Pre-compute map features for all & elusive towns
   const mapFeatures = {};
   mapFeatures.all = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
 
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
-  mapFeatures.elusive = mapFeatures.all.filter(d => isElusive(d.properties.NAME10));
+  mapFeatures.elusive = mapFeatures.all.filter(d => elusiveTowns[d.properties.NAME10]);
 
   return mapFeatures;
 }
@@ -541,8 +595,9 @@ class ChoroplethMap {
     // collect towns for each date
     // access elements as townsPerDate[<dateString>] 
     // yields a set of unique town names
-    this.townsPerDate = this.data[3].reduce((accumulator, currentValue) => {
-      const ds = currentValue.DateString;
+    // TODO: do not access data by index--fragile to changes
+    this.townsPerDate = this.data[2].reduce((accumulator, currentValue) => {
+      const ds = currentValue.DateStringForMap;
       if(!(ds in accumulator)) {
         accumulator[ds] = new Set();
       }
@@ -575,6 +630,7 @@ class ChoroplethMap {
       return fmt(mo) + "/" + fmt(day);
     }
 
+    // TODO: do not access data by index--fragile to changes
     const mapFeatures = this.data[0];
     let data = []; // default is nothing --> will remove highlighting
 
@@ -606,7 +662,6 @@ class ChoroplethMap {
     const [
       mapFeatures,
       drivingTimes,
-      racesRunMap,
       racesForMap,
       townNames,
       townIndex,
@@ -617,6 +672,7 @@ class ChoroplethMap {
 
     const myTown = this.options.myTown;
     const myName = this.options.myName;
+    const townsRun = this.options.townsRun;
     const highlightElusive = this.options.highlightElusive;
     const showDrivingFilter = this.options.showDrivingFilter;
 
@@ -830,15 +886,12 @@ class ChoroplethMap {
         .attr('class', d => {
           const reachableClass = isReachable(d.properties.NAME10) ?
             ' reachable' : ' unreachable';
-          return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+          return myName != noPersonName && townsRun[d.properties.NAME10] ? 
               pathClassName + ' area alreadyRun' + reachableClass : 
               pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
         });
 
     const highlightPathClassName = 'highlightareapath';
-    function isElusive(town) {
-      return numberOfRacesByTown[town] <= 1;
-    }
     let highlightAreas = this.mapAndLegendG.selectAll('.' + highlightPathClassName)
       .data(mapFeatures.elusive);
 
@@ -880,7 +933,7 @@ class ChoroplethMap {
           .attr("class", d => {
               const reachableClass = isReachable(d.properties.NAME10) ?
                 ' reachable' : ' unreachable';
-              return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+              return myName != noPersonName && townsRun[d.properties.NAME10] ? 
                 pathClassName + ' area alreadyRun' + reachableClass : 
                 pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
           });
@@ -918,19 +971,8 @@ class ChoroplethMap {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Calendar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseRace; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCalendarHeight; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return rollUpDataForCalendar; });
-const fmt = d3.format("02");
-const parseRace = d => {
-  d.Month = +d.Month;
-  d.Day = +d.Day;
-  d.Weekday = +d.Weekday;
-  d.Year = +d.Year;
-  d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
-  return d;
-};
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return rollUpDataForCalendar; });
 const formatCell = d3.format("0");
 const fmt2 = d3.timeFormat("%Y-%m-%d");
 
@@ -949,12 +991,12 @@ function getCalendarHeight(width) {
   return getCellSize(width)*10 * getNumRows(width);
 }
 
-function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
+function rollUpDataForCalendar(racesData, elusiveTowns) {
   // Compute data needed for the calendar
   // roll up data for all races
 
   const calendarData = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => {
         // collect together different distances for same race
         const summary = d3.nest()
@@ -981,14 +1023,10 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
     .object(racesData);
 
   // roll up data, but only for races in elusive towns
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
   const calendarDataElusive = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => { return { length: d.length } } )
-    .object(racesData.filter(d => isElusive(d.Town)));
+    .object(racesData.filter(d => elusiveTowns[d.Town]));
 
   return { all: calendarData, elusive: calendarDataElusive };
 }
@@ -997,7 +1035,8 @@ class Calendar {
   constructor(opts) {
     this.data = opts.data;
     this.margin = opts.margin;
-    this.shownYear = 2018;
+    // Show the current year
+    this.shownYear = (new Date()).getFullYear();
     this.tip = d3.tip()
         .attr('class', 'd3-tip-calendar')
         .offset([-10, 0]);
@@ -1291,12 +1330,14 @@ class Calendar {
       if(!(currentValue.Town in accumulator)) {
         accumulator[currentValue.Town] = new Set();
       }
-      const yr = currentValue.DateString.substr(0,4);
-      const mo = currentValue.DateString.substr(5,2);
-      const dy = currentValue.DateString.substr(8);
+      const yr = parseInt(currentValue.DateStringForCalendar.substr(0,4));
+      const mo = parseInt(currentValue.DateStringForCalendar.substr(5,2));
+      const dy = parseInt(currentValue.DateStringForCalendar.substr(8));
       const d = new Date(yr, mo - 1, dy);
-      // use getTime to have set equality avoid duplicate dates
-      accumulator[currentValue.Town].add(d.getTime());
+      if(yr == this.shownYear) {
+        // use getTime to have set equality avoid duplicate dates
+        accumulator[currentValue.Town].add(d.getTime());
+      }
       return accumulator;
     }, {});
     // create highlighter based on list of dates
