@@ -1,13 +1,3 @@
-const fmt = d3.format("02");
-const parseRace = d => {
-  d.Month = +d.Month;
-  d.Day = +d.Day;
-  d.Weekday = +d.Weekday;
-  d.Year = +d.Year;
-  d.DateString = fmt(d.Year) + "-" + fmt(d.Month) + "-" + fmt(d.Day);
-  return d;
-};
-
 const formatCell = d3.format("0");
 const fmt2 = d3.timeFormat("%Y-%m-%d");
 
@@ -26,12 +16,12 @@ function getCalendarHeight(width) {
   return getCellSize(width)*10 * getNumRows(width);
 }
 
-function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
+function rollUpDataForCalendar(racesData, elusiveTowns) {
   // Compute data needed for the calendar
   // roll up data for all races
 
   const calendarData = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => {
         // collect together different distances for same race
         const summary = d3.nest()
@@ -58,14 +48,10 @@ function rollUpDataForCalendar(racesData, numberOfRacesByTown) {
     .object(racesData);
 
   // roll up data, but only for races in elusive towns
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
   const calendarDataElusive = d3.nest()
-      .key(d => d.DateString)
+      .key(d => d.DateStringForCalendar)
       .rollup(d => { return { length: d.length } } )
-    .object(racesData.filter(d => isElusive(d.Town)));
+    .object(racesData.filter(d => elusiveTowns[d.Town]));
 
   return { all: calendarData, elusive: calendarDataElusive };
 }
@@ -74,7 +60,8 @@ class Calendar {
   constructor(opts) {
     this.data = opts.data;
     this.margin = opts.margin;
-    this.shownYear = 2018;
+    // Show the current year
+    this.shownYear = (new Date()).getFullYear();
     this.tip = d3.tip()
         .attr('class', 'd3-tip-calendar')
         .offset([-10, 0]);
@@ -368,12 +355,14 @@ class Calendar {
       if(!(currentValue.Town in accumulator)) {
         accumulator[currentValue.Town] = new Set();
       }
-      const yr = currentValue.DateString.substr(0,4);
-      const mo = currentValue.DateString.substr(5,2);
-      const dy = currentValue.DateString.substr(8);
+      const yr = parseInt(currentValue.DateStringForCalendar.substr(0,4));
+      const mo = parseInt(currentValue.DateStringForCalendar.substr(5,2));
+      const dy = parseInt(currentValue.DateStringForCalendar.substr(8));
       const d = new Date(yr, mo - 1, dy);
-      // use getTime to have set equality avoid duplicate dates
-      accumulator[currentValue.Town].add(d.getTime());
+      if(yr == this.shownYear) {
+        // use getTime to have set equality avoid duplicate dates
+        accumulator[currentValue.Town].add(d.getTime());
+      }
       return accumulator;
     }, {});
     // create highlighter based on list of dates
@@ -425,5 +414,5 @@ class Calendar {
   }
 }
 
-export { Calendar, parseRace, getCalendarHeight, rollUpDataForCalendar };
+export { Calendar, getCalendarHeight, rollUpDataForCalendar };
 

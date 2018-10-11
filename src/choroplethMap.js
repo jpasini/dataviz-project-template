@@ -35,54 +35,9 @@ function createNewNameIfNeeded(name, namesAlreadySeen) {
   let suffixIndex = 2;
   while(currentName in namesAlreadySeen) {
     currentName = name + ' (' + suffixIndex + ')';
+    suffixIndex++;
   }
   return currentName;
-}
-
-function buildRacesRunMap(memberTownsRun, townNames) {
-  // access result as racesRunMap['Pasini, Jose']['Canton']
-  // and as memberTownsMap['Pasini, Jose']
-  const racesRunMap = {};
-  const memberTownsMap = {};
-  memberTownsRun.forEach(row => {
-    const newName = createNewNameIfNeeded(row.Name, racesRunMap);
-    row.Name = newName;
-    memberTownsMap[row.Name] = row.Town;
-    racesRunMap[row.Name] = townNames.reduce((accumulator, currentValue) => {
-      accumulator[currentValue] = row[currentValue] == '1';
-      return accumulator;
-    }, {});
-  });
-  return { racesRunMap, memberTownsMap };
-}
-
-function parseTownsRunByMembers(row) {
-  row.TotalTowns = +row.TotalTowns;
-  return row;
-}
-
-function computeNumberOfRacesByTown(num_races_by_town_2017) {
-  /*
-  // compute distinct races by town
-  // distinct means: if it's on the same date and has the same name
-  // then it's the same race (even if it's the same distance)
-  const distinctRacesByTown = d3.nest()
-      .key(d => d.Town)
-      .rollup(
-        d => {
-          const distinctRacesInTown = d3.nest()
-              .key(d => d.DateString + ':' + d.Name)
-              .rollup(item => ({length: item.length}))
-            .object(d);
-          return Object.keys(distinctRacesInTown).length;
-        }
-      )
-    .object(races);
-  return distinctRacesByTown;
-  */
-  const dictionary = {};
-  num_races_by_town_2017.forEach(row => { dictionary[row.Town] = +row.numRaces; });
-  return dictionary;
 }
 
 function buildRaceHorizon(races, townNames) {
@@ -125,7 +80,7 @@ function buildRacesSoonTables(races) {
     const daysToRace = d3.timeDay.count(today, row.raceDay);
     if(daysToRace >= 0 && daysToRace <= 14) {
       const raceString = "<tr><td><span class='racedate'>" + 
-          row["Date/Time"].slice(5) + 
+          row.DateStringForMap +  " " + row.DateTime.toTimeString().slice(0, 5) + 
           "</span></td><td><span class='racedistance'>" + 
           row.Distance + "</span></td><td><span class='racename'>" + 
           row.Name + "</span></td></tr>";          
@@ -139,13 +94,21 @@ function buildRacesSoonTables(races) {
   return racesSoonByTown;
 }
 
+function cleanTownName(name) {
+  return name.replace(' (E)', '');
+}
+
 function parseRaces(row) {
   const fmt = d3.format("02");
-  row.Month = +row.Month;
-  row.Day = +row.Day;
-  row.Weekday = +row.Weekday;
-  row.DateString = fmt(row.Month) + "/" + fmt(row.Day);
-  row.raceDay = d3.timeDay(new Date(2018, row.Month-1, row.Day));
+  row.Town = cleanTownName(row.Town);
+  row.DateTime = new Date(row.Date_Time);
+  row.Year = row.DateTime.getFullYear();
+  row.Month = row.DateTime.getMonth() + 1; // correct for zero-based
+  row.Day = row.DateTime.getDate();
+  row.DateStringForMap = fmt(row.Month) + "/" + fmt(row.Day);
+  row.DateStringForCalendar = fmt(row.Year) + "-" + fmt(row.Month) + "-" + fmt(row.Day);
+  row.raceDay = d3.timeDay(row.DateTime);
+  row.Name = row.RaceName;
   return row;
 }
 
@@ -183,16 +146,12 @@ function completeTooltipTables(racesSoonByTown) {
   );
 }
 
-function computeMapFeatures(mapData, numberOfRacesByTown) {
+function computeMapFeatures(mapData, elusiveTowns) {
   // Pre-compute map features for all & elusive towns
   const mapFeatures = {};
   mapFeatures.all = topojson.feature(mapData, mapData.objects.townct_37800_0000_2010_s100_census_1_shp_wgs84).features;
 
-  function isElusive(town) {
-    return numberOfRacesByTown[town] <= 1;
-  }
-
-  mapFeatures.elusive = mapFeatures.all.filter(d => isElusive(d.properties.NAME10));
+  mapFeatures.elusive = mapFeatures.all.filter(d => elusiveTowns[d.properties.NAME10]);
 
   return mapFeatures;
 }
@@ -211,8 +170,9 @@ class ChoroplethMap {
     // collect towns for each date
     // access elements as townsPerDate[<dateString>] 
     // yields a set of unique town names
-    this.townsPerDate = this.data[3].reduce((accumulator, currentValue) => {
-      const ds = currentValue.DateString;
+    // TODO: do not access data by index--fragile to changes
+    this.townsPerDate = this.data[2].reduce((accumulator, currentValue) => {
+      const ds = currentValue.DateStringForMap;
       if(!(ds in accumulator)) {
         accumulator[ds] = new Set();
       }
@@ -245,6 +205,7 @@ class ChoroplethMap {
       return fmt(mo) + "/" + fmt(day);
     }
 
+    // TODO: do not access data by index--fragile to changes
     const mapFeatures = this.data[0];
     let data = []; // default is nothing --> will remove highlighting
 
@@ -276,7 +237,6 @@ class ChoroplethMap {
     const [
       mapFeatures,
       drivingTimes,
-      racesRunMap,
       racesForMap,
       townNames,
       townIndex,
@@ -287,6 +247,7 @@ class ChoroplethMap {
 
     const myTown = this.options.myTown;
     const myName = this.options.myName;
+    const townsRun = this.options.townsRun;
     const highlightElusive = this.options.highlightElusive;
     const showDrivingFilter = this.options.showDrivingFilter;
 
@@ -500,15 +461,12 @@ class ChoroplethMap {
         .attr('class', d => {
           const reachableClass = isReachable(d.properties.NAME10) ?
             ' reachable' : ' unreachable';
-          return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+          return myName != noPersonName && townsRun[d.properties.NAME10] ? 
               pathClassName + ' area alreadyRun' + reachableClass : 
               pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
         });
 
     const highlightPathClassName = 'highlightareapath';
-    function isElusive(town) {
-      return numberOfRacesByTown[town] <= 1;
-    }
     let highlightAreas = this.mapAndLegendG.selectAll('.' + highlightPathClassName)
       .data(mapFeatures.elusive);
 
@@ -550,7 +508,7 @@ class ChoroplethMap {
           .attr("class", d => {
               const reachableClass = isReachable(d.properties.NAME10) ?
                 ' reachable' : ' unreachable';
-              return myName != noPersonName && racesRunMap[myName][d.properties.NAME10] ? 
+              return myName != noPersonName && townsRun[d.properties.NAME10] ? 
                 pathClassName + ' area alreadyRun' + reachableClass : 
                 pathClassName + ' area ' + raceHorizonByTown[d.properties.NAME10].raceType + reachableClass;
           });
@@ -581,14 +539,12 @@ class ChoroplethMap {
 export {
   ChoroplethMap,
   parseDrivingMap, 
-  buildRacesRunMap, 
   parseRaces, 
   getTownNames,
   buildTownIndex,
   buildRaceHorizon,
   buildRacesSoonTables,
   getMapHeight, 
-  computeNumberOfRacesByTown,
   computeMapFeatures
 }
 
