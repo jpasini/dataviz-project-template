@@ -95,7 +95,7 @@ function buildRacesSoonTables(races) {
 }
 
 function cleanTownName(name) {
-  return name.replace(' (E)', '');
+  return name.replace(' (E)', '').trim();
 }
 
 function parseRaces(row) {
