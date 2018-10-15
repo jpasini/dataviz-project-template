@@ -83,7 +83,7 @@ function dataLoaded(values) {
 
   const villagesToTownsMap = {}
   villages_to_towns.forEach(row => {
-    villagesToTownsMap[row.Village] = row.Town;
+    villagesToTownsMap[row.Village.toLowerCase()] = row.Town;
   });
 
   const townNames = getTownNames(drivingTimes);
@@ -101,8 +101,8 @@ function dataLoaded(values) {
   listOfMembers.forEach( row => {
     row['Name'] = row._LastName + ', ' + row._FirstName;
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
-    if(row._City in villagesToTownsMap) {
-      row['Town'] = villagesToTownsMap[row._City];
+    if(row._City.toLowerCase() in villagesToTownsMap) {
+      row['Town'] = villagesToTownsMap[row._City.toLowerCase()];
     } else {
       row['Town'] = row._City;
     }
