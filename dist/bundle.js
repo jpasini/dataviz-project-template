@@ -248,7 +248,7 @@ function dataLoaded(values) {
           this.townsRun[this.name] = {};
           // mark towns already run
           d.forEach( row => {
-            this.townsRun[this.name][row.Town] = true;
+            this.townsRun[this.name][row.Town.trim()] = true;
           });
           // fill the other towns with "false"
           townNames.forEach( town => {
