@@ -57,6 +57,12 @@ function getPageParameters() {
 
 const run169urlPrefix = 'https://www.omnisuite.net/run169data/api/data/';
 const racesUrl = run169urlPrefix + 'Races/All/';
+const thisYear = (new Date()).getFullYear();
+const nextYear = thisYear + 1;
+const beginDate = '' + thisYear + '0101';
+const endDate = '' + nextYear +  '0201';
+const racesByDateRangeUrl = run169urlPrefix + 'RacesByRange/' + beginDate + '/' + endDate;
+//console.log(racesByDateRangeUrl);
 const membersUrl = run169urlPrefix + 'Members_Min';
 
 function dataLoaded(values) {
@@ -340,7 +346,7 @@ const promises = [];
 promises.push(d3.json('data/ct_towns_simplified.topojson'));
 promises.push(d3.csv('data/driving_times_full_symmetric.csv', parseDrivingMap));
 promises.push(d3.csv('data/ct_villages_and_towns.csv'));
-promises.push(d3.json(racesUrl)); // for map & calendar
+promises.push(d3.json(racesByDateRangeUrl)); // for map & calendar
 promises.push(d3.csv('data/num_races_by_town_2017.csv'));
 promises.push(d3.json(membersUrl));
 
