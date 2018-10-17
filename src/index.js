@@ -62,8 +62,15 @@ const nextYear = thisYear + 1;
 const beginDate = '' + thisYear + '0101';
 const endDate = '' + nextYear +  '0201';
 const racesByDateRangeUrl = run169urlPrefix + 'RacesByRange/' + beginDate + '/' + endDate;
-//console.log(racesByDateRangeUrl);
 const membersUrl = run169urlPrefix + 'Members_Min';
+
+function toTitleCase(str) {
+  return str.replace(
+    /\w\S*/g,
+    function(txt) { 
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
 
 function dataLoaded(values) {
 
@@ -107,10 +114,14 @@ function dataLoaded(values) {
   listOfMembers.forEach( row => {
     row['Name'] = row._LastName + ', ' + row._FirstName;
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
-    if(row._City.toLowerCase() in villagesToTownsMap) {
-      row['Town'] = villagesToTownsMap[row._City.toLowerCase()];
-    } else {
-      row['Town'] = row._City;
+    const city = toTitleCase(row._City.trim());
+    if(city.toLowerCase() in villagesToTownsMap) {
+      row['Town'] = villagesToTownsMap[city];
+    } else if(townNames.includes(city)) {
+      row['Town'] = city;
+    } else { // town not recognized; assume out of state
+      // console.log('Town "' + city + '" not recognized');
+      row['Town'] = outOfState;
     }
   });
   const memberNames = [];
