@@ -116,7 +116,7 @@ function dataLoaded(values) {
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
     const city = toTitleCase(row._City.trim());
     if(city.toLowerCase() in villagesToTownsMap) {
-      row['Town'] = villagesToTownsMap[city];
+      row['Town'] = villagesToTownsMap[city.toLowerCase()];
     } else if(townNames.includes(city)) {
       row['Town'] = city;
     } else { // town not recognized; assume out of state
