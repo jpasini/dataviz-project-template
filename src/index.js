@@ -112,7 +112,7 @@ function dataLoaded(values) {
 
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {
-    row['Name'] = row._LastName + ', ' + row._FirstName;
+    row['Name'] = row._LastName.trim() + ', ' + row._FirstName.trim();
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
     const city = toTitleCase(row._City.trim());
     if(city.toLowerCase() in villagesToTownsMap) {
