@@ -113,6 +113,7 @@ function dataLoaded(values) {
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {
     row['Name'] = row._LastName.trim() + ', ' + row._FirstName.trim();
+    row['Login'] = row._Login.trim().toLowerCase();
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
     const city = toTitleCase(row._City.trim());
     if(city.toLowerCase() in villagesToTownsMap) {
@@ -127,8 +128,8 @@ function dataLoaded(values) {
   const memberNames = [];
   listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
-      title: row.Name,
-      description: row.Town
+      title: row.Name + ' (' + row.Town + ')',
+      description: row.Login
     });
   });
   // create a map from memberName -> town in which member is registered
