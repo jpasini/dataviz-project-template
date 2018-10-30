@@ -51,6 +51,9 @@ function getPageParameters() {
     const x = p.split("=");
     // replace %20 with spaces, etc.
     paramsDict[x[0]] = decodeURI(x[1]);
+    if(x[0] == 'login') {
+      paramsDict[x[0]] = paramsDict[x[0]].toLowerCase();
+    }
   }
   return paramsDict;
 };
