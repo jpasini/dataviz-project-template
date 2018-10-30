@@ -172,6 +172,7 @@ function dataLoaded(values) {
   // prepare list of members for use in search box
   listOfMembers.forEach( row => {
     row['Name'] = row._LastName.trim() + ', ' + row._FirstName.trim();
+    row['Login'] = row._Login.trim().toLowerCase();
     //row['Town'] = row.State == 'CT' ? row.City : outOfState;
     const city = toTitleCase(row._City.trim());
     if(city.toLowerCase() in villagesToTownsMap) {
@@ -186,20 +187,22 @@ function dataLoaded(values) {
   const memberNames = [];
   listOfMembers.sort((x, y) => d3.ascending(x.Name, y.Name)).forEach((row, i) => {
     memberNames.push({ 
-      title: row.Name,
-      description: row.Town
+      title: row.Name + ' (' + row.Town + ')',
+      description: row.Login
     });
   });
-  // create a map from memberName -> town in which member is registered
-  // Note: this assumes no repeated names
-  const memberTownsMap = {};
+  // create a map from Login -> Name and town in which member is registered
+  const memberNameMap = {};
+  const memberTownMap = {};
   listOfMembers.forEach(row => {
-    memberTownsMap[row.Name] = row.Town;
+    memberNameMap[row.Login] = row.Name;
+    memberTownMap[row.Login] = row.Town;
   });
 
   class PersonAndTownName {
     constructor() {
       // start with defaults
+      this.login = noPersonName;
       this.name = noPersonName;
       this.town = outOfState;
       // to avoid multiple web requests, cache towns run
@@ -212,26 +215,29 @@ function dataLoaded(values) {
     }
 
     update(params) {
-      if(params == undefined || !('personName' in params || 'townName' in params)) return new Promise( (resolve, reject) => {
+      if(params == undefined || !('login' in params || 'townName' in params)) return new Promise( (resolve, reject) => {
         resolve({
+          myLogin: this.login,
           myTown: this.town,
           myName: this.name,
-          townsRun: this.townsRun[this.name]
+          townsRun: this.townsRun[this.login]
         });
       });
-      if('personName' in params) {
+      if('login' in params) {
         // if a person is provided, override the town selection
-        this.name = params.personName;
-        this.town = memberTownsMap[this.name];
+        this.login = params.login;
+        this.name = memberNameMap[this.login];
+        this.town = memberTownMap[this.login];
         // also set the town selector to the town to avoid confusion
         $('#townSearch').search('set value', this.town);
         // get the towns run by this person if the person is new
-        if(this.name in this.townsRun) {
+        if(this.login in this.townsRun) {
           return new Promise( (resolve, reject) => {
             resolve({
+              myLogin: this.login,
               myTown: this.town,
               myName: this.name,
-              townsRun: this.townsRun[this.name]
+              townsRun: this.townsRun[this.login]
             });
           });
         } else {
@@ -241,9 +247,10 @@ function dataLoaded(values) {
         this.town = params.townName;
         return new Promise( (resolve, reject) => {
           resolve({
+            myLogin: this.login,
             myTown: this.town,
             myName: this.name,
-            townsRun: this.townsRun[this.name]
+            townsRun: this.townsRun[this.login]
           });
         });
       }
@@ -258,23 +265,25 @@ function dataLoaded(values) {
     }
 
     getUserInfoFromApi() {
-      const [lastName, firstName] = this.name.split(', ');
-      const townsRunUrl = run169urlPrefix + 'member/' + firstName + '/' + lastName + '/TownsComp';
+      //const [lastName, firstName] = this.name.split(', ');
+      //const townsRunUrl = run169urlPrefix + 'member/' + firstName + '/' + lastName + '/TownsComp';
+      const townsRunUrl = run169urlPrefix + 'member/' + this.login + '/TownsComp';
       return new Promise( (resolve, reject) => {
         d3.json(townsRunUrl).then( d => {
-          this.townsRun[this.name] = {};
+          this.townsRun[this.login] = {};
           // mark towns already run
           d.forEach( row => {
-            this.townsRun[this.name][row.Town.trim()] = true;
+            this.townsRun[this.login][row.Town.trim()] = true;
           });
           // fill the other towns with "false"
           townNames.forEach( town => {
-            this.townsRun[this.name][town] = town in this.townsRun[this.name];
+            this.townsRun[this.login][town] = town in this.townsRun[this.login];
           });
           resolve({
+            myLogin: this.login,
             myTown: this.town,
             myName: this.name,
-            townsRun: this.townsRun[this.name]
+            townsRun: this.townsRun[this.login]
           });
         });
       });
@@ -319,7 +328,7 @@ function dataLoaded(values) {
     }
 
     let promise = NaN;
-    if('personName' in pageParameters) {
+    if('login' in pageParameters) {
       promise = townName.update(pageParameters);
     } else {
       promise = townName.update(params);
@@ -382,7 +391,7 @@ function dataLoaded(values) {
       // hack to prevent inconsistent display when result is selected
       // after entering a partial match
       $('#searchPersonText').val(result.title);
-      if(result.title != '') render({ personName: result.title });
+      if(result.title != '') render({ login: result.description });
     }
   });
 
