@@ -3,21 +3,18 @@
 # Load libraries ----
 suppressMessages(library(tidyverse, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 suppressMessages(library(stringi, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
-suppressMessages(library(curl, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 suppressMessages(library(readxl, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 suppressMessages(library(lubridate, warn.conflicts = FALSE, verbose= FALSE, quietly = TRUE))
 
 # Get data ----
-# old_url: 'https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!365&app=Excel&authkey=!ADVujkY8Qh3SXfc'
-members_url <- 'https://onedrive.live.com/Download.aspx?resid=FCE36160BC09E014!762&ithint=file%2cxlsx&app=Excel&authkey=!AKdCOm5eewQMvgs'
-curl_download(members_url, destfile='data/members_towns.xlsx')
+members_url <- 'https://onedrive.live.com/Download.aspx?resid=CF8569415A3DBEF8!1784&ithint=file%2cxlsx&authkey=!AIOxaAECnyoTpVQ'
+download.file(members_url, 'data/members_towns.xlsx')
 members <- suppressMessages(read_excel('data/members_towns.xlsx'))
-#members <- read_csv('data/members_towns.csv')
 
 # Data wrangling ----
 
 # drop some columns
-members <- members %>% select(-`No.`, -`Fishers island`)
+members <- members %>% select(-`No.`, -`Last Name`, -`First Name`, -`Fishers island`)
 
 # simplify column names
 columns <- names(members)
@@ -53,6 +50,20 @@ members <- members %>% mutate(Town = gsub('Southimgton', 'Southington', Town))
 members <- members %>% mutate(Town = gsub('Mil;ford', 'Milford', Town))
 members <- members %>% mutate(Town = gsub('Glatonbury', 'Glastonbury', Town))
 members <- members %>% mutate(Town = gsub('E Haddam', 'East Haddam', Town))
+members <- members %>% mutate(Town = gsub('NEW HAVEN', 'New Haven', Town))
+members <- members %>% mutate(Town = gsub('east haven', 'East Haven', Town))
+members <- members %>% mutate(Town = gsub('windsor', 'Windsor', Town))
+members <- members %>% mutate(Town = gsub('middletown', 'Middletown', Town))
+members <- members %>% mutate(Town = gsub('Burlignton', 'Burlington', Town))
+# also fix place names to the town they're located in
+members <- members %>% mutate(Town = gsub('Uncasville', 'Montville', Town))
+members <- members %>% mutate(Town = gsub('Oakville', 'Watertown', Town))
+members <- members %>% mutate(Town = gsub('Moodus', 'East Haddam', Town))
+members <- members %>% mutate(Town = gsub('Amston', 'Hebron', Town))
+members <- members %>% mutate(Town = gsub('Unionville', 'Farmington', Town))
+members <- members %>% mutate(Town = gsub('Danielson', 'Killingly', Town))
+members <- members %>% mutate(Town = gsub('Terryville', 'Plymouth', Town))
+members <- members %>% mutate(Town = gsub('Oakdale', 'Montville', Town))
 
 
 # note that there are people from out of state
@@ -80,3 +91,4 @@ write_csv(members, 'data/members_towns_clean.csv')
 # Update the timestamp ----
 last_downloaded <- format(today(), format='%b %d, %Y')
 write_lines(last_downloaded, 'data/last_downloaded.txt') # overwrites the file
+
