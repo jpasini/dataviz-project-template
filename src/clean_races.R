@@ -3,18 +3,25 @@
 # Load libraries ----
 suppressMessages(library(tidyverse, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(lubridate, warn.conflicts = FALSE, quietly = TRUE))
-suppressMessages(library(curl, warn.conflicts = FALSE, quietly = TRUE))
 suppressMessages(library(readxl, warn.conflicts = FALSE, quietly = TRUE))
 
 
 # Get data ----
 year_of_interest <- 2018
 
-races_basefilename <- 'data/DEBTiConnSchedule'
-races_xlsx_name <- paste0(races_basefilename, '.xlsx')
-curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
+races_basefilename <- 'data/races_raw'
+races_upcoming_name <- paste0(races_basefilename, '_upcoming.csv')
+races_past_name <- paste0(races_basefilename, '_past.csv')
+
+# replace url to convert to CSV and download specific sheets
+download.file('https://docs.google.com/spreadsheets/d/1QLjGbAQzxOHqdoE4tKi2V5kqOnYQmiL6qbrPZPOoc28/export?format=csv&gid=0', races_upcoming_name)
+download.file('https://docs.google.com/spreadsheets/d/1QLjGbAQzxOHqdoE4tKi2V5kqOnYQmiL6qbrPZPOoc28/export?format=csv&gid=717378382', races_past_name)
+
+# remove curl: some incompatibility--can't install libcurl without uninstlling npm
+#curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
 # races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races')))
-races <- suppressMessages(read_excel(races_xlsx_name, sheet = 'Future Races'))
+races_upcoming <- suppressMessages(read_csv(races_upcoming_name, skip=2))
+races_past <- suppressMessages(read_csv(races_past_name))
 
 # Data wrangling ----
 
