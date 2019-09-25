@@ -7,7 +7,7 @@ suppressMessages(library(readxl, warn.conflicts = FALSE, quietly = TRUE))
 
 
 # Get data ----
-year_of_interest <- 2018
+year_of_interest <- 2018 # shouldn't need to specify this. The viz now takes care of this
 
 races_basefilename <- 'data/races_raw'
 races_upcoming_name <- paste0(races_basefilename, '_upcoming.csv')
@@ -18,16 +18,21 @@ download.file('https://docs.google.com/spreadsheets/d/1QLjGbAQzxOHqdoE4tKi2V5kqO
 download.file('https://docs.google.com/spreadsheets/d/1QLjGbAQzxOHqdoE4tKi2V5kqOnYQmiL6qbrPZPOoc28/export?format=csv&gid=717378382', races_past_name)
 
 # remove curl: some incompatibility--can't install libcurl without uninstlling npm
-#curl_download('https://docs.google.com/spreadsheets/d/1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI/export?format=xlsx&id=1UK8io2jFMPs2KDEMxX1xgXNwa2JKFJT5w0SpvalAqxI', destfile=races_xlsx_name)
-# races <- suppressMessages(read_excel(races_xlsx_name, sheet=paste0(year_of_interest, ' Races')))
 races_upcoming <- suppressMessages(read_csv(races_upcoming_name, skip=2))
 races_past <- suppressMessages(read_csv(races_past_name))
 
 # Data wrangling ----
 
 # select relevant columns - to make robust to added material in other columns
-races <- races %>% select(Town, `Date/Time`, Distance, `Race Name`, Cost, Results)
-races <- races %>% rename(Name = `Race Name`)
+races_upcoming <- races_upcoming %>% select(Date, Town, `Race Name`, Distance)
+races_upcoming <- races_upcoming %>% rename(Name = `Race Name`)
+
+races_past <- races_past %>% select(Date, Town, `Race Name`, Distance)
+races_past <- races_past %>% rename(Name = `Race Name`)
+
+# merge the two datasets
+
+races <- bind_rows(races_past, races_upcoming) %>% unique()
 
 # Remove postponed races
 regexp_for_erasing <- 'postponed|moved to|cancelled|canceled|cancalled'
